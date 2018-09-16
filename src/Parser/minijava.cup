@@ -14,15 +14,53 @@ import java_cup.runtime.*;
 
 /* reserved words */
 terminal DISPLAY;
+terminal CLASS;
+terminal EXTENDS;
+terminal PUBLIC;
+terminal STATIC;
+terminal VOID;
+terminal MAIN;
+terminal LENGTH;
+terminal THIS;
+terminal NEW;
+
+/* types and boolean reserved */
+terminal STRING;
+terminal INTEGER_TYPE;
+terminal BOOLEAN_TYPE;
+terminal TRUE;
+terminal FALSE;
+
+/* control flow */
+terminal IF;
+terminal ELSE;
+terminal WHILE;
+terminal RETURN;
 
 /* operators */
-terminal PLUS, BECOMES;
+terminal PLUS;
+terminal BECOMES;
+terminal MINUS;
+terminal MULTIPLY;
+terminal ADD;
+terminal LT;
+terminal NOT;
+terminal DOT;
+terminal COMMA;
+terminal AND;
 
 /* delimiters */
-terminal LPAREN, RPAREN, SEMICOLON;
+terminal LPAREN;
+terminal RPAREN;
+terminal SEMICOLON;
+terminal LBRACKET;
+terminal RBRACKET;
+terminal LBRACE;
+terminal RBRACE;
 
 /* identifiers */
 terminal String IDENTIFIER;
+terminal Integer INTEGER_LITERAL;
 
 
 /* Nonterminals (constructed by parser): */
