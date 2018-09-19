@@ -1,9 +1,8 @@
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 import Parser.sym;
 import Scanner.*;
+import cli.Cli;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.ComplexSymbolFactory;
 
@@ -30,24 +29,9 @@ public class MiniJava {
     }
 
     public static void main(String[] args) {
-        int argsLength = args.length;
-        Map<String, String> inputArgs = new HashMap<>();
-        if (argsLength > 0) {
-            for (int i = 0; i < argsLength; i++) {
-                switch(args[i]) {
-                    case "-S" :
-                        System.out.println(i);
-                        System.out.println(argsLength - 1);
-                        if (i < argsLength - 1) { i++; inputArgs.put("-S", args[i]); }
-                }
-            }
-            if (inputArgs.containsKey("-S")) {
-                System.out.println(inputArgs.get("-S"));
-                scanner(new File(inputArgs.get("-S")));
-            }
-        }
-        else {
-            System.out.println("Please provide input arguments");
+        String file = new Cli(args).parse();
+        if (file != null) {
+            scanner(new File(file));
         }
     }
 }
