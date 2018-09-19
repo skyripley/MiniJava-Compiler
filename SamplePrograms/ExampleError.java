@@ -1,4 +1,5 @@
-package SamplePrograms;
+package SamplePrograms
 
-public class ExampleError {
-}
+        ####
+public class ExampleError }
+{
