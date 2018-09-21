@@ -111,6 +111,7 @@ import Parser.sym;
         case sym.ELSE: return "ELSE";
         case sym.WHILE: return "WHILE";
         case sym.RETURN: return "RETURN";
+        case sym.PRINTLN: return "PRINTLN";
         case sym.PLUS: return "PLUS";
         case sym.BECOMES: return "BECOMES";
         case sym.MINUS: return "MINUS";
@@ -176,6 +177,7 @@ end_comment = "*/"
 "else" { return symbol(sym.ELSE); }
 "while" { return symbol(sym.WHILE); }
 "return" { return symbol(sym.RETURN); }
+"System.out.println" { return symbol(sym.PRINTLN); }
 
 /* operators */
 "+" { return symbol(sym.PLUS); }

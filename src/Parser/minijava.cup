@@ -23,6 +23,7 @@ terminal MAIN;
 terminal LENGTH;
 terminal THIS;
 terminal NEW;
+terminal PRINTLN;
 
 /* types and boolean reserved */
 terminal STRING;
