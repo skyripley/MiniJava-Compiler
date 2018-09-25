@@ -69,7 +69,9 @@ terminal Integer INTEGER_LITERAL;
 nonterminal Program Program;
 nonterminal MainClass MainClass;
 nonterminal ClassDeclaration ClassDeclaration;
+nonterminal ClassDeclarationChain ClassDeclarationChain;
 nonterminal VarDeclaration VarDeclaration;
+nonterminal VarDeclarationList VarDeclarationList;
 nonterminal MethodDeclaration MethodDeclaration;
 nonterminal Type Type;
 nonterminal Statement Statement;
@@ -93,8 +95,45 @@ precedence left PLUS;
 
 /* Productions: */
 
-Program ::= MainClass:mc ClassDeclaration:cd
-                {: RESULT = new Program(mc, cd); :};
+Program ::= MainClass:mc ClassDeclarationList:cdl
+                {: RESULT = new Program(mc, cdl); :};
+
+MainClass ::= CLASS Identifier:id LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Identifier:id1 RPAREN LBRACE Statement:s RBRACE RBRACE
+                {: RESULT = new MainClass(id, id1, s); :};
+
+ClassDeclaration ::= CLASS Identifier:id LBRACE VarDeclarationList:vdl MethodDeclarationList:mdl RBRACE
+                            {: RESULT = new ClassDeclaration(id, vdl, mdl); :}
+                        |
+                        CLASS Identifier:id EXTENDS Identifier:id1 LBRACE VarDeclarationList:vdl MethodDeclarationList:mdl RBRACE
+                            {: RESULT = new ClassDeclaration(id, id1, vdl, mdl); :};
+
+ClassDeclarationList ::= ClassDeclaration:cd ClassDeclarationList:cdl
+                            {:
+                                if (cdl == null)
+                                    cdl = new ClassDeclarationList();
+                                cdl.addElement(cd);
+                                RESULT = cdl;
+                            :}
+                            |
+                            {: RESULT = new ClassDeclarationList(); :};
+
+VarDeclaration ::= Type:t Identifier:id SEMICOLON
+                        {: RESULT = new VarDeclaration(t, id); :}
+
+VarDeclarationList ::= VarDeclaration:vd VarDeclarationList:vdl
+                            {:
+                                if (vdl == null)
+                                    vdl = new VarDeclarationList();
+                                vdl.add(vd);
+                                RESULT = vdl;
+                            :}
+                            |
+                            {: RESULT = new VarDeclarationList(); :};
+
+MethodDeclaration ::= PUBLIC Type:t Identifier:id LPAREN RPAREN LBRACE VarDeclarationList:vdl StatementList:sl RETURN Expression:e SEMICOLON RBRACE
+                            {: RESULT = new MethodDeclaration(t, id, vdl, sl, e); :}
+                            |
+                            # TODO: Ended here
 
 Program ::= Statement:s
             {: List<Statement> p = new LinkedList<Statement>();
