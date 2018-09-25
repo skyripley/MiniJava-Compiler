@@ -66,12 +66,24 @@ terminal Integer INTEGER_LITERAL;
 
 /* Nonterminals (constructed by parser): */
 
-nonterminal List<Statement> Program;
+nonterminal Program Program;
+nonterminal MainClass MainClass;
+nonterminal ClassDeclaration ClassDeclaration;
+nonterminal VarDeclaration VarDeclaration;
+nonterminal MethodDeclaration MethodDeclaration;
+nonterminal Type Type;
 nonterminal Statement Statement;
-nonterminal Assign AssignStatement;
-nonterminal Display DisplayStatement;
-nonterminal Exp Expression;
+nonterminal Expression Expression;
 nonterminal Identifier Identifier;
+
+/**
+ * nonterminal List<Statement> Program;
+ * nonterminal Statement Statement;
+ * nonterminal Assign AssignStatement;
+ * nonterminal Display DisplayStatement;
+ * nonterminal Exp Expression;
+ * nonterminal Identifier Identifier;
+*/
 
 
 /* Precedence declarations: */
@@ -80,6 +92,9 @@ precedence left PLUS;
 
 
 /* Productions: */
+
+Program ::= MainClass:mc ClassDeclaration:cd
+                {: RESULT = new Program(mc, cd); :};
 
 Program ::= Statement:s
             {: List<Statement> p = new LinkedList<Statement>();
