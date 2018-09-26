@@ -154,7 +154,6 @@ end_comment = "*/"
 {start_comment}{comment_contents}*{end_comment} {}
 
 /* reserved words (first so that they take precedence over identifiers) */
-"display" { return symbol(sym.DISPLAY); }
 "class" { return symbol(sym.CLASS); }
 "extends" { return symbol(sym.EXTENDS); }
 "public" { return symbol(sym.PUBLIC); }

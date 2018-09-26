@@ -13,7 +13,6 @@ import java_cup.runtime.*;
 /* Terminals (lexical tokens returned by the scanner): */
 
 /* reserved words */
-terminal DISPLAY;
 terminal CLASS;
 terminal EXTENDS;
 terminal PUBLIC;
@@ -43,7 +42,6 @@ terminal PLUS;
 terminal BECOMES;
 terminal MINUS;
 terminal MULTIPLY;
-terminal ADD;
 terminal LT;
 terminal NOT;
 terminal DOT;
@@ -125,7 +123,7 @@ classDeclarationList ::= classDeclaration:cd classDeclarationList:cdl
                             {: RESULT = new ClassDeclarationList(); :};
 
 varDeclaration ::= type:t identifier:id SEMICOLON
-                        {: RESULT = new VarDeclaration(t, id); :}
+                        {: RESULT = new VarDeclaration(t, id); :};
 
 varDeclarationList ::= varDeclaration:vd varDeclarationList:vdl
                             {:
@@ -237,10 +235,10 @@ expression ::= expression:e AND expression:e1
                         RESULT = new IntegerLiteral(x.intintValue(), i.getLine(), i.getCol());
                     :}
                     |
-                    TRUE:
+                    TRUE
                     {: RESULT = new True(); :}
                     |
-                    FALSE:
+                    FALSE
                     {: RESULT = new False(); :}
                     |
                     identifier:id
@@ -249,7 +247,7 @@ expression ::= expression:e AND expression:e1
                     THIS
                     {: RESULT = new This(); :}
                     |
-                    NEW INT LBRACKET expression:e RBRACKET
+                    NEW INTEGER_TYPE LBRACKET expression:e RBRACKET
                     {: RESULT = new NewArray(e); :}
                     |
                     NEW identifier:id LPAREN RPAREN
@@ -273,6 +271,5 @@ expressionList ::= COMMA expression:e expressionList:el
 
 identifier ::= IDENTIFIER:id
                     {:
-                        String s = (String) id.getValue();
-                        RESULT = new Identifier(s, id.getLine(), id.getCol());
+                        RESULT = new Identifier(id);
                     :};
