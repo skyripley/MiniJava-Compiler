@@ -133,32 +133,117 @@ VarDeclarationList ::= VarDeclaration:vd VarDeclarationList:vdl
 MethodDeclaration ::= PUBLIC Type:t Identifier:id LPAREN RPAREN LBRACE VarDeclarationList:vdl StatementList:sl RETURN Expression:e SEMICOLON RBRACE
                             {: RESULT = new MethodDeclaration(t, id, vdl, sl, e); :}
                             |
-                            # TODO: Ended here
+                            # TODO : need to add csv parameter list
 
-Program ::= Statement:s
-            {: List<Statement> p = new LinkedList<Statement>();
-               p.add(s);
-               RESULT = p; :}
-        | Program:p Statement:s
-            {: p.add(s); RESULT = p; :};
+MethodDeclarationList ::= MethodDeclaration:md methodDeclarationList:mdl
+                            {:
+                                if (mdl == null)
+                                    mdl = new MethodDeclarationList();
+                                mdl.add(md);
+                                RESULT = mdl;
+                            :}
+                            |
+                            {: RESULT = new MethodDeclarationList(); :};
 
-Statement   ::= AssignStatement:s
-                {: RESULT = s; :}
-            | DisplayStatement:s
-                {: RESULT = s; :};
+Type ::= INTEGER_TYPE LBRACE RBRACE
+            {: RESULT = new IntArrayType(); :}
+            |
+            BOOLEAN_TYPE
+            {: RESULT = new BooleanType(); :}
+            |
+            INTEGER_TYPE
+            {: RESULT = new IntType(); :}
+            |
+            Identifier:id
+            {: RESULT = new IdentifierType(id.toString()); :};
 
-AssignStatement ::= Identifier:id BECOMES Expression:expr SEMICOLON
-                    {: RESULT = new Assign(id, expr, idxleft); :};
+Statement ::= LBRACE StatementList:sl RBRACE
+                {: RESULT = new StatementBlock(sl); :}
+                |
+                IF LPAREN Expression:e RPAREN Statement:s ELSE Statement:s1
+                {: RESULT = new IfStatement(e, s, s1); :}
+                |
+                WHILE LPAREN Expression:e RPAREN Statement:s
+                {: RESULT = new WhileStatement(e, s); :}
+                |
+                PRINTLN LPAREN Expression:e RPAREN SEMICOLON
+                {: RESULT = new PrintStatement (e); :}
+                |
+                Identifier:i BECOMES Expression:e SEMICOLON
+                {: RESULT = new AssignStatement(i, e); :}
+                |
+                Identifier:i LBRACKET Expression:e RBRACKET BECOMES Expression:e1 SEMICOLON
+                {: RESULT = new ArrayAssignStatement(i, e, e1); :};
 
-Identifier  ::= IDENTIFIER:id
-                {: RESULT = new Identifier(id, idxleft); :};
+StatementList ::= Statement:s StatementList:sl
+                    {:
+                        if (sl == null)
+                            sl = new StatementList();
+                        sl.addElement(s);
+                        RESULT = sl;
+                    :}
+                    |
+                    {: RESULT = new StatementList(); :};
 
-DisplayStatement ::= DISPLAY:d Expression:expr SEMICOLON
-                     {: RESULT = new Display(expr, dxleft); :};
+Expression ::= Expression:e AND Expression:e1
+                    {: RESULT = new AndExpression(e, e1); :}
+                    |
+                    Expression:e LT Expression:e1
+                    {: RESULT = new LTExpression(e, e1); :}
+                    |
+                    Expression:e PLUS Expression:e1
+                    {: RESULT = new PlusExpression(e, e1); :}
+                    |
+                    Expression:e MINUS Expression:e1
+                    {: RESULT = new MinusExpression(e, e1); :}
+                    |
+                    Expression:e MULTIPLY Expression:e1
+                    {: RESULT = new MultiplyExpression(e, e1); :}
+                    |
+                    Expression:e LBRACKET Expression:e1 RBRACKET
+                    {: RESULT = new ArrayLookup(e, e1); :}
+                    |
+                    Expression:e DOT LENGTH
+                    {: RESULT = new ArrayLength(e); :}
+                    |
+                    Expression:e DOT Identifier:id LPAREN RPAREN
+                    {: RESULT = new MethodCall(e, id); :}
+                    |
+                    Expression:e DOT Identifier:id LPAREN Expression:e1 ExpressionCSVList:ecl RPAREN
+                    {: RESULT = new MethodCall(e, id, e1, ecl); :}
+                    |
+                    INTEGER_LITERAL:i
+                    {:
+                        Integer x = (Integer) i.getValue();
+                        RESULT = new IntegerLiteral(x.intintValue(), i.getLine(), i.getCol());
+                    :}
+                    |
+                    TRUE:
+                    {: RESULT = new True(); :}
+                    |
+                    FALSE:
+                    {: RESULT = new False(); :}
+                    |
+                    Identifier:id
+                    {: RESULT = new Identifier(id); :}
+                    |
+                    THIS
+                    {: RESULT = new This(); :}
+                    |
+                    NEW INT LBRACKET Expression:e RBRACKET
+                    {: RESULT = new NewArray(e); :}
+                    |
+                    NEW Identifier:id LPAREN RPAREN
+                    {: RESULT = new NewObject(id); :}
+                    |
+                    NOT Expression:e
+                    {: RESULT = new NotExpression(e); :}
+                    |
+                    LPAREN Expression:e RPAREN
+                    {: RESULT = new e; :};
 
-Expression    ::= IDENTIFIER:name
-            {: RESULT = new IdentifierExp(name, namexleft); :}
-        | Expression:arg1 PLUS Expression:arg2
-            {: RESULT = new Plus(arg1, arg2, arg1xleft); :}
-        | LPAREN Expression:expr RPAREN
-            {: RESULT = expr; :};
+Identifier ::= IDENTIFIER:id
+                    {:
+                        String s = (String) id.getValue();
+                        RESULT = new Identifier(s, id.getLine(), id.getCol());
+                    :}
