@@ -66,17 +66,19 @@ terminal Integer INTEGER_LITERAL;
 
 /* Nonterminals (constructed by parser): */
 
-nonterminal Program Program;
-nonterminal MainClass MainClass;
-nonterminal ClassDeclaration ClassDeclaration;
-nonterminal ClassDeclarationChain ClassDeclarationChain;
-nonterminal VarDeclaration VarDeclaration;
-nonterminal VarDeclarationList VarDeclarationList;
-nonterminal MethodDeclaration MethodDeclaration;
-nonterminal Type Type;
-nonterminal Statement Statement;
-nonterminal Expression Expression;
-nonterminal Identifier Identifier;
+nonterminal Program program;
+nonterminal MainClass mainClass;
+nonterminal ClassDeclaration classDeclaration;
+nonterminal ClassDeclarationChain classDeclarationList;
+nonterminal VarDeclaration varDeclaration;
+nonterminal VarDeclarationList varDeclarationList;
+nonterminal MethodDeclaration methodDeclaration;
+nonterminal MethodDeclarationList methodDeclarationList;
+nonterminal Type type;
+nonterminal Statement statement;
+nonterminal StatementList statementList;
+nonterminal Expression expression;
+nonterminal Identifier identifier;
 
 /**
  * nonterminal List<Statement> Program;
@@ -95,19 +97,19 @@ precedence left PLUS;
 
 /* Productions: */
 
-Program ::= MainClass:mc ClassDeclarationList:cdl
+program ::= mainClass:mc classDeclarationList:cdl
                 {: RESULT = new Program(mc, cdl); :};
 
-MainClass ::= CLASS Identifier:id LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET Identifier:id1 RPAREN LBRACE Statement:s RBRACE RBRACE
+mainClass ::= CLASS identifier:id LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET identifier:id1 RPAREN LBRACE statement:s RBRACE RBRACE
                 {: RESULT = new MainClass(id, id1, s); :};
 
-ClassDeclaration ::= CLASS Identifier:id LBRACE VarDeclarationList:vdl MethodDeclarationList:mdl RBRACE
+classDeclaration ::= CLASS identifier:id LBRACE varDeclarationList:vdl methodDeclarationList:mdl RBRACE
                             {: RESULT = new ClassDeclaration(id, vdl, mdl); :}
                         |
-                        CLASS Identifier:id EXTENDS Identifier:id1 LBRACE VarDeclarationList:vdl MethodDeclarationList:mdl RBRACE
+                        CLASS identifier:id EXTENDS identifier:id1 LBRACE varDeclarationList:vdl methodDeclarationList:mdl RBRACE
                             {: RESULT = new ClassDeclaration(id, id1, vdl, mdl); :};
 
-ClassDeclarationList ::= ClassDeclaration:cd ClassDeclarationList:cdl
+classDeclarationList ::= classDeclaration:cd classDeclarationList:cdl
                             {:
                                 if (cdl == null)
                                     cdl = new ClassDeclarationList();
@@ -117,10 +119,10 @@ ClassDeclarationList ::= ClassDeclaration:cd ClassDeclarationList:cdl
                             |
                             {: RESULT = new ClassDeclarationList(); :};
 
-VarDeclaration ::= Type:t Identifier:id SEMICOLON
+varDeclaration ::= type:t identifier:id SEMICOLON
                         {: RESULT = new VarDeclaration(t, id); :}
 
-VarDeclarationList ::= VarDeclaration:vd VarDeclarationList:vdl
+varDeclarationList ::= varDeclaration:vd varDeclarationList:vdl
                             {:
                                 if (vdl == null)
                                     vdl = new VarDeclarationList();
@@ -130,12 +132,12 @@ VarDeclarationList ::= VarDeclaration:vd VarDeclarationList:vdl
                             |
                             {: RESULT = new VarDeclarationList(); :};
 
-MethodDeclaration ::= PUBLIC Type:t Identifier:id LPAREN RPAREN LBRACE VarDeclarationList:vdl StatementList:sl RETURN Expression:e SEMICOLON RBRACE
+methodDeclaration ::= PUBLIC type:t identifier:id LPAREN RPAREN LBRACE varDeclarationList:vdl statementList:sl RETURN expression:e SEMICOLON RBRACE
                             {: RESULT = new MethodDeclaration(t, id, vdl, sl, e); :}
                             |
                             # TODO : need to add csv parameter list
 
-MethodDeclarationList ::= MethodDeclaration:md methodDeclarationList:mdl
+methodDeclarationList ::= methodDeclaration:md methodDeclarationList:mdl
                             {:
                                 if (mdl == null)
                                     mdl = new MethodDeclarationList();
@@ -145,7 +147,7 @@ MethodDeclarationList ::= MethodDeclaration:md methodDeclarationList:mdl
                             |
                             {: RESULT = new MethodDeclarationList(); :};
 
-Type ::= INTEGER_TYPE LBRACE RBRACE
+type ::= INTEGER_TYPE LBRACE RBRACE
             {: RESULT = new IntArrayType(); :}
             |
             BOOLEAN_TYPE
@@ -154,28 +156,28 @@ Type ::= INTEGER_TYPE LBRACE RBRACE
             INTEGER_TYPE
             {: RESULT = new IntType(); :}
             |
-            Identifier:id
+            identifier:id
             {: RESULT = new IdentifierType(id.toString()); :};
 
-Statement ::= LBRACE StatementList:sl RBRACE
+statement ::= LBRACE statementList:sl RBRACE
                 {: RESULT = new StatementBlock(sl); :}
                 |
-                IF LPAREN Expression:e RPAREN Statement:s ELSE Statement:s1
+                IF LPAREN expression:e RPAREN statement:s ELSE statement:s1
                 {: RESULT = new IfStatement(e, s, s1); :}
                 |
-                WHILE LPAREN Expression:e RPAREN Statement:s
+                WHILE LPAREN expression:e RPAREN statement:s
                 {: RESULT = new WhileStatement(e, s); :}
                 |
-                PRINTLN LPAREN Expression:e RPAREN SEMICOLON
+                PRINTLN LPAREN expression:e RPAREN SEMICOLON
                 {: RESULT = new PrintStatement (e); :}
                 |
-                Identifier:i BECOMES Expression:e SEMICOLON
+                identifier:i BECOMES expression:e SEMICOLON
                 {: RESULT = new AssignStatement(i, e); :}
                 |
-                Identifier:i LBRACKET Expression:e RBRACKET BECOMES Expression:e1 SEMICOLON
+                identifier:i LBRACKET expression:e RBRACKET BECOMES expression:e1 SEMICOLON
                 {: RESULT = new ArrayAssignStatement(i, e, e1); :};
 
-StatementList ::= Statement:s StatementList:sl
+statementList ::= statement:s statementList:sl
                     {:
                         if (sl == null)
                             sl = new StatementList();
@@ -185,31 +187,31 @@ StatementList ::= Statement:s StatementList:sl
                     |
                     {: RESULT = new StatementList(); :};
 
-Expression ::= Expression:e AND Expression:e1
+expression ::= expression:e AND expression:e1
                     {: RESULT = new AndExpression(e, e1); :}
                     |
-                    Expression:e LT Expression:e1
+                    expression:e LT expression:e1
                     {: RESULT = new LTExpression(e, e1); :}
                     |
-                    Expression:e PLUS Expression:e1
+                    expression:e PLUS expression:e1
                     {: RESULT = new PlusExpression(e, e1); :}
                     |
-                    Expression:e MINUS Expression:e1
+                    expression:e MINUS expression:e1
                     {: RESULT = new MinusExpression(e, e1); :}
                     |
-                    Expression:e MULTIPLY Expression:e1
+                    expression:e MULTIPLY expression:e1
                     {: RESULT = new MultiplyExpression(e, e1); :}
                     |
-                    Expression:e LBRACKET Expression:e1 RBRACKET
+                    expression:e LBRACKET expression:e1 RBRACKET
                     {: RESULT = new ArrayLookup(e, e1); :}
                     |
-                    Expression:e DOT LENGTH
+                    expression:e DOT LENGTH
                     {: RESULT = new ArrayLength(e); :}
                     |
-                    Expression:e DOT Identifier:id LPAREN RPAREN
+                    expression:e DOT identifier:id LPAREN RPAREN
                     {: RESULT = new MethodCall(e, id); :}
                     |
-                    Expression:e DOT Identifier:id LPAREN Expression:e1 ExpressionCSVList:ecl RPAREN
+                    expression:e DOT identifier:id LPAREN expression:e1 expressionCSVList:ecl RPAREN
                     {: RESULT = new MethodCall(e, id, e1, ecl); :}
                     |
                     INTEGER_LITERAL:i
@@ -224,25 +226,25 @@ Expression ::= Expression:e AND Expression:e1
                     FALSE:
                     {: RESULT = new False(); :}
                     |
-                    Identifier:id
+                    identifier:id
                     {: RESULT = new Identifier(id); :}
                     |
                     THIS
                     {: RESULT = new This(); :}
                     |
-                    NEW INT LBRACKET Expression:e RBRACKET
+                    NEW INT LBRACKET expression:e RBRACKET
                     {: RESULT = new NewArray(e); :}
                     |
-                    NEW Identifier:id LPAREN RPAREN
+                    NEW identifier:id LPAREN RPAREN
                     {: RESULT = new NewObject(id); :}
                     |
-                    NOT Expression:e
+                    NOT expression:e
                     {: RESULT = new NotExpression(e); :}
                     |
-                    LPAREN Expression:e RPAREN
+                    LPAREN expression:e RPAREN
                     {: RESULT = new e; :};
 
-Identifier ::= IDENTIFIER:id
+identifier ::= IDENTIFIER:id
                     {:
                         String s = (String) id.getValue();
                         RESULT = new Identifier(s, id.getLine(), id.getCol());
