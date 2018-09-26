@@ -85,7 +85,19 @@ nonterminal Identifier identifier;
 
 /* Precedence declarations: */
 
+precedence right BECOMES;
+precedence left AND;
+precedence left LT;
 precedence left PLUS;
+precedence left MINUS;
+precedence left MULTIPLY;
+precedence right NEW;
+precedence right NOT;
+precedence left DOT;
+precedence left LBRACKET;
+precedence left RBRACKET;
+precedence left LPAREN;
+precedence left RPAREN;
 
 
 /* Productions: */
