@@ -73,21 +73,14 @@ nonterminal ClassDeclarationChain classDeclarationList;
 nonterminal VarDeclaration varDeclaration;
 nonterminal VarDeclarationList varDeclarationList;
 nonterminal MethodDeclaration methodDeclaration;
+nonterminal ParameterList parameterList;
 nonterminal MethodDeclarationList methodDeclarationList;
 nonterminal Type type;
 nonterminal Statement statement;
 nonterminal StatementList statementList;
 nonterminal Expression expression;
+nonterminal ExpressionList expressionList;
 nonterminal Identifier identifier;
-
-/**
- * nonterminal List<Statement> Program;
- * nonterminal Statement Statement;
- * nonterminal Assign AssignStatement;
- * nonterminal Display DisplayStatement;
- * nonterminal Exp Expression;
- * nonterminal Identifier Identifier;
-*/
 
 
 /* Precedence declarations: */
@@ -105,8 +98,8 @@ mainClass ::= CLASS identifier:id LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING L
 
 classDeclaration ::= CLASS identifier:id LBRACE varDeclarationList:vdl methodDeclarationList:mdl RBRACE
                             {: RESULT = new ClassDeclaration(id, vdl, mdl); :}
-                        |
-                        CLASS identifier:id EXTENDS identifier:id1 LBRACE varDeclarationList:vdl methodDeclarationList:mdl RBRACE
+                            |
+                            CLASS identifier:id EXTENDS identifier:id1 LBRACE varDeclarationList:vdl methodDeclarationList:mdl RBRACE
                             {: RESULT = new ClassDeclaration(id, id1, vdl, mdl); :};
 
 classDeclarationList ::= classDeclaration:cd classDeclarationList:cdl
@@ -135,7 +128,19 @@ varDeclarationList ::= varDeclaration:vd varDeclarationList:vdl
 methodDeclaration ::= PUBLIC type:t identifier:id LPAREN RPAREN LBRACE varDeclarationList:vdl statementList:sl RETURN expression:e SEMICOLON RBRACE
                             {: RESULT = new MethodDeclaration(t, id, vdl, sl, e); :}
                             |
-                            # TODO : need to add csv parameter list
+                            PUBLIC type:t identifier:id LPAREN type:t1 identifier:id1 parameterList:pl RPAREN LBRACE varDeclarationList:vdl statementList:sl RETURN expression:e SEMICOLON RBRACE
+                            {: RESULT = new MethodDeclaration(t, id, t1, id1, pl, vdl, sl, e); :};
+
+parameterList ::= COMMA type:t identifier:id parameterList:pl
+                    {:
+                        Formal tmp = new Formal(t, id);
+                        if (pl == null)
+                            pl = new FormalList();
+                        pl.addElement(tmp);
+                        RESULT = pl;
+                    :}
+                    |
+                    {: RESULT = new FormalList(); :};
 
 methodDeclarationList ::= methodDeclaration:md methodDeclarationList:mdl
                             {:
@@ -169,7 +174,7 @@ statement ::= LBRACE statementList:sl RBRACE
                 {: RESULT = new WhileStatement(e, s); :}
                 |
                 PRINTLN LPAREN expression:e RPAREN SEMICOLON
-                {: RESULT = new PrintStatement (e); :}
+                {: RESULT = new PrintStatement(e); :}
                 |
                 identifier:i BECOMES expression:e SEMICOLON
                 {: RESULT = new AssignStatement(i, e); :}
@@ -211,7 +216,7 @@ expression ::= expression:e AND expression:e1
                     expression:e DOT identifier:id LPAREN RPAREN
                     {: RESULT = new MethodCall(e, id); :}
                     |
-                    expression:e DOT identifier:id LPAREN expression:e1 expressionCSVList:ecl RPAREN
+                    expression:e DOT identifier:id LPAREN expression:e1 expressionList:ecl RPAREN
                     {: RESULT = new MethodCall(e, id, e1, ecl); :}
                     |
                     INTEGER_LITERAL:i
@@ -244,8 +249,18 @@ expression ::= expression:e AND expression:e1
                     LPAREN expression:e RPAREN
                     {: RESULT = new e; :};
 
+expressionList ::= COMMA expression:e expressionList:el
+                    {:
+                        if (el == null)
+                            el = new ExpressionList();
+                        el.addElement(e);
+                        RESULT = el;
+                    :}
+                    |
+                    {: RESULT = new ExpressionList(); :};
+
 identifier ::= IDENTIFIER:id
                     {:
                         String s = (String) id.getValue();
                         RESULT = new Identifier(s, id.getLine(), id.getCol());
-                    :}
+                    :};
