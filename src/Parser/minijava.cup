@@ -178,7 +178,14 @@ formal ::= type:t identifier:id
 formalList ::= formal:f COMMA formalList:fl
             {:
                 if (fl == null)
-                    fl = new FormalList(flxleft);
+                    fl = new FormalList(fxleft);
+                fl.add(f);
+                RESULT = fl;
+            :}
+            |
+            formal:f
+            {:
+                FormalList fl = new FormalList(fxleft);
                 fl.add(f);
                 RESULT = fl;
             :};
