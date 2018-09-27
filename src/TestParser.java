@@ -24,7 +24,7 @@ public class TestParser {
                 statement.accept(new PrettyPrintVisitor());
                 System.out.print("\n");
             }
-            System.out.print("\nParsing completed"); 
+            System.out.print("\nParsing completed");
         } catch (Exception e) {
             // yuck: some kind of error in the compiler implementation
             // that we're not expecting (a bug!)

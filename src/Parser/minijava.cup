@@ -9,6 +9,7 @@ package Parser;
 import AST.*;
 import java.util.*;
 import java_cup.runtime.*;
+import java_cup.runtime.ComplexSymbolFactory;
 
 action code {:
 
@@ -30,7 +31,7 @@ parser code {:
 	Symbol current_symbol;
 
 	public void syntax_error(Symbol cur_token){
-		System.out.println("Error on line " + cur_token.left);
+		System.out.println("Error on line " + cur_token.left + " and column " + cur_token.right);
 	}
 :};
 
@@ -42,6 +43,7 @@ scan with {:
 /* Terminals (lexical tokens returned by the scanner): */
 
 /* reserved words */
+terminal DISPLAY;
 terminal CLASS;
 terminal EXTENDS;
 terminal PUBLIC;
@@ -95,18 +97,19 @@ terminal Integer INTEGER_LITERAL;
 
 non terminal Program program;
 non terminal MainClass mainClass;
-non terminal ClassDeclaration classDeclaration;
-non terminal ClassDeclarationList classDeclarationList;
-non terminal VarDeclaration varDeclaration;
-non terminal VarDeclarationList varDeclarationList;
-non terminal MethodDeclaration methodDeclaration;
-non terminal ParameterList parameterList;
-non terminal MethodDeclarationList methodDeclarationList;
+non terminal ClassDecl classDecl;
+non terminal ClassDeclList classDeclList;
+non terminal VarDecl varDecl;
+non terminal VarDeclList varDeclList;
+non terminal MethodDecl methodDecl;
+non terminal Formal formal;
+non terminal FormalList formalList;
+non terminal MethodDeclList methodDeclList;
 non terminal Type type;
 non terminal Statement statement;
 non terminal StatementList statementList;
-non terminal Expression expression;
-non terminal ExpressionList expressionList;
+non terminal Exp exp;
+non terminal ExpList expList;
 non terminal Identifier identifier;
 
 
@@ -121,189 +124,165 @@ precedence left MULTIPLY;
 precedence right NEW;
 precedence right NOT;
 precedence left DOT;
-precedence left LBRACKET;
-precedence left RBRACKET;
-precedence left LPAREN;
-precedence left RPAREN;
 
 
 /* Productions: */
 
-program ::= mainClass:mc classDeclarationList:cdl
-                {: RESULT = new Program(mc, cdl); :};
+program ::= mainClass:mc classDeclList:cdl
+                {: RESULT = new Program(mc, cdl, mcxleft); :};
 
 mainClass ::= CLASS identifier:id LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET identifier:id1 RPAREN LBRACE statement:s RBRACE RBRACE
-                {: RESULT = new MainClass(id, id1, s); :};
+                {: RESULT = new MainClass(id, id1, s, idxleft); :};
 
-classDeclaration ::= CLASS identifier:id LBRACE varDeclarationList:vdl methodDeclarationList:mdl RBRACE
-                            {: RESULT = new ClassDeclaration(id, vdl, mdl); :}
+classDecl ::= CLASS identifier:id LBRACE varDeclList:vdl methodDeclList:mdl RBRACE
+                            {: RESULT = new ClassDeclSimple(id, vdl, mdl, idxleft); :}
                             |
-                            CLASS identifier:id EXTENDS identifier:id1 LBRACE varDeclarationList:vdl methodDeclarationList:mdl RBRACE
-                            {: RESULT = new ClassDeclaration(id, id1, vdl, mdl); :};
+                            CLASS identifier:id EXTENDS identifier:id1 LBRACE varDeclList:vdl methodDeclList:mdl RBRACE
+                            {: RESULT = new ClassDeclExtends(id, id1, vdl, mdl, idxleft); :};
 
-classDeclarationList ::= classDeclaration:cd classDeclarationList:cdl
+classDeclList ::= classDecl:cd classDeclList:cdl
                             {:
                                 if (cdl == null)
-                                    cdl = new ClassDeclarationList();
-                                cdl.addElement(cd);
+                                    cdl = new ClassDeclList(cdlxleft);
+                                cdl.add(cd);
                                 RESULT = cdl;
-                            :}
-                            |
-			    classDeclaration:cd
-                            {: RESULT = new ClassDeclarationList(cd); :};
+                            :};
 
-varDeclaration ::= type:t identifier:id SEMICOLON
-                        {: RESULT = new VarDeclaration(t, id); :};
+varDecl ::= type:t identifier:id SEMICOLON
+                        {: RESULT = new VarDecl(t, id, txleft); :};
 
-varDeclarationList ::= varDeclarationList:vdl varDeclaration:vd
+varDeclList ::= varDeclList:vdl varDecl:vd
                             {:
                                 if (vdl == null)
-                                    vdl = new VarDeclarationList();
+                                    vdl = new VarDeclList(vdxleft);
                                 vdl.add(vd);
                                 RESULT = vdl;
-                            :}
-                            |
-			    varDeclaration:vd
-                            {: RESULT = new VarDeclarationList(vd); :};
+                            :};
 
-methodDeclaration ::= PUBLIC type:t identifier:id LPAREN RPAREN LBRACE varDeclarationList:vdl statementList:sl RETURN expression:e SEMICOLON RBRACE
-                            {: RESULT = new MethodDeclaration(t, id, vdl, sl, e); :}
-                            |
-                            PUBLIC type:t identifier:id LPAREN type:t1 identifier:id1 parameterList:pl RPAREN LBRACE varDeclarationList:vdl statementList:sl RETURN expression:e SEMICOLON RBRACE
-                            {: RESULT = new MethodDeclaration(t, id, t1, id1, pl, vdl, sl, e); :};
+/* Todo : this needs to align with MethodDecl.java */
+methodDecl ::= PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE varDeclList:vdl statementList:sl RETURN exp:e SEMICOLON RBRACE
+                {: RESULT = new MethodDecl(t, id, fl, vdl, sl, e, txleft); :};
 
-parameterList ::= COMMA type:t identifier:id parameterList:pl
-                    {:
-                        Formal tmp = new Formal(t, id);
-                        if (pl == null)
-                            pl = new FormalList();
-                        pl.addElement(tmp);
-                        RESULT = pl;
-                    :}
-                    |
-                    {: RESULT = new FormalList(); :};
-
-methodDeclarationList ::= methodDeclaration:md methodDeclarationList:mdl
+/* TODO : basically all list classes do not take an initial argument so second option should initialize and then assign */
+methodDeclList ::= methodDecl:md methodDeclList:mdl
                             {:
                                 if (mdl == null)
-                                    mdl = new MethodDeclarationList();
+                                    mdl = new MethodDeclList(mdlxleft);
                                 mdl.add(md);
                                 RESULT = mdl;
-                            :}
-                            |
-			    methodDeclaration:md
-                            {: RESULT = new MethodDeclarationList(md); :};
+                            :};
 
-type ::= INTEGER_TYPE LBRACE RBRACE
-            {: RESULT = new IntArrayType(); :}
+formal ::= type:t identifier:id
+            {: RESULT = new Formal(t, id, txleft); :};
+
+formalList ::= formal:f COMMA formalList:fl
+            {:
+                if (fl == null)
+                    fl = new FormalList(flxleft);
+                fl.add(f);
+                RESULT = fl;
+            :};
+
+type ::= INTEGER_TYPE:it LBRACE RBRACE
+            {: RESULT = new IntArrayType(itxleft); :}
             |
-            BOOLEAN_TYPE
-            {: RESULT = new BooleanType(); :}
+            BOOLEAN_TYPE:bt
+            {: RESULT = new BooleanType(btxleft); :}
             |
-            INTEGER_TYPE
-            {: RESULT = new IntType(); :}
+            INTEGER_TYPE:it
+            {: RESULT = new IntegerType(itxleft); :}
             |
             identifier:id
-            {: RESULT = new IdentifierType(id.toString()); :};
+            {: RESULT = new IdentifierType(id.toString(), idxleft); :};
 
 statement ::= LBRACE statementList:sl RBRACE
-                {: RESULT = new StatementBlock(sl); :}
+                {: RESULT = new Block(sl, slxleft); :}
                 |
-                IF LPAREN:l expression:e RPAREN statement:s ELSE statement:s1
-                {: RESULT = new IfStatement(e, s, s1, l.getLine(), l.getCol()); :}
+                IF LPAREN:l exp:e RPAREN statement:s ELSE statement:s1
+                {: RESULT = new If(e, s, s1, exleft); :}
                 |
-                WHILE LPAREN:l expression:e RPAREN statement:s
-                {: RESULT = new WhileStatement(e, s, l.getLine(), l.getCol()); :}
+                WHILE LPAREN:l exp:e RPAREN statement:s
+                {: RESULT = new While(e, s, exleft); :}
                 |
-                PRINTLN LPAREN expression:e RPAREN SEMICOLON
-                {: RESULT = new PrintStatement(e); :}
+                PRINTLN:p LPAREN exp:e RPAREN SEMICOLON
+                {: RESULT = new Print(e, pxleft); :}
                 |
-                identifier:i BECOMES:b expression:e SEMICOLON
-                {: RESULT = new AssignStatement(i, e, b.getLine(), b.getCol()); :}
+                identifier:i BECOMES:b exp:e SEMICOLON
+                {: RESULT = new Assign(i, e, ixleft); :}
                 |
-                identifier:i LBRACKET expression:e RBRACKET BECOMES:b expression:e1 SEMICOLON
-                {: RESULT = new ArrayAssignStatement(i, e, e1, b.getLine(), b.getCol()); :};
+                identifier:i LBRACKET exp:e RBRACKET BECOMES exp:e1 SEMICOLON
+                {: RESULT = new ArrayAssign(i, e, e1, ixleft); :};
 
 statementList ::= statement:s statementList:sl
                     {:
                         if (sl == null)
-                            sl = new StatementList();
-                        sl.addElement(s);
+                            sl = new StatementList(slxleft);
+                        sl.add(s);
                         RESULT = sl;
-                    :}
-                    |
-		    statement:s
-                    {: RESULT = new StatementList(s); :};
+                    :};
 
-expression ::= expression:e AND:a expression:e1
-                    {: RESULT = new AndExpression(e, e1, a.getLine(), a.getCol()); :}
+exp ::= exp:e AND exp:e1
+                    {: RESULT = new And(e, e1, exleft); :}
                     |
-                    expression:e LT:l expression:e1
-                    {: RESULT = new LTExpression(e, e1, l.getLine(), l.getCol()); :}
+                    exp:e LT exp:e1
+                    {: RESULT = new LessThan(e, e1, exleft); :}
                     |
-                    expression:e PLUS:p expression:e1
-                    {: RESULT = new PlusExpression(e, e1, p.getLine(), p.getCol()); :}
+                    exp:e PLUS exp:e1
+                    {: RESULT = new Plus(e, e1, exleft); :}
                     |
-                    expression:e MINUS:m expression:e1
-                    {: RESULT = new MinusExpression(e, e1, m.getLine(), m.getCol()); :}
+                    exp:e MINUS exp:e1
+                    {: RESULT = new Minus(e, e1, exleft); :}
                     |
-                    expression:e MULTIPLY:m expression:e1
-                    {: RESULT = new MultiplyExpression(e, e1, m.getLine(), m.getCol()); :}
+                    exp:e MULTIPLY exp:e1
+                    {: RESULT = new Times(e, e1, exleft); :}
                     |
-                    expression:e LBRACKET expression:e1 RBRACKET
-                    {: RESULT = new ArrayLookup(e, e1); :}
+                    exp:e LBRACKET exp:e1 RBRACKET
+                    {: RESULT = new ArrayLookup(e, e1, exleft); :}
                     |
-                    expression:e DOT:d LENGTH
-                    {: RESULT = new ArrayLength(e, d.getLine(), d.getCol()); :}
+                    exp:e DOT LENGTH
+                    {: RESULT = new ArrayLength(e, exleft); :}
                     |
-                    expression:e DOT:d identifier:id LPAREN RPAREN
-                    {: RESULT = new MethodCall(e, id, d.getLine(), d.getCol()); :}
-                    |
-                    expression:e DOT:d identifier:id LPAREN expression:e1 expressionList:ecl RPAREN
-                    {: RESULT = new MethodCall(e, id, e1, ecl, d.getLine(), d.getCol()); :}
+                    exp:e DOT identifier:id LPAREN expList:exl RPAREN
+                    {: RESULT = new Call(e, id, exl, exleft); :}
                     |
                     INTEGER_LITERAL:i
                     {:
-                        Integer x = (Integer) i.getValue();
-                        RESULT = new IntegerLiteral(x.intintValue(), i.getLine(), i.getCol());
+                        RESULT = new IntegerLiteral(i, ixleft);
                     :}
                     |
-                    TRUE
-                    {: RESULT = new True(); :}
+                    TRUE:t
+                    {: RESULT = new True(txleft); :}
                     |
-                    FALSE
-                    {: RESULT = new False(); :}
+                    FALSE:f
+                    {: RESULT = new False(fxleft); :}
                     |
                     identifier:id
-                    {: RESULT = new Identifier(id); :}
+                    {: RESULT = new IdentifierExp(id.toString(), idxleft); :}
                     |
                     THIS:t
-                    {: RESULT = new This(t.getLine(), t.getCol()); :}
+                    {: RESULT = new This(txleft); :}
                     |
-                    NEW INTEGER_TYPE LBRACKET expression:e RBRACKET
-                    {: RESULT = new NewArray(e); :}
+                    NEW INTEGER_TYPE LBRACKET exp:e RBRACKET
+                    {: RESULT = new NewArray(e, exleft); :}
                     |
                     NEW identifier:id LPAREN RPAREN
-                    {: RESULT = new NewObject(id); :}
+                    {: RESULT = new NewObject(id, idxleft); :}
                     |
-                    NOT:n expression:e
-                    {: RESULT = new NotExpression(e, n.getLine(), n.getCol()); :}
+                    NOT exp:e
+                    {: RESULT = new Not(e, exleft); :}
                     |
-                    LPAREN expression:e RPAREN
+                    LPAREN exp:e RPAREN
                     {: RESULT = e; :};
 
-expressionList ::= COMMA expression:e expressionList:el
+expList ::= exp:e COMMA expList:el
                     {:
                         if (el == null)
-                            el = new ExpressionList();
-                        el.addElement(e);
+                            el = new ExpList(elxleft);
+                        el.add(e);
                         RESULT = el;
-                    :}
-                    |
-                    {: RESULT = new ExpressionList(); :};
+                    :};
 
 identifier ::= IDENTIFIER:id
                     {:
-		    	String s = (String) id.getValue();
-                        RESULT = new Identifier(id, id.getLine(), id.getCol());
+                        RESULT = new Identifier(id, idxleft);
                     :};

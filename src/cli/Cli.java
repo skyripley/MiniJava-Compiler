@@ -1,5 +1,7 @@
 package cli;
 
+import java.util.Map;
+import java.util.HashMap;
 import org.apache.commons.cli.*;
 
 public class Cli {
@@ -9,20 +11,26 @@ public class Cli {
     public Cli(String[] args) {
         this.args = args;
         options.addOption("S", "Scan", true, "Scan a source file");
+        options.addOption("P", "Parse", true, "Parse a source file");
     }
 
-    public String parse() {
+    public Map<String, String> parse() {
         CommandLineParser parser = new BasicParser();
         CommandLine commandLine = null;
+        Map<String, String> argsMap = new HashMap<>();
         try {
             commandLine = parser.parse(options, args);
             if (commandLine.hasOption("S")) {
-                return commandLine.getOptionValue("S");
+                argsMap.put("S", commandLine.getOptionValue("S"));
+            }
+            else if (commandLine.hasOption("P")) {
+                argsMap.put("P", commandLine.getOptionValue("P"));
             }
             else {
                 help();
                 return null;
             }
+            return argsMap;
         } catch (ParseException ex) {
             help();
             return null;
