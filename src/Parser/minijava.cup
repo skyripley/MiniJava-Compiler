@@ -199,10 +199,10 @@ statement ::= LBRACE statementList:sl RBRACE
                 {: RESULT = new Block(sl, slxleft); :}
                 |
                 IF LPAREN:l exp:e RPAREN statement:s ELSE statement:s1
-                {: RESULT = new If(e, s, s1, exleft); :}
+                {: RESULT = new If(e, s, s1, lxleft); :}
                 |
                 WHILE LPAREN:l exp:e RPAREN statement:s
-                {: RESULT = new While(e, s, exleft); :}
+                {: RESULT = new While(e, s, lxleft); :}
                 |
                 PRINTLN:p LPAREN exp:e RPAREN SEMICOLON
                 {: RESULT = new Print(e, pxleft); :}
@@ -277,7 +277,14 @@ exp ::= exp:e AND exp:e1
 expList ::= exp:e COMMA expList:el
                     {:
                         if (el == null)
-                            el = new ExpList(elxleft);
+                            el = new ExpList(exleft);
+                        el.add(e);
+                        RESULT = el;
+                    :}
+                    |
+                    exp:e
+                    {:
+                        ExpList el = new ExpList(exleft);
                         el.add(e);
                         RESULT = el;
                     :};
