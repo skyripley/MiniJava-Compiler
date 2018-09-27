@@ -10,6 +10,35 @@ import AST.*;
 import java.util.*;
 import java_cup.runtime.*;
 
+action code {:
+
+	public int getReducedRow() {
+		return parser.current_symbol.left;
+	}
+
+	public void isMain(String method) throws Exception {
+		if (!method.equals("main")) {
+			throw new Exception("Missing static main method!");
+		}
+	}
+
+
+:};
+
+parser code {:
+
+	Symbol current_symbol;
+
+	public void syntax_error(Symbol cur_token){
+		System.out.println("Error on line " + cur_token.left);
+	}
+:};
+
+scan with {:
+	current_symbol = getScanner().next_token();
+	return current_symbol;
+:};
+
 /* Terminals (lexical tokens returned by the scanner): */
 
 /* reserved words */
@@ -64,21 +93,21 @@ terminal Integer INTEGER_LITERAL;
 
 /* Nonterminals (constructed by parser): */
 
-nonterminal Program program;
-nonterminal MainClass mainClass;
-nonterminal ClassDeclaration classDeclaration;
-nonterminal ClassDeclarationChain classDeclarationList;
-nonterminal VarDeclaration varDeclaration;
-nonterminal VarDeclarationList varDeclarationList;
-nonterminal MethodDeclaration methodDeclaration;
-nonterminal ParameterList parameterList;
-nonterminal MethodDeclarationList methodDeclarationList;
-nonterminal Type type;
-nonterminal Statement statement;
-nonterminal StatementList statementList;
-nonterminal Expression expression;
-nonterminal ExpressionList expressionList;
-nonterminal Identifier identifier;
+non terminal Program program;
+non terminal MainClass mainClass;
+non terminal ClassDeclaration classDeclaration;
+non terminal ClassDeclarationList classDeclarationList;
+non terminal VarDeclaration varDeclaration;
+non terminal VarDeclarationList varDeclarationList;
+non terminal MethodDeclaration methodDeclaration;
+non terminal ParameterList parameterList;
+non terminal MethodDeclarationList methodDeclarationList;
+non terminal Type type;
+non terminal Statement statement;
+non terminal StatementList statementList;
+non terminal Expression expression;
+non terminal ExpressionList expressionList;
+non terminal Identifier identifier;
 
 
 /* Precedence declarations: */
@@ -120,12 +149,13 @@ classDeclarationList ::= classDeclaration:cd classDeclarationList:cdl
                                 RESULT = cdl;
                             :}
                             |
-                            {: RESULT = new ClassDeclarationList(); :};
+			    classDeclaration:cd
+                            {: RESULT = new ClassDeclarationList(cd); :};
 
 varDeclaration ::= type:t identifier:id SEMICOLON
                         {: RESULT = new VarDeclaration(t, id); :};
 
-varDeclarationList ::= varDeclaration:vd varDeclarationList:vdl
+varDeclarationList ::= varDeclarationList:vdl varDeclaration:vd
                             {:
                                 if (vdl == null)
                                     vdl = new VarDeclarationList();
@@ -133,7 +163,8 @@ varDeclarationList ::= varDeclaration:vd varDeclarationList:vdl
                                 RESULT = vdl;
                             :}
                             |
-                            {: RESULT = new VarDeclarationList(); :};
+			    varDeclaration:vd
+                            {: RESULT = new VarDeclarationList(vd); :};
 
 methodDeclaration ::= PUBLIC type:t identifier:id LPAREN RPAREN LBRACE varDeclarationList:vdl statementList:sl RETURN expression:e SEMICOLON RBRACE
                             {: RESULT = new MethodDeclaration(t, id, vdl, sl, e); :}
@@ -160,7 +191,8 @@ methodDeclarationList ::= methodDeclaration:md methodDeclarationList:mdl
                                 RESULT = mdl;
                             :}
                             |
-                            {: RESULT = new MethodDeclarationList(); :};
+			    methodDeclaration:md
+                            {: RESULT = new MethodDeclarationList(md); :};
 
 type ::= INTEGER_TYPE LBRACE RBRACE
             {: RESULT = new IntArrayType(); :}
@@ -177,20 +209,20 @@ type ::= INTEGER_TYPE LBRACE RBRACE
 statement ::= LBRACE statementList:sl RBRACE
                 {: RESULT = new StatementBlock(sl); :}
                 |
-                IF LPAREN expression:e RPAREN statement:s ELSE statement:s1
-                {: RESULT = new IfStatement(e, s, s1); :}
+                IF LPAREN:l expression:e RPAREN statement:s ELSE statement:s1
+                {: RESULT = new IfStatement(e, s, s1, l.getLine(), l.getCol()); :}
                 |
-                WHILE LPAREN expression:e RPAREN statement:s
-                {: RESULT = new WhileStatement(e, s); :}
+                WHILE LPAREN:l expression:e RPAREN statement:s
+                {: RESULT = new WhileStatement(e, s, l.getLine(), l.getCol()); :}
                 |
                 PRINTLN LPAREN expression:e RPAREN SEMICOLON
                 {: RESULT = new PrintStatement(e); :}
                 |
-                identifier:i BECOMES expression:e SEMICOLON
-                {: RESULT = new AssignStatement(i, e); :}
+                identifier:i BECOMES:b expression:e SEMICOLON
+                {: RESULT = new AssignStatement(i, e, b.getLine(), b.getCol()); :}
                 |
-                identifier:i LBRACKET expression:e RBRACKET BECOMES expression:e1 SEMICOLON
-                {: RESULT = new ArrayAssignStatement(i, e, e1); :};
+                identifier:i LBRACKET expression:e RBRACKET BECOMES:b expression:e1 SEMICOLON
+                {: RESULT = new ArrayAssignStatement(i, e, e1, b.getLine(), b.getCol()); :};
 
 statementList ::= statement:s statementList:sl
                     {:
@@ -200,34 +232,35 @@ statementList ::= statement:s statementList:sl
                         RESULT = sl;
                     :}
                     |
-                    {: RESULT = new StatementList(); :};
+		    statement:s
+                    {: RESULT = new StatementList(s); :};
 
-expression ::= expression:e AND expression:e1
-                    {: RESULT = new AndExpression(e, e1); :}
+expression ::= expression:e AND:a expression:e1
+                    {: RESULT = new AndExpression(e, e1, a.getLine(), a.getCol()); :}
                     |
-                    expression:e LT expression:e1
-                    {: RESULT = new LTExpression(e, e1); :}
+                    expression:e LT:l expression:e1
+                    {: RESULT = new LTExpression(e, e1, l.getLine(), l.getCol()); :}
                     |
-                    expression:e PLUS expression:e1
-                    {: RESULT = new PlusExpression(e, e1); :}
+                    expression:e PLUS:p expression:e1
+                    {: RESULT = new PlusExpression(e, e1, p.getLine(), p.getCol()); :}
                     |
-                    expression:e MINUS expression:e1
-                    {: RESULT = new MinusExpression(e, e1); :}
+                    expression:e MINUS:m expression:e1
+                    {: RESULT = new MinusExpression(e, e1, m.getLine(), m.getCol()); :}
                     |
-                    expression:e MULTIPLY expression:e1
-                    {: RESULT = new MultiplyExpression(e, e1); :}
+                    expression:e MULTIPLY:m expression:e1
+                    {: RESULT = new MultiplyExpression(e, e1, m.getLine(), m.getCol()); :}
                     |
                     expression:e LBRACKET expression:e1 RBRACKET
                     {: RESULT = new ArrayLookup(e, e1); :}
                     |
-                    expression:e DOT LENGTH
-                    {: RESULT = new ArrayLength(e); :}
+                    expression:e DOT:d LENGTH
+                    {: RESULT = new ArrayLength(e, d.getLine(), d.getCol()); :}
                     |
-                    expression:e DOT identifier:id LPAREN RPAREN
-                    {: RESULT = new MethodCall(e, id); :}
+                    expression:e DOT:d identifier:id LPAREN RPAREN
+                    {: RESULT = new MethodCall(e, id, d.getLine(), d.getCol()); :}
                     |
-                    expression:e DOT identifier:id LPAREN expression:e1 expressionList:ecl RPAREN
-                    {: RESULT = new MethodCall(e, id, e1, ecl); :}
+                    expression:e DOT:d identifier:id LPAREN expression:e1 expressionList:ecl RPAREN
+                    {: RESULT = new MethodCall(e, id, e1, ecl, d.getLine(), d.getCol()); :}
                     |
                     INTEGER_LITERAL:i
                     {:
@@ -244,8 +277,8 @@ expression ::= expression:e AND expression:e1
                     identifier:id
                     {: RESULT = new Identifier(id); :}
                     |
-                    THIS
-                    {: RESULT = new This(); :}
+                    THIS:t
+                    {: RESULT = new This(t.getLine(), t.getCol()); :}
                     |
                     NEW INTEGER_TYPE LBRACKET expression:e RBRACKET
                     {: RESULT = new NewArray(e); :}
@@ -253,11 +286,11 @@ expression ::= expression:e AND expression:e1
                     NEW identifier:id LPAREN RPAREN
                     {: RESULT = new NewObject(id); :}
                     |
-                    NOT expression:e
-                    {: RESULT = new NotExpression(e); :}
+                    NOT:n expression:e
+                    {: RESULT = new NotExpression(e, n.getLine(), n.getCol()); :}
                     |
                     LPAREN expression:e RPAREN
-                    {: RESULT = new e; :};
+                    {: RESULT = e; :};
 
 expressionList ::= COMMA expression:e expressionList:el
                     {:
@@ -271,5 +304,6 @@ expressionList ::= COMMA expression:e expressionList:el
 
 identifier ::= IDENTIFIER:id
                     {:
-                        RESULT = new Identifier(id);
+		    	String s = (String) id.getValue();
+                        RESULT = new Identifier(id, id.getLine(), id.getCol());
                     :};
