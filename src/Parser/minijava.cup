@@ -189,7 +189,7 @@ methodDecl ::= PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE va
                 {: RESULT = new MethodDecl(t, id, sl, e, txleft); :}
                 ;
 
-methodDeclList ::= methodDecl:md methodDeclList:mdl
+methodDeclList ::= methodDeclList:mdl methodDecl:md
                             {:
                                 if (mdl == null)
                                     mdl = new MethodDeclList(mdlxleft);
@@ -207,7 +207,7 @@ methodDeclList ::= methodDecl:md methodDeclList:mdl
 formal ::= type:t identifier:id
             {: RESULT = new Formal(t, id, txleft); :};
 
-formalList ::= formal:f COMMA formalList:fl
+formalList ::= formalList:fl COMMA formal:f
             {:
                 if (fl == null)
                     fl = new FormalList(fxleft);
@@ -252,7 +252,7 @@ statement ::= LBRACE statementList:sl RBRACE
                 identifier:i LBRACKET exp:e RBRACKET BECOMES exp:e1 SEMICOLON
                 {: RESULT = new ArrayAssign(i, e, e1, ixleft); :};
 
-statementList ::= statement:s statementList:sl
+statementList ::= statementList:sl statement:s
                     {:
                         if (sl == null)
                             sl = new StatementList(slxleft);
@@ -323,7 +323,7 @@ exp ::= exp:e AND exp:e1
                     LPAREN exp:e RPAREN
                     {: RESULT = e; :};
 
-expList ::= exp:e COMMA expList:el
+expList ::= expList:el COMMA exp:e
                     {:
                         if (el == null)
                             el = new ExpList(exleft);
