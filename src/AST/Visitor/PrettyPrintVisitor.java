@@ -207,9 +207,9 @@ public class PrettyPrintVisitor implements Visitor {
   // Statement s1,s2;
   public void visit(If n) {
     printTab();
-    System.out.print("if (");
+    System.out.print("if ");
     n.e.accept(this);
-    System.out.print(") ");
+    System.out.print(" ");
     if ((n.s1 instanceof Block) == false) {
       System.out.println();
       incTab();
@@ -234,9 +234,9 @@ public class PrettyPrintVisitor implements Visitor {
   // Statement s;
   public void visit(While n) {
     printTab();
-    System.out.print("while (");
+    System.out.print("while ");
     n.e.accept(this);
-    System.out.print(") ");
+    System.out.print(" ");
     n.s.accept(this);
   }
 
