@@ -176,11 +176,9 @@ varDeclList ::= varDeclList:vdl varDecl:vd
                                 RESULT = vdl;
                             :};
 
-/* Todo : this needs to align with MethodDecl.java */
 methodDecl ::= PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE varDeclList:vdl statementList:sl RETURN exp:e SEMICOLON RBRACE
                 {: RESULT = new MethodDecl(t, id, fl, vdl, sl, e, txleft); :};
 
-/* TODO : basically all list classes do not take an initial argument so second option should initialize and then assign */
 methodDeclList ::= methodDecl:md methodDeclList:mdl
                             {:
                                 if (mdl == null)
@@ -282,6 +280,9 @@ exp ::= exp:e AND exp:e1
                     |
                     exp:e DOT identifier:id LPAREN expList:exl RPAREN
                     {: RESULT = new Call(e, id, exl, exleft); :}
+                    |
+                    exp:e DOT identifier:id LPAREN RPAREN
+                    {: RESULT = new Call(e, id, exleft); :}
                     |
                     INTEGER_LITERAL:i
                     {:

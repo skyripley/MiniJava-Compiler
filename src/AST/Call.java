@@ -13,6 +13,12 @@ public class Call extends Exp {
     e=ae; i=ai; el=ael;
   }
 
+  public Call(Exp ae, Identifier ai, Location pos) {
+    super(pos);
+    e = ae;
+    i = ai;
+  }
+
   public void accept(Visitor v) {
     v.visit(this);
   }
