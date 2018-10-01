@@ -137,10 +137,12 @@ public class PrettyPrintVisitor implements Visitor {
     System.out.print(" ");
     n.i.accept(this);
     System.out.print(" (");
-    for (int i = 0; i < n.fl.size(); i++) {
-      n.fl.get(i).accept(this);
-      if (i + 1 < n.fl.size()) {
-        System.out.print(", ");
+    if (n.fl != null) {
+      for (int i = 0; i < n.fl.size(); i++) {
+        n.fl.get(i).accept(this);
+        if (i + 1 < n.fl.size()) {
+          System.out.print(", ");
+        }
       }
     }
     System.out.println(") { ");

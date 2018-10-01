@@ -16,6 +16,15 @@ public class MethodDecl extends ASTNode {
     super(pos);
     t=at; i=ai; fl=afl; vl=avl; sl=asl; e=ae;
   }
+
+  public MethodDecl(Type at, Identifier ai, VarDeclList avl, StatementList asl, Exp ae, Location pos) {
+    super(pos);
+    t = at;
+    i = ai;
+    vl = avl;
+    sl = asl;
+    e = ae;
+  }
  
   public void accept(Visitor v) {
     v.visit(this);
