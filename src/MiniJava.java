@@ -24,16 +24,6 @@ public class MiniJava {
             Program program = (Program) root.value;
             PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
             prettyPrintVisitor.visit(program);
-            // TODO: How to convert to list of statements?
-            // also are the statements a Java statement or part of a local class?
-            // Modify pretty print to fix an errors
-            /*
-            List<Statement> program = (List<Statement>) root.value;
-            for (Statement statement : program) {
-                statement.accept(new PrettyPrintVisitor());
-                System.out.print("\n");
-            }
-            */
             System.out.print("\nParsing completed");
             return return_code;
         } catch (Exception exception) {
@@ -68,18 +58,24 @@ public class MiniJava {
     }
 
     public static void main(String[] args) {
-        int return_code = 0;
+        int scanner_return_code = 0;
+        int parser_return_code = 0;
         Map<String, String> argsMap = new Cli(args).parse();
         if (argsMap != null) {
             if (argsMap.containsKey("S")) {
                 String file = argsMap.get("S");
-                int scanner_return_code = scanner(new File(file));
+                scanner_return_code = scanner(new File(file));
             }
             if (argsMap.containsKey("P")) {
                 String file = argsMap.get("P");
-                int parser_return_code = parser(new File(file));
+                parser_return_code = parser(new File(file));
             }
         }
-        System.exit(return_code);
+        if (scanner_return_code == 1 || parser_return_code == 1) {
+            System.exit(1);
+        }
+        else {
+            System.exit(0);
+        }
     }
 }
