@@ -214,7 +214,7 @@ formalList ::= formal:f COMMA formalList:fl
                 RESULT = fl;
             :};
 
-type ::= INTEGER_TYPE:it LBRACE RBRACE
+type ::= INTEGER_TYPE:it LBRACKET RBRACKET
             {: RESULT = new IntArrayType(itxleft); :}
             |
             BOOLEAN_TYPE:bt
