@@ -181,6 +181,12 @@ methodDecl ::= PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE va
                 |
                 PUBLIC type:t identifier:id LPAREN RPAREN LBRACE varDeclList:vdl statementList:sl RETURN exp:e SEMICOLON RBRACE
                 {: RESULT = new MethodDecl(t, id, vdl, sl, e, txleft); :}
+                |
+                PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE statementList:sl RETURN exp:e SEMICOLON RBRACE
+                {: RESULT = new MethodDecl(t, id, fl, sl, e, txleft); :}
+                |
+                PUBLIC type:t identifier:id LPAREN RPAREN LBRACE statementList:sl RETURN exp:e SEMICOLON RBRACE
+                {: RESULT = new MethodDecl(t, id, sl, e, txleft); :}
                 ;
 
 methodDeclList ::= methodDecl:md methodDeclList:mdl

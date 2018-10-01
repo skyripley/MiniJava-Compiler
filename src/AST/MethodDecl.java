@@ -25,6 +25,23 @@ public class MethodDecl extends ASTNode {
     sl = asl;
     e = ae;
   }
+
+  public MethodDecl(Type at, Identifier ai, FormalList afl, StatementList asl, Exp ae, Location pos) {
+    super(pos);
+    t = at;
+    i = ai;
+    fl = afl;
+    sl = asl;
+    e = ae;
+  }
+
+  public MethodDecl(Type at, Identifier ai, StatementList asl, Exp ae, Location pos) {
+    super(pos);
+    t = at;
+    i = ai;
+    sl = asl;
+    e = ae;
+  }
  
   public void accept(Visitor v) {
     v.visit(this);

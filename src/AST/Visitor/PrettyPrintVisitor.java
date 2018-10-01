@@ -147,8 +147,10 @@ public class PrettyPrintVisitor implements Visitor {
     }
     System.out.println(") { ");
     incTab();
-    for (int i = 0; i < n.vl.size(); i++) {
-      n.vl.get(i).accept(this);
+    if (n.vl != null) {
+      for (int i = 0; i < n.vl.size(); i++) {
+        n.vl.get(i).accept(this);
+      }
     }
     System.out.println();
     for (int i = 0; i < n.sl.size(); i++) {
