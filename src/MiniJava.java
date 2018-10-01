@@ -21,6 +21,9 @@ public class MiniJava {
             parser parser = new parser(scanner, complexSymbolFactory);
             Symbol root;
             root = parser.parse();
+            // TODO: How to convert to list of statements?
+            // also are the statements a Java statement or part of a local class?
+            // Modify pretty print to fix an errors
             List<Statement> program = (List<Statement>) root.value;
             for (Statement statement : program) {
                 statement.accept(new PrettyPrintVisitor());
