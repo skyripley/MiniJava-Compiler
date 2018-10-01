@@ -19,7 +19,8 @@ public class MiniJava {
             Reader reader = new InputStreamReader(inputStream);
             scanner scanner = new scanner(reader, complexSymbolFactory);
             parser parser = new parser(scanner, complexSymbolFactory);
-            Symbol root = parser.debug_parse();
+            Symbol root;
+            root = parser.parse();
             List<Statement> program = (List<Statement>) root.value;
             for (Statement statement : program) {
                 statement.accept(new PrettyPrintVisitor());
