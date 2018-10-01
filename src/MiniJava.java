@@ -21,14 +21,19 @@ public class MiniJava {
             parser parser = new parser(scanner, complexSymbolFactory);
             Symbol root;
             root = parser.parse();
+            Program program = (Program) root.value;
+            PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
+            prettyPrintVisitor.visit(program);
             // TODO: How to convert to list of statements?
             // also are the statements a Java statement or part of a local class?
             // Modify pretty print to fix an errors
+            /*
             List<Statement> program = (List<Statement>) root.value;
             for (Statement statement : program) {
                 statement.accept(new PrettyPrintVisitor());
                 System.out.print("\n");
             }
+            */
             System.out.print("\nParsing completed");
             return return_code;
         } catch (Exception exception) {
