@@ -22,8 +22,6 @@ action code {:
 			throw new Exception("Missing static main method!");
 		}
 	}
-
-
 :};
 
 parser code {:
@@ -129,80 +127,83 @@ precedence left DOT;
 /* Productions: */
 
 program ::= mainClass:mc classDeclList:cdl
-                {: RESULT = new Program(mc, cdl, mcxleft); :};
+            {: RESULT = new Program(mc, cdl, mcxleft); :};
 
 mainClass ::= CLASS identifier:id LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET identifier:id1 RPAREN LBRACE statement:s RBRACE RBRACE
-                {: RESULT = new MainClass(id, id1, s, idxleft); :};
+            {: RESULT = new MainClass(id, id1, s, idxleft); :};
 
 classDecl ::= CLASS identifier:id LBRACE varDeclList:vdl methodDeclList:mdl RBRACE
-                            {: RESULT = new ClassDeclSimple(id, vdl, mdl, idxleft); :}
-                            |
-                            CLASS identifier:id LBRACE methodDeclList:mdl RBRACE
-                            {: RESULT = new ClassDeclSimple(id, mdl, idxleft); :}
-                            |
-                            CLASS identifier:id EXTENDS identifier:id1 LBRACE varDeclList:vdl methodDeclList:mdl RBRACE
-                            {: RESULT = new ClassDeclExtends(id, id1, vdl, mdl, idxleft); :};
+            {: RESULT = new ClassDeclSimple(id, vdl, mdl, idxleft); :}
+            |
+            CLASS identifier:id LBRACE methodDeclList:mdl RBRACE
+            {: RESULT = new ClassDeclSimple(id, mdl, idxleft); :}
+            |
+            CLASS identifier:id EXTENDS identifier:id1 LBRACE varDeclList:vdl methodDeclList:mdl RBRACE
+            {: RESULT = new ClassDeclExtends(id, id1, vdl, mdl, idxleft); :};
 
 classDeclList ::= classDecl:cd classDeclList:cdl
-                            {:
-                                if (cdl == null)
-                                    cdl = new ClassDeclList(cdlxleft);
-                                cdl.add(cd);
-                                RESULT = cdl;
-                            :}
-                            |
-                            classDecl:cd
-                            {:
-                                ClassDeclList cdl = new ClassDeclList(cdxleft);
-                                cdl.add(cd);
-                                RESULT = cdl;
-                            :};
+            {:
+                if (cdl == null)
+                    cdl = new ClassDeclList(cdlxleft);
+                cdl.add(cd);
+                RESULT = cdl;
+            :}
+            |
+            classDecl:cd
+            {:
+                ClassDeclList cdl = new ClassDeclList(cdxleft);
+                cdl.add(cd);
+                RESULT = cdl;
+            :};
 
 varDecl ::= type:t identifier:id SEMICOLON
-                        {: RESULT = new VarDecl(t, id, txleft); :};
+            {: RESULT = new VarDecl(t, id, txleft); :}
+            |
+            error identifier SEMICOLON;
 
 varDeclList ::= varDeclList:vdl varDecl:vd
-                            {:
-                                if (vdl == null)
-                                    vdl = new VarDeclList(vdxleft);
-                                vdl.add(vd);
-                                RESULT = vdl;
-                            :}
-                            |
-                            varDecl:vd
-                            {:
-                                VarDeclList vdl = new VarDeclList(vdxleft);
-                                vdl.add(vd);
-                                RESULT = vdl;
-                            :};
+            {:
+                if (vdl == null)
+                    vdl = new VarDeclList(vdxleft);
+                vdl.add(vd);
+                RESULT = vdl;
+            :}
+            |
+            varDecl:vd
+            {:
+                VarDeclList vdl = new VarDeclList(vdxleft);
+                vdl.add(vd);
+                RESULT = vdl;
+            :};
 
 methodDecl ::= PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE varDeclList:vdl statementList:sl RETURN exp:e SEMICOLON RBRACE
-                {: RESULT = new MethodDecl(t, id, fl, vdl, sl, e, txleft); :}
-                |
-                PUBLIC type:t identifier:id LPAREN RPAREN LBRACE varDeclList:vdl statementList:sl RETURN exp:e SEMICOLON RBRACE
-                {: RESULT = new MethodDecl(t, id, vdl, sl, e, txleft); :}
-                |
-                PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE statementList:sl RETURN exp:e SEMICOLON RBRACE
-                {: RESULT = new MethodDecl(t, id, fl, sl, e, txleft); :}
-                |
-                PUBLIC type:t identifier:id LPAREN RPAREN LBRACE statementList:sl RETURN exp:e SEMICOLON RBRACE
-                {: RESULT = new MethodDecl(t, id, sl, e, txleft); :}
-                ;
+            {: RESULT = new MethodDecl(t, id, fl, vdl, sl, e, txleft); :}
+            |
+            PUBLIC type:t identifier:id LPAREN RPAREN LBRACE varDeclList:vdl statementList:sl RETURN exp:e SEMICOLON RBRACE
+            {: RESULT = new MethodDecl(t, id, vdl, sl, e, txleft); :}
+            |
+            PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE statementList:sl RETURN exp:e SEMICOLON RBRACE
+            {: RESULT = new MethodDecl(t, id, fl, sl, e, txleft); :}
+            |
+            PUBLIC type:t identifier:id LPAREN RPAREN LBRACE statementList:sl RETURN exp:e SEMICOLON RBRACE
+            {: RESULT = new MethodDecl(t, id, sl, e, txleft); :}
+            |
+            error RBRACE;
 
 methodDeclList ::= methodDeclList:mdl methodDecl:md
-                            {:
-                                if (mdl == null)
-                                    mdl = new MethodDeclList(mdlxleft);
-                                mdl.add(md);
-                                RESULT = mdl;
-                            :}
-                            |
-                            methodDecl:md
-                            {:
-                                MethodDeclList mdl = new MethodDeclList(mdxleft);
-                                mdl.add(md);
-                                RESULT = mdl;
-                            :};
+            {:
+                if (mdl == null)
+                    mdl = new MethodDeclList(mdlxleft);
+                mdl.add(md);
+                RESULT = mdl;
+            :}
+            |
+            methodDecl:md
+            {:
+                MethodDeclList mdl = new MethodDeclList(mdxleft);
+                mdl.add(md);
+                RESULT = mdl;
+            :};
 
 formal ::= type:t identifier:id
             {: RESULT = new Formal(t, id, txleft); :};
@@ -235,110 +236,110 @@ type ::= INTEGER_TYPE:it LBRACKET RBRACKET
             {: RESULT = new IdentifierType(id.toString(), idxleft); :};
 
 statement ::= LBRACE statementList:sl RBRACE
-                {: RESULT = new Block(sl, slxleft); :}
-                |
-                IF LPAREN:l exp:e RPAREN statement:s ELSE statement:s1
-                {: RESULT = new If(e, s, s1, lxleft); :}
-                |
-                WHILE LPAREN:l exp:e RPAREN statement:s
-                {: RESULT = new While(e, s, lxleft); :}
-                |
-                PRINTLN:p LPAREN exp:e RPAREN SEMICOLON
-                {: RESULT = new Print(e, pxleft); :}
-                |
-                identifier:i BECOMES:b exp:e SEMICOLON
-                {: RESULT = new Assign(i, e, ixleft); :}
-                |
-                identifier:i LBRACKET exp:e RBRACKET BECOMES exp:e1 SEMICOLON
-                {: RESULT = new ArrayAssign(i, e, e1, ixleft); :};
+            {: RESULT = new Block(sl, slxleft); :}
+            |
+            IF LPAREN:l exp:e RPAREN statement:s ELSE statement:s1
+            {: RESULT = new If(e, s, s1, lxleft); :}
+            |
+            WHILE LPAREN:l exp:e RPAREN statement:s
+            {: RESULT = new While(e, s, lxleft); :}
+            |
+            PRINTLN:p LPAREN exp:e RPAREN SEMICOLON
+            {: RESULT = new Print(e, pxleft); :}
+            |
+            identifier:i BECOMES:b exp:e SEMICOLON
+            {: RESULT = new Assign(i, e, ixleft); :}
+            |
+            identifier:i LBRACKET exp:e RBRACKET BECOMES exp:e1 SEMICOLON
+            {: RESULT = new ArrayAssign(i, e, e1, ixleft); :};
 
 statementList ::= statementList:sl statement:s
-                    {:
-                        if (sl == null)
-                            sl = new StatementList(slxleft);
-                        sl.add(s);
-                        RESULT = sl;
-                    :}
-                    |
-                    statement:s
-                    {:
-                        StatementList sl = new StatementList(sxleft);
-                        sl.add(s);
-                        RESULT = sl;
-                    :};
+            {:
+                if (sl == null)
+                    sl = new StatementList(slxleft);
+                sl.add(s);
+                RESULT = sl;
+            :}
+            |
+            statement:s
+            {:
+                StatementList sl = new StatementList(sxleft);
+                sl.add(s);
+                RESULT = sl;
+            :};
 
 exp ::= exp:e AND exp:e1
-                    {: RESULT = new And(e, e1, exleft); :}
-                    |
-                    exp:e LT exp:e1
-                    {: RESULT = new LessThan(e, e1, exleft); :}
-                    |
-                    exp:e PLUS exp:e1
-                    {: RESULT = new Plus(e, e1, exleft); :}
-                    |
-                    exp:e MINUS exp:e1
-                    {: RESULT = new Minus(e, e1, exleft); :}
-                    |
-                    exp:e MULTIPLY exp:e1
-                    {: RESULT = new Times(e, e1, exleft); :}
-                    |
-                    exp:e LBRACKET exp:e1 RBRACKET
-                    {: RESULT = new ArrayLookup(e, e1, exleft); :}
-                    |
-                    exp:e DOT LENGTH
-                    {: RESULT = new ArrayLength(e, exleft); :}
-                    |
-                    exp:e DOT identifier:id LPAREN expList:exl RPAREN
-                    {: RESULT = new Call(e, id, exl, exleft); :}
-                    |
-                    exp:e DOT identifier:id LPAREN RPAREN
-                    {: RESULT = new Call(e, id, exleft); :}
-                    |
-                    INTEGER_LITERAL:i
-                    {:
-                        RESULT = new IntegerLiteral(i, ixleft);
-                    :}
-                    |
-                    TRUE:t
-                    {: RESULT = new True(txleft); :}
-                    |
-                    FALSE:f
-                    {: RESULT = new False(fxleft); :}
-                    |
-                    identifier:id
-                    {: RESULT = new IdentifierExp(id.toString(), idxleft); :}
-                    |
-                    THIS:t
-                    {: RESULT = new This(txleft); :}
-                    |
-                    NEW INTEGER_TYPE LBRACKET exp:e RBRACKET
-                    {: RESULT = new NewArray(e, exleft); :}
-                    |
-                    NEW identifier:id LPAREN RPAREN
-                    {: RESULT = new NewObject(id, idxleft); :}
-                    |
-                    NOT exp:e
-                    {: RESULT = new Not(e, exleft); :}
-                    |
-                    LPAREN exp:e RPAREN
-                    {: RESULT = e; :};
+            {: RESULT = new And(e, e1, exleft); :}
+            |
+            exp:e LT exp:e1
+            {: RESULT = new LessThan(e, e1, exleft); :}
+            |
+            exp:e PLUS exp:e1
+            {: RESULT = new Plus(e, e1, exleft); :}
+            |
+            exp:e MINUS exp:e1
+            {: RESULT = new Minus(e, e1, exleft); :}
+            |
+            exp:e MULTIPLY exp:e1
+            {: RESULT = new Times(e, e1, exleft); :}
+            |
+            exp:e LBRACKET exp:e1 RBRACKET
+            {: RESULT = new ArrayLookup(e, e1, exleft); :}
+            |
+            exp:e DOT LENGTH
+            {: RESULT = new ArrayLength(e, exleft); :}
+            |
+            exp:e DOT identifier:id LPAREN expList:exl RPAREN
+            {: RESULT = new Call(e, id, exl, exleft); :}
+            |
+            exp:e DOT identifier:id LPAREN RPAREN
+            {: RESULT = new Call(e, id, exleft); :}
+            |
+            INTEGER_LITERAL:i
+            {:
+                RESULT = new IntegerLiteral(i, ixleft);
+            :}
+            |
+            TRUE:t
+            {: RESULT = new True(txleft); :}
+            |
+            FALSE:f
+            {: RESULT = new False(fxleft); :}
+            |
+            identifier:id
+            {: RESULT = new IdentifierExp(id.toString(), idxleft); :}
+            |
+            THIS:t
+            {: RESULT = new This(txleft); :}
+            |
+            NEW INTEGER_TYPE LBRACKET exp:e RBRACKET
+            {: RESULT = new NewArray(e, exleft); :}
+            |
+            NEW identifier:id LPAREN RPAREN
+            {: RESULT = new NewObject(id, idxleft); :}
+            |
+            NOT exp:e
+            {: RESULT = new Not(e, exleft); :}
+            |
+            LPAREN exp:e RPAREN
+            {: RESULT = e; :};
 
 expList ::= expList:el COMMA exp:e
-                    {:
-                        if (el == null)
-                            el = new ExpList(exleft);
-                        el.add(e);
-                        RESULT = el;
-                    :}
-                    |
-                    exp:e
-                    {:
-                        ExpList el = new ExpList(exleft);
-                        el.add(e);
-                        RESULT = el;
-                    :};
+            {:
+                if (el == null)
+                    el = new ExpList(exleft);
+                el.add(e);
+                RESULT = el;
+            :}
+            |
+            exp:e
+            {:
+                ExpList el = new ExpList(exleft);
+                el.add(e);
+                RESULT = el;
+            :};
 
 identifier ::= IDENTIFIER:id
-                    {:
-                        RESULT = new Identifier(id, idxleft);
-                    :};
+            {:
+                RESULT = new Identifier(id, idxleft);
+            :};
