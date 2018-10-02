@@ -10,6 +10,7 @@ import AST.*;
 import java.util.*;
 import java_cup.runtime.*;
 import java_cup.runtime.ComplexSymbolFactory;
+import java.lang.reflect.Field;
 
 action code {:
 
@@ -27,9 +28,13 @@ action code {:
 parser code {:
 
 	Symbol current_symbol;
+	public boolean errorDetected = false;
 
-	public void syntax_error(Symbol cur_token){
-		System.out.println("Error on line " + cur_token.left + " and column " + cur_token.right);
+	public void syntax_error(Symbol cur_token) {
+	    System.out.println("Syntax error found!");
+	    System.out.println("Current symbol is: " + cur_token);
+	    System.out.println("Current symbol value is: " + cur_token.value);
+		errorDetected = true;
 	}
 :};
 
@@ -130,7 +135,9 @@ program ::= mainClass:mc classDeclList:cdl
             {: RESULT = new Program(mc, cdl, mcxleft); :};
 
 mainClass ::= CLASS identifier:id LBRACE PUBLIC STATIC VOID MAIN LPAREN STRING LBRACKET RBRACKET identifier:id1 RPAREN LBRACE statement:s RBRACE RBRACE
-            {: RESULT = new MainClass(id, id1, s, idxleft); :};
+            {: RESULT = new MainClass(id, id1, s, idxleft); :}
+            |
+            error RBRACE RBRACE;
 
 classDecl ::= CLASS identifier:id LBRACE varDeclList:vdl methodDeclList:mdl RBRACE
             {: RESULT = new ClassDeclSimple(id, vdl, mdl, idxleft); :}
@@ -139,7 +146,9 @@ classDecl ::= CLASS identifier:id LBRACE varDeclList:vdl methodDeclList:mdl RBRA
             {: RESULT = new ClassDeclSimple(id, mdl, idxleft); :}
             |
             CLASS identifier:id EXTENDS identifier:id1 LBRACE varDeclList:vdl methodDeclList:mdl RBRACE
-            {: RESULT = new ClassDeclExtends(id, id1, vdl, mdl, idxleft); :};
+            {: RESULT = new ClassDeclExtends(id, id1, vdl, mdl, idxleft); :}
+            |
+            error RBRACE;
 
 classDeclList ::= classDecl:cd classDeclList:cdl
             {:
@@ -158,6 +167,8 @@ classDeclList ::= classDecl:cd classDeclList:cdl
 
 varDecl ::= type:t identifier:id SEMICOLON
             {: RESULT = new VarDecl(t, id, txleft); :}
+            |
+            type error SEMICOLON
             |
             error identifier SEMICOLON;
 
@@ -251,7 +262,9 @@ statement ::= LBRACE statementList:sl RBRACE
             {: RESULT = new Assign(i, e, ixleft); :}
             |
             identifier:i LBRACKET exp:e RBRACKET BECOMES exp:e1 SEMICOLON
-            {: RESULT = new ArrayAssign(i, e, e1, ixleft); :};
+            {: RESULT = new ArrayAssign(i, e, e1, ixleft); :}
+            |
+            error SEMICOLON;
 
 statementList ::= statementList:sl statement:s
             {:

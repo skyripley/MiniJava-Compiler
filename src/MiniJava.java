@@ -21,9 +21,16 @@ public class MiniJava {
             parser parser = new parser(scanner, complexSymbolFactory);
             Symbol root;
             root = parser.parse();
-            Program program = (Program) root.value;
-            PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
-            prettyPrintVisitor.visit(program);
+            if (parser.errorDetected) {
+                System.out.println("\nParsing complete, but syntax errors were detected");
+                return_code = 1;
+            }
+            else {
+                System.out.println("Parsing complete - no errors found");
+                Program program = (Program) root.value;
+                PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
+                prettyPrintVisitor.visit(program);
+            }
             return return_code;
         } catch (Exception exception) {
             System.err.println("Unexpected internal compiler error: " + exception.toString());
@@ -47,6 +54,7 @@ public class MiniJava {
                 System.out.print(scanner.symbolToString(symbol) + " ");
                 symbol = scanner.next_token();
             }
+            System.out.println();
             return return_code;
         } catch (Exception exception) {
             System.err.println("Unexpected internal compiler error: " + exception.toString());
