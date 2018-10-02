@@ -336,7 +336,6 @@ public class PrettyPrintVisitor implements Visitor {
     n.e.accept(this);
     System.out.print(".");
     n.i.accept(this);
-    System.out.print("(");
     if (n.el != null) {
       for (int i = 0; i < n.el.size(); i++) {
         n.el.get(i).accept(this);
@@ -345,7 +344,6 @@ public class PrettyPrintVisitor implements Visitor {
         }
       }
     }
-    System.out.print(")");
   }
 
   // int i;
