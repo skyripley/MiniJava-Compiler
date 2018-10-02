@@ -47,6 +47,7 @@ public class MiniJava {
                 System.out.print(scanner.symbolToString(symbol) + " ");
                 symbol = scanner.next_token();
             }
+            System.out.println();
             return return_code;
         } catch (Exception exception) {
             System.err.println("Unexpected internal compiler error: " + exception.toString());
