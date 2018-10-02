@@ -148,9 +148,12 @@ classDecl ::= CLASS identifier:id LBRACE varDeclList:vdl methodDeclList:mdl RBRA
             CLASS identifier:id EXTENDS identifier:id1 LBRACE varDeclList:vdl methodDeclList:mdl RBRACE
             {: RESULT = new ClassDeclExtends(id, id1, vdl, mdl, idxleft); :}
             |
+            CLASS identifier:id EXTENDS identifier:id1 LBRACE methodDeclList:mdl RBRACE
+            {: RESULT = new ClassDeclExtends(id, id1, mdl, idxleft); :}
+            |
             error RBRACE;
 
-classDeclList ::= classDecl:cd classDeclList:cdl
+classDeclList ::= classDeclList:cdl classDecl:cd
             {:
                 if (cdl == null)
                     cdl = new ClassDeclList(cdlxleft);
@@ -198,6 +201,12 @@ methodDecl ::= PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE va
             |
             PUBLIC type:t identifier:id LPAREN RPAREN LBRACE statementList:sl RETURN exp:e SEMICOLON RBRACE
             {: RESULT = new MethodDecl(t, id, sl, e, txleft); :}
+            |
+            PUBLIC type:t identifier:id LPAREN formalList:fl RPAREN LBRACE RETURN exp:e SEMICOLON RBRACE
+            {: RESULT = new MethodDecl(t, id, fl, e, txleft); :}
+            |
+            PUBLIC type:t identifier:id LPAREN RPAREN LBRACE RETURN exp:e SEMICOLON RBRACE
+            {: RESULT = new MethodDecl(t, id, e, txleft); :}
             |
             error RBRACE;
 
