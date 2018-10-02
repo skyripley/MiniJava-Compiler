@@ -96,12 +96,14 @@ public class PrettyPrintVisitor implements Visitor {
   public void visit(ClassDeclExtends n) {
     System.out.print("class ");
     n.i.accept(this);
-    System.out.println(" extends ");
+    System.out.print(" extends ");
     n.j.accept(this);
     System.out.println(" { ");
     incTab();
-    for (int i = 0; i < n.vl.size(); i++) {
-      n.vl.get(i).accept(this);
+    if (n.vl != null){
+      for (int i = 0; i < n.vl.size(); i++) {
+        n.vl.get(i).accept(this);
+      }
     }
     System.out.println();
     for (int i = 0; i < n.ml.size(); i++) {
@@ -152,9 +154,11 @@ public class PrettyPrintVisitor implements Visitor {
         n.vl.get(i).accept(this);
       }
     }
-    System.out.println();
-    for (int i = 0; i < n.sl.size(); i++) {
-      n.sl.get(i).accept(this);
+    if (n.sl != null) {
+      System.out.println();
+      for (int i = 0; i < n.sl.size(); i++) {
+        n.sl.get(i).accept(this);
+      }
     }
     System.out.println();
     printTab();
