@@ -24,7 +24,6 @@ public class MiniJava {
             Program program = (Program) root.value;
             PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
             prettyPrintVisitor.visit(program);
-            System.out.print("\nParsing completed");
             return return_code;
         } catch (Exception exception) {
             System.err.println("Unexpected internal compiler error: " + exception.toString());
@@ -48,7 +47,6 @@ public class MiniJava {
                 System.out.print(scanner.symbolToString(symbol) + " ");
                 symbol = scanner.next_token();
             }
-            System.out.println("\n Lexical analysis complete");
             return return_code;
         } catch (Exception exception) {
             System.err.println("Unexpected internal compiler error: " + exception.toString());

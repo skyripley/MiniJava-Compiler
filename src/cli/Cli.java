@@ -39,8 +39,8 @@ public class Cli {
 
     private void help() {
         final HelpFormatter formatter = new HelpFormatter();
-        final String syntax = "Main";
-        final String usageHeader = "MiniJava Compiler";
+        final String syntax = "java MiniJava [-S <file_path>] [-P <file_path>]";
+        final String usageHeader = "Scan or parse an input file\n\n";
         final String usageFooter = "";
         formatter.printHelp(syntax, usageHeader, options, usageFooter);
     }
