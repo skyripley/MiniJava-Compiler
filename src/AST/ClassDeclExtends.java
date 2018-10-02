@@ -16,6 +16,13 @@ public class ClassDeclExtends extends ClassDecl {
     i=ai; j=aj; vl=avl; ml=aml;
   }
 
+  public ClassDeclExtends(Identifier ai, Identifier aj,
+                          MethodDeclList aml,
+                          Location pos) {
+    super(pos);
+    i=ai; j=aj; ml=aml;
+  }
+
   public void accept(Visitor v) {
     v.visit(this);
   }
