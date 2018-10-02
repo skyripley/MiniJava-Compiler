@@ -11,13 +11,17 @@ import AST.Visitor.*;
 
 public class MiniJava {
 
+    private static scanner getScanner(File file) {
+        ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
+        InputStream inputStream = new FileInputStream(file);
+        Reader reader = new InputStreamReader(inputStream);
+        return new scanner(reader, complexSymbolFactory);
+    }
+
     private static int parser(File file) {
         try {
             int return_code = 0;
-            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
-            InputStream inputStream = new FileInputStream(file);
-            Reader reader = new InputStreamReader(inputStream);
-            scanner scanner = new scanner(reader, complexSymbolFactory);
+            scanner scanner = getScanner(file);
             parser parser = new parser(scanner, complexSymbolFactory);
             Symbol root;
             root = parser.parse();
@@ -36,10 +40,7 @@ public class MiniJava {
     private static int scanner(File file) {
         try {
             int return_code = 0;
-            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
-            InputStream inputStream = new FileInputStream(file);
-            Reader reader = new InputStreamReader(inputStream);
-            scanner scanner = new scanner(reader, complexSymbolFactory);
+            scanner scanner = getScanner(file);
             Symbol symbol = scanner.next_token();
             while (symbol.sym != sym.EOF) {
                 if (symbol.sym == sym.error) {
