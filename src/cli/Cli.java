@@ -23,10 +23,10 @@ public class Cli {
             if (commandLine.hasOption("S")) {
                 argsMap.put("S", commandLine.getOptionValue("S"));
             }
-            else if (commandLine.hasOption("P")) {
+            if (commandLine.hasOption("P")) {
                 argsMap.put("P", commandLine.getOptionValue("P"));
             }
-            else {
+            if (argsMap.isEmpty()) {
                 help();
                 return null;
             }
