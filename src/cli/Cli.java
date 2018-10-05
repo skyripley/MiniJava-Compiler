@@ -12,6 +12,7 @@ public class Cli {
         this.args = args;
         options.addOption("S", "Scan", true, "Scan a source file");
         options.addOption("P", "Parse", true, "Parse a source file");
+        options.addOption("T", "SymbolTable", true, "Generate a symbol table from a source file");
     }
 
     public Map<String, String> parse() {
@@ -25,6 +26,9 @@ public class Cli {
             }
             if (commandLine.hasOption("P")) {
                 argsMap.put("P", commandLine.getOptionValue("P"));
+            }
+            if (commandLine.hasOption("T")) {
+                argsMap.put("T", commandLine.getOptionValue("T"));
             }
             if (argsMap.isEmpty()) {
                 help();
