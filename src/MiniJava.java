@@ -11,6 +11,28 @@ import AST.Visitor.*;
 
 public class MiniJava {
 
+    private static int generateSymbolTable(File file) {
+        try {
+            int return_code = 0;
+            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
+            InputStream inputStream = new FileInputStream(file);
+            Reader reader = new InputStreamReader(inputStream);
+            scanner scanner = new scanner(reader, complexSymbolFactory);
+            parser parser = new parser(scanner, complexSymbolFactory);
+            Symbol root;
+            root = parser.parse();
+            Program program = (Program) root.value;
+            SymTableVisitor symTableVisitor = new SymTableVisitor();
+            symTableVisitor.visit(program);
+            symTableVisitor.print();
+            return return_code;
+        } catch (Exception exception) {
+            System.err.println("Unexpected internal compiler error: " + exception.toString());
+            exception.printStackTrace();
+            return 1;
+        }
+    }
+
     private static int parser(File file) {
         try {
             int return_code = 0;
@@ -66,6 +88,7 @@ public class MiniJava {
     public static void main(String[] args) {
         int scanner_return_code = 0;
         int parser_return_code = 0;
+        int symbol_table_return_code = 0;
         Map<String, String> argsMap = new Cli(args).parse();
         if (argsMap != null) {
             if (argsMap.containsKey("S")) {
@@ -76,8 +99,12 @@ public class MiniJava {
                 String file = argsMap.get("P");
                 parser_return_code = parser(new File(file));
             }
+            if (argsMap.containsKey("T")) {
+                String file = argsMap.get("T");
+                symbol_table_return_code = generateSymbolTable(new File(file));
+            }
         }
-        if (scanner_return_code == 1 || parser_return_code == 1) {
+        if (scanner_return_code == 1 || parser_return_code == 1 || symbol_table_return_code == 1) {
             System.exit(1);
         }
         else {
