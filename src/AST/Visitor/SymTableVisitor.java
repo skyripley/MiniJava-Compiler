@@ -47,6 +47,7 @@ public class SymTableVisitor implements Visitor {
 	// Statement s;
 	public void visit(MainClass n) {
 		/* TO DO */
+		/* instantiate MethodDecl for main and add its sym table */
 		SymbolTable symbolTable = new SymbolTable();
 		ClassSymbol mainClassSymbol = new ClassSymbol(n.i1.toString());
 		st.addSymbol(mainClassSymbol);
@@ -78,11 +79,10 @@ public class SymTableVisitor implements Visitor {
 		}
 		if (n.ml != null) {
 			for (int i = 0; i < n.ml.size(); i++) {
-				MethodDecl methodDecl = n.ml.get(i);
-				MethodSymbol methodSymbol = new MethodSymbol(methodDecl.i.toString(), getTypeString(methodDecl.t));
-				if (methodDecl.fl != null) {
-					for (int j = 0; j < methodDecl.fl.size(); j++) {
-						Formal formal = methodDecl.fl.get(j);
+				MethodSymbol methodSymbol = new MethodSymbol(n.ml.get(i).i.toString(), getTypeString(n.ml.get(i).t));
+				if (n.ml.get(i).fl != null) {
+					for (int j = 0; j < n.ml.get(i).fl.size(); j++) {
+						Formal formal = n.ml.get(i).fl.get(j);
 						VarSymbol varSymbol = new VarSymbol(formal.i.toString(), getTypeString(formal.t));
 						methodSymbol.addParameter(varSymbol);
 					}
