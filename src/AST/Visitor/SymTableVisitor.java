@@ -28,7 +28,8 @@ public class SymTableVisitor implements Visitor {
 			type = "boolean";
 		}
 		else {
-			type = t.toString();
+			IdentifierType identifierType = (IdentifierType) t;
+			type = identifierType.s;
 		}
 		return type;
 	}
@@ -46,12 +47,16 @@ public class SymTableVisitor implements Visitor {
 	// Statement s;
 	public void visit(MainClass n) {
 		/* TO DO */
+		SymbolTable symbolTable = new SymbolTable();
 		ClassSymbol mainClassSymbol = new ClassSymbol(n.i1.toString());
+		st.addSymbol(mainClassSymbol);
+		st.addChild(n.toString(), symbolTable);
+		st = st.enterScope(n.i1.toString());
 		MethodSymbol mainMethodSymbol = new MethodSymbol("main", "void");
 		VarSymbol mainVarSymbol = new VarSymbol(n.i2.toString(), "String[]");
 		mainMethodSymbol.addParameter(mainVarSymbol);
 		mainClassSymbol.addMethod(mainMethodSymbol);
-		st.addSymbol(mainClassSymbol);
+		st = st.exitScope();
 	}
 
 	// Identifier i;
@@ -59,24 +64,34 @@ public class SymTableVisitor implements Visitor {
 	// MethodDeclList ml;
 	public void visit(ClassDeclSimple n) {
 		/* TO DO */
-		// issue with this is that enterScope returns a symbol table...
-		// meaning that each class should be a symbol table
+		SymbolTable symbolTable = new SymbolTable();
 		ClassSymbol classSymbol = new ClassSymbol(n.i.toString());
 		st.addSymbol(classSymbol);
+		st.addChild(n.toString(), symbolTable);
+		st = st.enterScope(n.i.toString());
 		if (n.vl != null) {
-			st.enterScope(n.i.toString());
 			for (int i = 0; i < n.vl.size(); i++) {
+				VarSymbol varSymbol = new VarSymbol(n.vl.get(i).i.toString(), getTypeString(n.vl.get(i).t));
+				classSymbol.addVariable(varSymbol);
 				n.vl.get(i).accept(this);
 			}
-			st.exitScope();
 		}
 		if (n.ml != null) {
-			st.enterScope(n.i.toString());
 			for (int i = 0; i < n.ml.size(); i++) {
+				MethodDecl methodDecl = n.ml.get(i);
+				MethodSymbol methodSymbol = new MethodSymbol(methodDecl.i.toString(), getTypeString(methodDecl.t));
+				if (methodDecl.fl != null) {
+					for (int j = 0; j < methodDecl.fl.size(); j++) {
+						Formal formal = methodDecl.fl.get(j);
+						VarSymbol varSymbol = new VarSymbol(formal.i.toString(), getTypeString(formal.t));
+						methodSymbol.addParameter(varSymbol);
+					}
+				}
+				classSymbol.addMethod(methodSymbol);
 				n.ml.get(i).accept(this);
 			}
-			st.exitScope();
 		}
+		st = st.exitScope();
 	}
 
 	// Identifier i;
@@ -105,31 +120,57 @@ public class SymTableVisitor implements Visitor {
 	// Exp e;
 	public void visit(MethodDecl n) {
 		/* TO DO */
+		SymbolTable symbolTable = new SymbolTable();
 		MethodSymbol methodSymbol = new MethodSymbol(n.i.toString(), getTypeString(n.t));
 		st.addSymbol(methodSymbol);
+		st.addChild(n.toString(), symbolTable);
+		st = st.enterScope(n.i.toString());
+		if (n.fl != null) {
+			for (int i = 0; i < n.fl.size(); i++) {
+				VarSymbol varSymbol = new VarSymbol(n.fl.get(i).i.toString(), getTypeString(n.fl.get(i).t));
+				methodSymbol.addParameter(varSymbol);
+				n.fl.get(i).accept(this);
+			}
+		}
+		if (n.vl != null) {
+			for (int i = 0; i < n.vl.size(); i++) {
+				n.vl.get(i).accept(this);
+			}
+		}
+		st = st.exitScope();
 	}
 
 	// Type t;
 	// Identifier i;
 	public void visit(Formal n) {
 		/* TO DO */
+		VarSymbol formal = new VarSymbol(n.i.toString(), getTypeString(n.t));
+		st.addSymbol(formal);
 	}
 
 	// StatementList sl;
 	public void visit(Block n) {
 		/* TO DO */
+		for (int i = 0; i < n.sl.size(); i++) {
+			n.sl.get(i).accept(this);
+		}
 	}
 
 	// Exp e;
 	// Statement s1,s2;
 	public void visit(If n) {
 		/* TO DO */
+		n.e.accept(this);
+		n.s1.accept(this);
+		n.s2.accept(this);
 	}
 
 	// Exp e;
 	// Statement s;
 	public void visit(While n) {
 		/* TO DO */
+		n.e.accept(this);
+		n.s.accept(this);
 	}
 
 	// Exp e;
