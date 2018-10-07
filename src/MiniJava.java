@@ -21,6 +21,11 @@ public class MiniJava {
             parser parser = new parser(scanner, complexSymbolFactory);
             Symbol root;
             root = parser.parse();
+            if (parser.errorDetected) {
+                System.out.println("\nErrors detected during parsing!");
+                System.out.println("Will attempt to generate a partial symbol table anyway...");
+                return_code = 1;
+            }
             Program program = (Program) root.value;
             SymTableVisitor symTableVisitor = new SymTableVisitor();
             symTableVisitor.visit(program);
