@@ -17,7 +17,6 @@ public class SymTableVisitor implements Visitor {
 	}
 	
 	private String getTypeString(Type t) {
-		/* TO DO */
 		String type;
 		if (t instanceof IntegerType) {
 			type = "int";
@@ -81,7 +80,6 @@ public class SymTableVisitor implements Visitor {
 	// Identifier i1,i2;
 	// Statement s;
 	public void visit(MainClass n) {
-		/* TO DO */
 		SymbolTable symbolTable = new SymbolTable();
 		ClassSymbol mainClassSymbol = new ClassSymbol(n.i1.toString());
 		st.addSymbol(mainClassSymbol);
@@ -104,7 +102,6 @@ public class SymTableVisitor implements Visitor {
 	// VarDeclList vl;
 	// MethodDeclList ml;
 	public void visit(ClassDeclSimple n) {
-		/* TO DO */
 		SymbolTable symbolTable = new SymbolTable();
 		ClassSymbol classSymbol = new ClassSymbol(n.i.toString());
 		st.addSymbol(classSymbol);
@@ -124,7 +121,6 @@ public class SymTableVisitor implements Visitor {
 	// VarDeclList vl;
 	// MethodDeclList ml;
 	public void visit(ClassDeclExtends n) {
-		/* TO DO */
 		SymbolTable symbolTable = new SymbolTable();
 		ClassSymbol classSymbol = new ClassSymbol(n.i.toString());
 		st.addSymbol(classSymbol);
@@ -142,7 +138,6 @@ public class SymTableVisitor implements Visitor {
 	// Type t;
 	// Identifier i;
 	public void visit(VarDecl n) {
-		/* TO DO */
 		VarSymbol varSymbol = new VarSymbol(n.i.toString(), getTypeString(n.t));
 		st.addSymbol(varSymbol);
 	}
@@ -154,7 +149,6 @@ public class SymTableVisitor implements Visitor {
 	// StatementList sl;
 	// Exp e;
 	public void visit(MethodDecl n) {
-		/* TO DO */
 		SymbolTable symbolTable = new SymbolTable();
 		MethodSymbol methodSymbol = new MethodSymbol(n.i.toString(), getTypeString(n.t));
 		st.addSymbol(methodSymbol);
@@ -172,14 +166,12 @@ public class SymTableVisitor implements Visitor {
 	// Type t;
 	// Identifier i;
 	public void visit(Formal n) {
-		/* TO DO */
 		VarSymbol formal = new VarSymbol(n.i.toString(), getTypeString(n.t));
 		st.addSymbol(formal);
 	}
 
 	// StatementList sl;
 	public void visit(Block n) {
-		/* TO DO */
 		for (int i = 0; i < n.sl.size(); i++) {
 			n.sl.get(i).accept(this);
 		}
@@ -188,7 +180,6 @@ public class SymTableVisitor implements Visitor {
 	// Exp e;
 	// Statement s1,s2;
 	public void visit(If n) {
-		/* TO DO */
 		n.e.accept(this);
 		n.s1.accept(this);
 		n.s2.accept(this);
@@ -197,7 +188,6 @@ public class SymTableVisitor implements Visitor {
 	// Exp e;
 	// Statement s;
 	public void visit(While n) {
-		/* TO DO */
 		n.e.accept(this);
 		n.s.accept(this);
 	}
