@@ -1,5 +1,6 @@
 package AST;
 
+import AST.Visitor.ObjectVisitor;
 import AST.Visitor.Visitor;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
@@ -18,4 +19,6 @@ public class Identifier extends ASTNode {
   public String toString(){
     return s;
   }
+
+  public Object accept(ObjectVisitor objectVisitor) { return objectVisitor.visit(this); }
 }
