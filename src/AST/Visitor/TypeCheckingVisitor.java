@@ -3,6 +3,8 @@ package AST.Visitor;
 import AST.*;
 import Symtab.*;
 
+import java.util.HashMap;
+
 public class TypeCheckingVisitor implements ObjectVisitor {
 
     SymbolTable st = null;
@@ -41,6 +43,16 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     private String getParentScopeMethodReturnType(Call call) {
         System.out.println(call.i.toString());
+        /*
+        Object object = call.e.accept(this);
+        if (object instanceof IdentifierExp) {
+            IdentifierExp identifierExp = (IdentifierExp) object;
+            String identifier = identifierExp.s;
+            String type = st.getVarTable().get(identifier).getType();
+            SymbolTable tmpSymbolTable = st.exitScope();
+            tmpSymbolTable = st.enterScope(type);
+        }
+        */
         SymbolTable tmpSymbolTable = st.exitScope();
         return tmpSymbolTable.getMethodTable().get(call.i.toString()).getType();
     }
