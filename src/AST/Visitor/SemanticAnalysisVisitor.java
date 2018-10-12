@@ -7,6 +7,7 @@ public class SemanticAnalysisVisitor implements ObjectVisitor {
 
 	SymbolTable st = null;
 	public int errors = 0;
+	public int warnings = 0;
 	
 	public void setSymtab(SymbolTable s)
 	{
@@ -23,6 +24,20 @@ public class SemanticAnalysisVisitor implements ObjectVisitor {
 		System.out.println(line+": "+msg);
 		++errors;
 	}
+
+    public void report_warning(int line, String msg)
+    {
+        System.out.println(line+": "+msg);
+        ++warnings;
+    }
+
+	private boolean isAssignable(Type type, Type typeOne) {
+	    return type.getClass().equals(typeOne.getClass());
+    }
+
+	private boolean sameType(Type type, Type typeOne) {
+	    return type.getClass().equals(typeOne.getClass());
+    }
 	
 	// Display added for toy example language. Not used in regular MiniJava
 	public Object visit(Display n) {
