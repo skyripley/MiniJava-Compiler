@@ -147,13 +147,11 @@ public class TypeCheckingVisitor implements ObjectVisitor {
                 n.fl.get(i).accept(this);
             }
         }
-        System.out.println(st.getVarTable().toString());
         if (n.vl != null) {
             for (int i = 0; i < n.vl.size(); i++) {
                 n.vl.get(i).accept(this);
             }
         }
-        System.out.println(st.getVarTable().toString());
         if (n.sl != null) {
             for (int i = 0; i < n.sl.size(); i++) {
                 n.sl.get(i).accept(this);
@@ -402,7 +400,7 @@ public class TypeCheckingVisitor implements ObjectVisitor {
                 (! getIdentifierType(((IdentifierExp) e2Object).s).equals("int"))) {
             report_error(n.line_number, "Invalid type for second argument in multiplication");
         }
-        else if (!(n.e1.accept(this) instanceof IdentifierExp) &&
+        else if (!(e2Object instanceof IdentifierExp) &&
                 !(e2Object instanceof IntegerLiteral)) {
             report_error(n.line_number, "Invalid type for second argument in multiplication");
         }
@@ -482,7 +480,8 @@ public class TypeCheckingVisitor implements ObjectVisitor {
                 (! getIdentifierType(((IdentifierExp) n.e.accept(this)).s).equals("int"))) {
             report_error(n.line_number, "Non-integer literal in new array declaration");
         }
-        if (! (n.e.accept(this) instanceof IntegerType)) {
+        else if (!(n.e.accept(this) instanceof IdentifierExp) &&
+                !(n.e.accept(this) instanceof IntegerType)) {
             report_error(n.line_number, "Non-integer literal in new array declaration");
         }
         return n;
