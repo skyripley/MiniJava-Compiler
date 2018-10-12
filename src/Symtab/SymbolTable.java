@@ -40,6 +40,8 @@ public class SymbolTable {
     public HashMap<String, Symbol> getVarTable() {
     	return vtable;    	
     }
+
+    public HashMap<String, SymbolTable> getChildren() { return children; }
     
     public void addSymbol(Symbol s) {
     	if ( s instanceof ClassSymbol )

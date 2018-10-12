@@ -13,6 +13,7 @@ public class Cli {
         options.addOption("S", "Scan", true, "Scan a source file");
         options.addOption("P", "Parse", true, "Parse a source file");
         options.addOption("T", "SymbolTable", true, "Generate a symbol table from a source file");
+        options.addOption("A", "SemanticAnalysis", true, "Perform semantic analysis on a source file");
     }
 
     public Map<String, String> parse() {
@@ -29,6 +30,9 @@ public class Cli {
             }
             if (commandLine.hasOption("T")) {
                 argsMap.put("T", commandLine.getOptionValue("T"));
+            }
+            if (commandLine.hasOption("A")) {
+                argsMap.put("A", commandLine.getOptionValue("A"));
             }
             if (argsMap.isEmpty()) {
                 help();

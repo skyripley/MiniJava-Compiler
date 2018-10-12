@@ -11,6 +11,8 @@ import Symtab.*;
 public class SymTableVisitor implements Visitor {
 
 	private SymbolTable st = new SymbolTable();
+
+	public SymbolTable getSymbolTable() { return st; }
 	
 	public void print() {
 		st.print(0);
