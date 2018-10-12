@@ -41,7 +41,15 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     private String getIdentifierType(String identifier) {
         try {
-            return st.getVarTable().get(identifier).getType();
+            Symbol symbol = st.getVarTable().get(identifier);
+            if (symbol != null) {
+                return symbol.getType();
+            }
+            else {
+                SymbolTable tmpSymbolTable = st.exitScope();
+                symbol = tmpSymbolTable.getVarTable().get(identifier);
+                return symbol.getType();
+            }
         } catch (NullPointerException nullPointerException) {
             System.out.println("Null pointer exception encountered for: " + identifier);
             return "";
@@ -199,18 +207,28 @@ public class TypeCheckingVisitor implements ObjectVisitor {
                 (! getIdentifierType(((IdentifierExp) eObject).s).equals("boolean"))) {
             report_error(n.line_number, "If statement should contain a valid boolean expression");
         }
+        else if (eObject instanceof Call && !handleCallInControlStatement((Call) eObject)) {
+            report_error(n.line_number, "Method in if statement doesn't return a boolean");
+        }
         else if ((!(eObject instanceof IdentifierExp)) &&
+                (!(eObject instanceof Call)) &&
                 ((!(eObject instanceof BooleanType)) &&
                         (!(eObject instanceof And)) &&
                         (!(eObject instanceof False)) &&
                         (!(eObject instanceof True)) &&
                         (!(eObject instanceof LessThan)) &&
                         (!(eObject instanceof Not)))) {
-            report_error(n.line_number, "If statement expects boolean") ;
+            report_error(n.line_number, "If statement expects boolean");
         }
         n.s1.accept(this);
         n.s2.accept(this);
         return null;
+    }
+
+    private boolean handleCallInControlStatement(Call call) {
+        SymbolTable tmpSymbolTable = st.exitScope();
+        String methodReturnType = tmpSymbolTable.getMethodTable().get(call.i.toString()).getType();
+        return methodReturnType.equals("boolean");
     }
 
     // Exp e;
@@ -222,14 +240,18 @@ public class TypeCheckingVisitor implements ObjectVisitor {
                 (! getIdentifierType(((IdentifierExp) eObject).s).equals("boolean"))) {
             report_error(n.line_number, "While statement should contain a valid boolean expression");
         }
+        else if (eObject instanceof Call && !handleCallInControlStatement((Call) eObject)) {
+            report_error(n.line_number, "Method in if statement doesn't return a boolean");
+        }
         else if ((!(eObject instanceof IdentifierExp)) &&
+                (!(eObject instanceof Call)) &&
                 ((!(eObject instanceof BooleanType)) &&
-                (!(eObject instanceof And)) &&
-                (!(eObject instanceof False)) &&
-                (!(eObject instanceof True)) &&
-                (!(eObject instanceof LessThan)) &&
-                (!(eObject instanceof Not)))) {
-            report_error(n.line_number, "While statement expects boolean");
+                        (!(eObject instanceof And)) &&
+                        (!(eObject instanceof False)) &&
+                        (!(eObject instanceof True)) &&
+                        (!(eObject instanceof LessThan)) &&
+                        (!(eObject instanceof Not)))) {
+            report_error(n.line_number, "While statement expects boolean") ;
         }
         n.s.accept(this);
         return null;
@@ -279,11 +301,11 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         }
         if (e2Object instanceof IdentifierExp &&
                 (! getIdentifierType(((IdentifierExp) e2Object).s).equals("boolean"))) {
-            report_error(n.line_number, "Invalid type for first argument in And expression");
+            report_error(n.line_number, "Invalid type for second argument in And expression");
         }
         else if (!(e2Object instanceof IdentifierExp) &&
                 !(e2Object instanceof BooleanType)) {
-            report_error(n.line_number, "Invalid type for first argument in And expression");
+            report_error(n.line_number, "Invalid type for second argument in And expression");
         }
         return null;
     }
@@ -304,13 +326,13 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         }
         if (e2Object instanceof IdentifierExp &&
                 (! getIdentifierType(((IdentifierExp) e2Object).s).equals("int"))) {
-            report_error(n.line_number, "Invalid type for first argument in less than comparison");
+            report_error(n.line_number, "Invalid type for second argument in less than comparison");
         }
         else if (!(n.e1.accept(this) instanceof IdentifierExp) &&
                 !(e2Object instanceof IntegerLiteral)) {
-            report_error(n.line_number, "Invalid type for first argument in less than comparison");
+            report_error(n.line_number, "Invalid type for second argument in less than comparison");
         }
-        return null;
+        return n;
     }
 
     // Exp e1,e2;
@@ -329,11 +351,11 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         }
         if (e2Object instanceof IdentifierExp &&
                 (! getIdentifierType(((IdentifierExp) e2Object).s).equals("int"))) {
-            report_error(n.line_number, "Invalid type for first argument in addition");
+            report_error(n.line_number, "Invalid type for second argument in addition");
         }
         else if (!(e2Object instanceof IdentifierExp) &&
                 !(e2Object instanceof IntegerLiteral)) {
-            report_error(n.line_number, "Invalid type for first argument in addition");
+            report_error(n.line_number, "Invalid type for second argument in addition");
         }
         return null;
     }
@@ -354,10 +376,10 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         }
         if (e2Object instanceof IdentifierExp &&
                 (! getIdentifierType(((IdentifierExp) e2Object).s).equals("int"))) {
-            report_error(n.line_number, "Invalid type for first argument in subtraction");
+            report_error(n.line_number, "Invalid type for second argument in subtraction");
         }
         else if (! (e2Object instanceof IntegerLiteral)) {
-            report_error(n.line_number, "Invalid type for first argument in subtraction");
+            report_error(n.line_number, "Invalid type for second argument in subtraction");
         }
         return null;
     }
@@ -378,11 +400,11 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         }
         if (e2Object instanceof IdentifierExp &&
                 (! getIdentifierType(((IdentifierExp) e2Object).s).equals("int"))) {
-            report_error(n.line_number, "Invalid type for first argument in multiplication");
+            report_error(n.line_number, "Invalid type for second argument in multiplication");
         }
         else if (!(n.e1.accept(this) instanceof IdentifierExp) &&
                 !(e2Object instanceof IntegerLiteral)) {
-            report_error(n.line_number, "Invalid type for first argument in multiplication");
+            report_error(n.line_number, "Invalid type for second argument in multiplication");
         }
         return null;
     }
@@ -429,7 +451,7 @@ public class TypeCheckingVisitor implements ObjectVisitor {
                 n.el.get(i).accept(this);
             }
         }
-        return null;
+        return n;
     }
 
     // int i;
@@ -478,11 +500,11 @@ public class TypeCheckingVisitor implements ObjectVisitor {
             report_error(n.line_number, "Operator '!' used on a non-boolean type");
         }
         else if (!(n.e.accept(this) instanceof IdentifierExp) &&
-                !(n.e.accept(this) instanceof BooleanType) ||
+                !(n.e.accept(this) instanceof BooleanType) &&
                 !(n.e.accept(this) instanceof LessThan)) {
             report_error(n.line_number, "Operator '!' used on a non-boolean type");
         }
-        return null;
+        return n;
     }
 
     // String s;
