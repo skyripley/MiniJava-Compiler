@@ -3,13 +3,13 @@ package AST.Visitor;
 import AST.*;
 import Symtab.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TypeCheckingVisitor implements ObjectVisitor {
 
-    SymbolTable st = null;
+    private SymbolTable st = null;
     public int errors = 0;
-    public int warnings = 0;
 
     public void setSymtab(SymbolTable s)
     {
@@ -21,24 +21,10 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         return st;
     }
 
-    public void report_error(int line, String msg)
+    private void report_error(int line, String msg)
     {
         System.out.println(line+": "+msg);
         ++errors;
-    }
-
-    public void report_warning(int line, String msg)
-    {
-        System.out.println(line+": "+msg);
-        ++warnings;
-    }
-
-    private boolean isAssignable(Type type, Type typeOne) {
-        return type.getClass().equals(typeOne.getClass());
-    }
-
-    private boolean sameType(Type type, Type typeOne) {
-        return type.getClass().equals(typeOne.getClass());
     }
 
     private String getParentScopeMethodReturnType(Call call) {
@@ -55,6 +41,90 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         */
         SymbolTable tmpSymbolTable = st.exitScope();
         return tmpSymbolTable.getMethodTable().get(call.i.toString()).getType();
+    }
+
+    private boolean validMethodCall(Call call, String expectedType) {
+        Object object = call.e.accept(this);
+        if (object instanceof IdentifierExp) {
+            if (!validReferenceType((IdentifierExp) object, call.i.toString())) {
+                System.out.println("Invalid ident in valid method call");
+                return false;
+            }
+            if (!validReturnType(call.i.toString(), expectedType)) {
+                System.out.println("Invalid ret in valid method call");
+                return false;
+            }
+        }
+        else if (object instanceof This) {
+            if (!validReturnType(call.i.toString(), expectedType)) {
+                return false;
+            }
+        }
+        if (call.el != null) {
+            if (!validMethodParameters(call.i.toString(), call.el)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validReferenceType(IdentifierExp identifierExp, String methodName) {
+        String identifier = identifierExp.s;
+        String identifierType = null;
+        SymbolTable tmpSymbolTable = st;
+        Symbol identifierVar = tmpSymbolTable.getVarTable().get(identifier);
+        if (identifierVar != null) {
+            identifierType = identifierVar.getType();
+        }
+        else {
+            return false;
+        }
+        while (tmpSymbolTable.getParent() != null) {
+            tmpSymbolTable = tmpSymbolTable.getParent();
+        }
+        if (tmpSymbolTable.getClassTable().get(identifierType) != null) {
+            tmpSymbolTable = tmpSymbolTable.enterScope(identifierType);
+            if (tmpSymbolTable.getMethodTable().get(methodName) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean validReturnType(String methodName, String expectedType) {
+        return getMethodReturnType(methodName).equals(expectedType);
+    }
+
+    private boolean validMethodParameters(String methodName, ExpList expList) {
+        boolean result = true;
+        ArrayList<Symbol> methodParameters = new ArrayList<>();
+        SymbolTable tmpSymbolTable = st;
+        while(st.getParent() != null) {
+            tmpSymbolTable = tmpSymbolTable.getParent();
+            if (tmpSymbolTable == null) {
+                break;
+            }
+            HashMap<String, Symbol> methodTable = tmpSymbolTable.getMethodTable();
+            Symbol methodSymbol = methodTable.get(methodName);
+            if (methodSymbol != null) {
+                methodParameters = ((MethodSymbol) methodSymbol).getParameters();
+                break;
+            }
+        }
+        if (expList.size() == methodParameters.size()) {
+            int size = expList.size();
+            for (int i = 0; i < size; i++) {
+                String parameterType = ((VarSymbol) methodParameters.get(i)).getType();
+                Exp exp = expList.get(i);
+                Object object = exp.accept(this);
+                String objectType = getExpressionType(object);
+                if (!(objectType != null && objectType.equals(parameterType))) {
+                    result = false;
+                    break;
+                }
+            }
+        }
+        return result;
     }
 
     private String getIdentifierType(String identifier) {
@@ -74,12 +144,57 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         }
     }
 
-    private boolean validOperatorObjects(Object objectOne, Object objectTwo) {
+    private String getExpressionType(Object object) {
+        String objectName = object.getClass().getName().replace("AST.", "");
+        switch (objectName) {
+            case "And": return "boolean";
+            case "ArrayLength": return "int";
+            case "ArrayLookup": return getExpressionType(((ArrayLookup) object).e1);
+            case "BooleanType": return "boolean";
+            case "Call": return getMethodReturnType(((Call) object).i.toString());
+            case "False": return "boolean";
+            case "True": return "boolean";
+            case "IdentifierExp": return getIdentifierType(((IdentifierExp) object).s);
+            case "IntArrayType": return "int[]";
+            case "IntegerLiteral": return "int";
+            case "LessThan": return "boolean";
+            case "Minus": return "int";
+            case "NewArray": return getExpressionType(((NewArray) object).e);
+            case "NewObject": return getIdentifierType(((NewObject) object).i.toString());
+            case "Not": return "boolean";
+            case "Plus": return "int";
+            case "Times": return "int";
+            case "This":
+        }
+        return null;
+    }
+
+    private String getMethodReturnType(String methodName) {
+        SymbolTable symbolTable = st;
+        Symbol methodSymbol = st.getMethodTable().get(methodName);
+        if (methodSymbol != null) {
+            return methodSymbol.getType();
+        }
+        // move to global scope to search for method
+        while (symbolTable.getParent() != null) {
+            symbolTable = symbolTable.getParent();
+        }
+        HashMap<String, Symbol> classes = symbolTable.getClassTable();
+        for (String key : classes.keySet()) {
+            SymbolTable tmpSymbolTable = symbolTable.enterScope(key);
+            if (tmpSymbolTable.getMethodTable().get(methodName) != null) {
+                return tmpSymbolTable.getMethodTable().get(methodName).getType();
+            }
+        }
+        return null;
+    }
+
+    private boolean validOperatorObjects(Object objectOne) {
         if (objectOne instanceof IdentifierExp &&
-                (! getIdentifierType(((IdentifierExp) objectOne).s).equals("int"))) {
+                (!getIdentifierType(((IdentifierExp) objectOne).s).equals("int"))) {
             return false;
         }
-        else if (objectOne instanceof Call && !getParentScopeMethodReturnType((Call) objectOne).equals("int")) {
+        else if (objectOne instanceof Call && !validMethodCall((Call) objectOne, "int")) {
             return false;
         }
         else if (!(objectOne instanceof IdentifierExp) &&
@@ -90,30 +205,15 @@ public class TypeCheckingVisitor implements ObjectVisitor {
                 !(objectOne instanceof Times)) {
             return false;
         }
-        if (objectTwo instanceof IdentifierExp &&
-                (! getIdentifierType(((IdentifierExp) objectTwo).s).equals("int"))) {
-            return false;
-        }
-        else if (objectTwo instanceof Call && !getParentScopeMethodReturnType((Call) objectTwo).equals("int")) {
-            return false;
-        }
-        else if (!(objectTwo instanceof IdentifierExp) &&
-                !(objectTwo instanceof Call) &&
-                !(objectTwo instanceof IntegerLiteral) &&
-                !(objectTwo instanceof Plus) &&
-                !(objectTwo instanceof Minus) &&
-                !(objectTwo instanceof Times)) {
-            return false;
-        }
         return true;
     }
 
     private boolean validControlExpression(Object object) {
         if (object instanceof IdentifierExp &&
-                (! getIdentifierType(((IdentifierExp) object).s).equals("boolean"))) {
+                (!getIdentifierType(((IdentifierExp) object).s).equals("boolean"))) {
             return false;
         }
-        else if (object instanceof Call && !getParentScopeMethodReturnType((Call) object).equals("boolean")) {
+        else if (object instanceof Call && !validMethodCall((Call) object, "boolean")) {
             return false;
         }
         else if ((!(object instanceof IdentifierExp)) &&
@@ -142,7 +242,7 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         for (int i = 0; i < n.cl.size(); i++) {
             n.cl.get(i).accept(this);
         }
-        return "This is a program";
+        return n;
     }
 
     // Identifier i1,i2;
@@ -188,11 +288,15 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         st = st.enterScope(n.i.toString());
         n.i.accept(this);
         n.j.accept(this);
-        for (int i = 0; i < n.vl.size(); i++) {
-            n.vl.get(i).accept(this);
+        if (n.vl != null) {
+            for (int i = 0; i < n.vl.size(); i++) {
+                n.vl.get(i).accept(this);
+            }
         }
-        for (int i = 0; i < n.ml.size(); i++) {
-            n.ml.get(i).accept(this);
+        if (n.ml != null) {
+            for (int i = 0; i < n.ml.size(); i++) {
+                n.ml.get(i).accept(this);
+            }
         }
         st = st.exitScope();
         return n;
@@ -278,7 +382,7 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     public Object visit(If n) {
         // also need to check if a method call returns a boolean or if an identifier is boolean
         if (!validControlExpression(n.e.accept(this))) {
-            report_error(n.line_number, "If statement exprects a boolean expression");
+            report_error(n.line_number, "If statement expects a boolean expression");
         }
         n.s1.accept(this);
         n.s2.accept(this);
@@ -290,7 +394,7 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     public Object visit(While n) {
         // also check identifier
         if (!validControlExpression(n.e.accept(this))) {
-            report_error(n.line_number, "If statement exprects a boolean expression");
+            report_error(n.line_number, "If statement expects a boolean expression");
         }
         n.s.accept(this);
         return n;
@@ -306,6 +410,7 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // Identifier i;
     // Exp e;
     public Object visit(Assign n) {
+        // TODO: Should check validity
         // compare types
         n.i.accept(this);
         n.e.accept(this);
@@ -315,6 +420,7 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // Identifier i;
     // Exp e1,e2;
     public Object visit(ArrayAssign n) {
+        // TODO
         // should check for array out of bounds
         // should check that valid types are being assigned
         // should check that the array has been declared
@@ -330,45 +436,43 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         // if it is should check type
         Object e1Object = n.e1.accept(this);
         Object e2Object = n.e2.accept(this);
-        if (e1Object instanceof IdentifierExp &&
-                (! getIdentifierType(((IdentifierExp) e1Object).s).equals("boolean"))) {
+        if (!andExpressionHelper(e1Object)) {
             report_error(n.line_number, "Invalid type for first argument in And expression");
         }
-        else if (e1Object instanceof Call && !getParentScopeMethodReturnType((Call) e1Object).equals("boolean")) {
-            report_error(n.line_number, "Method in and statement doesn't return a boolean");
-        }
-        else if (!(e2Object instanceof IdentifierExp) &&
-                !(e2Object instanceof BooleanType) &&
-                !(e2Object instanceof Call) &&
-                !(e2Object instanceof LessThan) &&
-                !(e2Object instanceof Not) &&
-                !(e2Object instanceof And)) {
-            report_error(n.line_number, "Invalid type for first argument in And expression");
-        }
-        if (e2Object instanceof IdentifierExp &&
-                (! getIdentifierType(((IdentifierExp) e2Object).s).equals("boolean"))) {
-            report_error(n.line_number, "Invalid type for second argument in And expression");
-        }
-        else if (e2Object instanceof Call && !getParentScopeMethodReturnType((Call) e2Object).equals("boolean")) {
-            report_error(n.line_number, "Method in and statement doesn't return a boolean");
-        }
-        else if (!(e2Object instanceof IdentifierExp) &&
-                !(e2Object instanceof BooleanType) &&
-                !(e2Object instanceof Call) &&
-                !(e2Object instanceof LessThan) &&
-                !(e2Object instanceof Not) &&
-                !(e2Object instanceof And)) {
+        if (!andExpressionHelper(e2Object)) {
             report_error(n.line_number, "Invalid type for second argument in And expression");
         }
         return n;
+    }
+
+    private boolean andExpressionHelper(Object object) {
+        if (object instanceof IdentifierExp &&
+                (! getIdentifierType(((IdentifierExp) object).s).equals("boolean"))) {
+            return false;
+        }
+        else if (object instanceof Call && !validMethodCall((Call) object, "boolean")) {
+            return false;
+        }
+        else if (!(object instanceof IdentifierExp) &&
+                !(object instanceof BooleanType) &&
+                !(object instanceof Call) &&
+                !(object instanceof LessThan) &&
+                !(object instanceof Not) &&
+                !(object instanceof And)) {
+            return false;
+        }
+        return true;
     }
 
     // Exp e1,e2;
     public Object visit(LessThan n) {
         // should also check if it's an identifier
         // if it is should check type
-        if (!validOperatorObjects(n.e1.accept(this), n.e2.accept(this))) {
-            report_error(n.line_number, "Invalid argument in less than expression");
+        if (!validOperatorObjects(n.e1.accept(this))) {
+            report_error(n.line_number, "Argument one in less than expression invalid");
+        }
+        if (!validOperatorObjects(n.e2.accept(this))) {
+            report_error(n.line_number, "Argument two in less than expression invalid");
         }
         return n;
     }
@@ -377,8 +481,11 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     public Object visit(Plus n) {
         // should also check if it's an identifier
         // if it is should check type
-        if (!validOperatorObjects(n.e1.accept(this), n.e2.accept(this))) {
-            report_error(n.line_number, "Invalid argument in addition expression");
+        if (!validOperatorObjects(n.e1.accept(this))) {
+            report_error(n.line_number, "Argument one in addition expression invalid");
+        }
+        if (!validOperatorObjects(n.e2.accept(this))) {
+            report_error(n.line_number, "Argument two in addition expression invalid");
         }
         return n;
     }
@@ -387,8 +494,11 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     public Object visit(Minus n) {
         // should also check if it's an identifier
         // if it is should check type
-        if (!validOperatorObjects(n.e1.accept(this), n.e2.accept(this))) {
-            report_error(n.line_number, "Invalid argument in subtraction expression");
+        if (!validOperatorObjects(n.e1.accept(this))) {
+            report_error(n.line_number, "Argument one in subtraction expression invalid");
+        }
+        if (!validOperatorObjects(n.e2.accept(this))) {
+            report_error(n.line_number, "Argument two in subtraction expression invalid");
         }
         return n;
     }
@@ -397,8 +507,11 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     public Object visit(Times n) {
         // should also check if it's an identifier
         // if it is should check type
-        if (!validOperatorObjects(n.e1.accept(this), n.e2.accept(this))) {
-            report_error(n.line_number, "Invalid argument in multiplication expression");
+        if (!validOperatorObjects(n.e1.accept(this))) {
+            report_error(n.line_number, "Argument one in multiplication expression invalid");
+        }
+        if (!validOperatorObjects(n.e2.accept(this))) {
+            report_error(n.line_number, "Argument two in multiplication expression invalid");
         }
         return n;
     }
@@ -492,20 +605,7 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     // Exp e;
     public Object visit(Not n) {
-        Object eObject = n.e.accept(this);
-        if (eObject instanceof IdentifierExp &&
-                (! getIdentifierType(((IdentifierExp) eObject).s).equals("boolean"))) {
-            report_error(n.line_number, "Operator '!' used on a non-boolean type");
-        }
-        else if (eObject instanceof Call && !getParentScopeMethodReturnType((Call) eObject).equals("boolean")) {
-            report_error(n.line_number, "Method in not statement doesn't return a boolean");
-        }
-        else if (!(eObject instanceof IdentifierExp) &&
-                !(eObject instanceof Call) &&
-                !(eObject instanceof BooleanType) &&
-                !(eObject instanceof LessThan) &&
-                !(eObject instanceof Not) &&
-                !(eObject instanceof And)) {
+        if (!validControlExpression(n.e.accept(this))) {
             report_error(n.line_number, "Operator '!' used on a non-boolean type");
         }
         return n;
