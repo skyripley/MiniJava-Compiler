@@ -39,7 +39,8 @@ class Element {
 	ret_val = true ;
 
 	aux01 = other.GetAge();
-	if (!this.Compare(aux01,Age)) ret_val = false ;
+	// semantic error 1
+	if (aux01 + aux02) ret_val = false ;
 	else { 
 	    aux02 = other.GetSalary();
 	    if (!this.Compare(aux02,Salary)) ret_val = false ;
@@ -48,7 +49,8 @@ class Element {
 		    if (!other.GetMarried()) ret_val = false;
 		    else nt = 0 ;
 		else
-		    if (other.GetMarried()) ret_val = false;
+			// semantic error 2
+		    if (other.GetMarried(aux01)) ret_val = false;
 		    else nt = 0 ;
 	}
 
