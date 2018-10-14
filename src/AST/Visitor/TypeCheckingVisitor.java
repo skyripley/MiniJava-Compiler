@@ -27,42 +27,29 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         ++errors;
     }
 
-    private String getParentScopeMethodReturnType(Call call) {
-        System.out.println(call.i.toString());
-        /*
-        Object object = call.e.accept(this);
-        if (object instanceof IdentifierExp) {
-            IdentifierExp identifierExp = (IdentifierExp) object;
-            String identifier = identifierExp.s;
-            String type = st.getVarTable().get(identifier).getType();
-            SymbolTable tmpSymbolTable = st.exitScope();
-            tmpSymbolTable = st.enterScope(type);
-        }
-        */
-        SymbolTable tmpSymbolTable = st.exitScope();
-        return tmpSymbolTable.getMethodTable().get(call.i.toString()).getType();
-    }
-
     private boolean validMethodCall(Call call, String expectedType) {
         Object object = call.e.accept(this);
         if (object instanceof IdentifierExp) {
             if (!validReferenceType((IdentifierExp) object, call.i.toString())) {
-                System.out.println("Invalid ident in valid method call");
                 return false;
             }
             if (!validReturnType(call.i.toString(), expectedType)) {
-                System.out.println("Invalid ret in valid method call");
                 return false;
+            }
+            if (call.el != null) {
+                if (!validMethodParameters(call.i.toString(), call.el, getIdentifierType(((IdentifierExp) object).s))) {
+                    return false;
+                }
             }
         }
         else if (object instanceof This) {
             if (!validReturnType(call.i.toString(), expectedType)) {
                 return false;
             }
-        }
-        if (call.el != null) {
-            if (!validMethodParameters(call.i.toString(), call.el)) {
-                return false;
+            if (call.el != null) {
+                if (!validMethodParameters(call.i.toString(), call.el, st.getParent().getScopeName())) {
+                    return false;
+                }
             }
         }
         return true;
@@ -92,26 +79,30 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     }
 
     private boolean validReturnType(String methodName, String expectedType) {
-        return getMethodReturnType(methodName).equals(expectedType);
+        try {
+            return getMethodReturnType(methodName).equals(expectedType);
+        } catch (NullPointerException ex) {
+            return false;
+        }
     }
 
-    private boolean validMethodParameters(String methodName, ExpList expList) {
+    private boolean validMethodParameters(String methodName, ExpList expList, String scopeName) {
         boolean result = true;
         ArrayList<Symbol> methodParameters = new ArrayList<>();
         SymbolTable tmpSymbolTable = st;
-        while(st.getParent() != null) {
+        while(tmpSymbolTable.getParent() != null) {
             tmpSymbolTable = tmpSymbolTable.getParent();
-            if (tmpSymbolTable == null) {
-                break;
-            }
-            HashMap<String, Symbol> methodTable = tmpSymbolTable.getMethodTable();
-            Symbol methodSymbol = methodTable.get(methodName);
-            if (methodSymbol != null) {
-                methodParameters = ((MethodSymbol) methodSymbol).getParameters();
-                break;
-            }
         }
-        if (expList.size() == methodParameters.size()) {
+        tmpSymbolTable = tmpSymbolTable.enterScope(scopeName);
+        HashMap<String, Symbol> methodTable = tmpSymbolTable.getMethodTable();
+        Symbol methodSymbol = methodTable.get(methodName);
+        if (methodSymbol != null) {
+            methodParameters = ((MethodSymbol) methodSymbol).getParameters();
+        }
+        else {
+            result = false;
+        }
+        if (expList != null && expList.size() == methodParameters.size()) {
             int size = expList.size();
             for (int i = 0; i < size; i++) {
                 String parameterType = ((VarSymbol) methodParameters.get(i)).getType();
@@ -119,10 +110,19 @@ public class TypeCheckingVisitor implements ObjectVisitor {
                 Object object = exp.accept(this);
                 String objectType = getExpressionType(object);
                 if (!(objectType != null && objectType.equals(parameterType))) {
+                    if (((ClassSymbol) tmpSymbolTable.exitScope().getClassTable().get(objectType)).getType().equals(parameterType)) {
+                        continue;
+                    }
                     result = false;
                     break;
                 }
             }
+        }
+        else if (expList == null && methodParameters.size() == 0) {
+            result = true;
+        }
+        else {
+            result = false;
         }
         return result;
     }
@@ -139,7 +139,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
                 return symbol.getType();
             }
         } catch (NullPointerException nullPointerException) {
-            System.out.println("Null pointer exception encountered for: " + identifier);
             return "";
         }
     }
@@ -160,11 +159,26 @@ public class TypeCheckingVisitor implements ObjectVisitor {
             case "LessThan": return "boolean";
             case "Minus": return "int";
             case "NewArray": return getExpressionType(((NewArray) object).e);
-            case "NewObject": return getIdentifierType(((NewObject) object).i.toString());
+            case "NewObject": return ((NewObject) object).i.toString();
             case "Not": return "boolean";
             case "Plus": return "int";
             case "Times": return "int";
-            case "This":
+            case "This": String scopeName = st.getParent().getScopeName();
+                         if (scopeName.equals("Global")) {
+                             scopeName = st.getScopeName();
+                         }
+                         return scopeName;
+        }
+        return null;
+    }
+
+    private String getTypeString(Type t) {
+        String type = t.toString().replace("AST.", "").split("@")[0];
+        switch (type) {
+            case "BooleanType": return "boolean";
+            case "IdentifierType": return ((IdentifierType) t).s;
+            case "IntArrayType": return "int[]";
+            case "IntegerType": return "int";
         }
         return null;
     }
@@ -319,8 +333,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // Exp e;
     public Object visit(MethodDecl n) {
         n.t.accept(this);
-        // method shouldn't already exist in scope unless overridden
-        // if overriden types should match
         st = st.enterScope(n.i.toString());
         n.i.accept(this);
         if (n.fl != null) {
@@ -337,6 +349,9 @@ public class TypeCheckingVisitor implements ObjectVisitor {
             for (int i = 0; i < n.sl.size(); i++) {
                 n.sl.get(i).accept(this);
             }
+        }
+        if (!getExpressionType(n.e).equals(getTypeString(n.t))) {
+            report_error(n.line_number, "Return type mismatch");
         }
         n.e.accept(this);
         st = st.exitScope();
@@ -380,19 +395,21 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // Exp e;
     // Statement s1,s2;
     public Object visit(If n) {
-        // also need to check if a method call returns a boolean or if an identifier is boolean
         if (!validControlExpression(n.e.accept(this))) {
             report_error(n.line_number, "If statement expects a boolean expression");
         }
-        n.s1.accept(this);
-        n.s2.accept(this);
+        if (n.s1 != null) {
+            n.s1.accept(this);
+        }
+        if (n.s2 != null) {
+            n.s2.accept(this);
+        }
         return n;
     }
 
     // Exp e;
     // Statement s;
     public Object visit(While n) {
-        // also check identifier
         if (!validControlExpression(n.e.accept(this))) {
             report_error(n.line_number, "If statement expects a boolean expression");
         }
@@ -402,7 +419,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     // Exp e;
     public Object visit(Print n) {
-        // should print string
         n.e.accept(this);
         return n;
     }
@@ -410,8 +426,12 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // Identifier i;
     // Exp e;
     public Object visit(Assign n) {
-        // TODO: Should check validity
-        // compare types
+        String identifierType = getIdentifierType(n.i.toString());
+        String expressionType = getExpressionType(n.e);
+        if (expressionType == null ||
+                !identifierType.replace("[]", "").equals(expressionType.replace("[]", ""))) {
+            report_error(n.line_number, "Mismatched assignment. Cannot assign " + expressionType + " to " + identifierType);
+        }
         n.i.accept(this);
         n.e.accept(this);
         return n;
@@ -420,10 +440,16 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // Identifier i;
     // Exp e1,e2;
     public Object visit(ArrayAssign n) {
-        // TODO
-        // should check for array out of bounds
-        // should check that valid types are being assigned
-        // should check that the array has been declared
+        String identifierType = getIdentifierType(n.i.toString());
+        String exp1Type = getExpressionType(n.e1);
+        String exp2Type = getExpressionType(n.e2);
+        if (exp1Type == null || !exp1Type.equals("int")) {
+            report_error(n.line_number, "Invalid array index type. Expect int found: " + exp1Type);
+        }
+        if (exp2Type == null || !exp2Type.replace("[]", "").equals(identifierType.replace("[]", ""))) {
+            report_error(n.line_number, "Invalid array item assignment. Expected: "
+            + identifierType.replace("[]", ""));
+        }
         n.i.accept(this);
         n.e1.accept(this);
         n.e2.accept(this);
@@ -432,8 +458,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     // Exp e1,e2;
     public Object visit(And n) {
-        // should also check if it's an identifier
-        // if it is should check type
         Object e1Object = n.e1.accept(this);
         Object e2Object = n.e2.accept(this);
         if (!andExpressionHelper(e1Object)) {
@@ -552,11 +576,33 @@ public class TypeCheckingVisitor implements ObjectVisitor {
             report_error(n.line_number, "Attempts to call method with invalid identifier: "
             + eObject.getClass().getName());
         }
+        String refType = "";
+        if (eObject instanceof IdentifierExp) {
+            refType = getIdentifierType(((IdentifierExp) eObject).s);
+        }
+        else if (eObject instanceof NewObject) {
+            refType = ((NewObject) eObject).i.toString();
+        }
+        else if (eObject instanceof This) {
+            refType = st.getParent().getScopeName();
+        }
+        else if (eObject instanceof Call) {
+            refType = getMethodReturnType(((Call) eObject).i.toString());
+        }
+        if (!(validMethodParameters(n.i.toString(), n.el, refType))) {
+            report_error(n.line_number, "Invalid arguments passed to method " + n.i.toString());
+        }
+        SymbolTable tmpSymbolTable = st;
+        while (tmpSymbolTable.getParent() != null) {
+            tmpSymbolTable = tmpSymbolTable.getParent();
+        }
+        tmpSymbolTable = tmpSymbolTable.enterScope(refType);
+        if (tmpSymbolTable.getMethodTable().get(n.i.toString()) == null) {
+            report_error(n.line_number, "Method " + n.i.toString() + " is undefined");
+        }
         n.i.accept(this);
         if (n.el != null) {
-            // maybe check argument length and compare to method decl
             for (int i = 0; i < n.el.size(); i++) {
-                // Need to check that these are valid arguments - types
                 n.el.get(i).accept(this);
             }
         }
@@ -578,6 +624,9 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     // String s;
     public Object visit(IdentifierExp n) {
+        if (st.getVarTable().get(n.s) == null && st.getParent().getVarTable().get(n.s) == null) {
+            report_error(n.line_number, "Var " + n.s + " hasn't been declared");
+        }
         return n;
     }
 
@@ -600,6 +649,9 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     // Identifier i;
     public Object visit(NewObject n) {
+        if (st.lookupSymbol(n.i.toString()) == null) {
+            report_error(n.line_number, n.i.toString() + " doesn't exist - can't be instantiated");
+        }
         return n;
     }
 
