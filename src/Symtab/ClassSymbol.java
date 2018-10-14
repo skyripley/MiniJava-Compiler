@@ -38,6 +38,8 @@ public class ClassSymbol extends Symbol
         return variables;
     }
 
+    public String getType() { return type; }
+
     public void extendsClass(ClassSymbol c) {
         type = c.name;
         methods.addAll(c.methods);
