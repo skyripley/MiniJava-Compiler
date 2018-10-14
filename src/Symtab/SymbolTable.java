@@ -12,21 +12,32 @@ public class SymbolTable {
     private HashMap<String, Symbol> ctable, vtable, mtable;
     private HashMap<String, SymbolTable> children;
     private SymbolTable parent = null;
+    private String scopeName;
 
-    public SymbolTable() {
+    public SymbolTable(String scopeName) {
         ctable = new HashMap<String, Symbol>();
         mtable = new HashMap<String, Symbol>();
         vtable = new HashMap<String, Symbol>();
         children = new HashMap<String, SymbolTable>();
         parent = null;
+        this.scopeName = scopeName;
     }
 
-    public SymbolTable(SymbolTable p) {
+    public SymbolTable(SymbolTable p, String scopeName) {
         ctable = new HashMap<String, Symbol>();
         mtable = new HashMap<String, Symbol>();
         vtable = new HashMap<String, Symbol>();
         children = new HashMap<String, SymbolTable>();
         parent = p;
+        this.scopeName = scopeName;
+    }
+
+    public void putScopeName(String scopeName) {
+        this.scopeName = scopeName;
+    }
+
+    public String getScopeName() {
+        return this.scopeName;
     }
 
     public HashMap<String, Symbol> getClassTable() {
@@ -74,7 +85,7 @@ public class SymbolTable {
     public SymbolTable enterScope(String i) {
         SymbolTable st = this.getChild(i);
         if ( st == null ) {
-            st = new SymbolTable(this);
+            st = new SymbolTable(this, i);
             this.addChild(i, st);
         }
         return st;

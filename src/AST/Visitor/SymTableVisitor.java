@@ -9,7 +9,9 @@ import Symtab.*;
 
 public class SymTableVisitor implements Visitor {
 
-	SymbolTable st = new SymbolTable();
+    public int errors = 0;
+
+	SymbolTable st = new SymbolTable("Global");
 
 	public void print()
 	{
@@ -33,6 +35,16 @@ public class SymTableVisitor implements Visitor {
 		}
 		else return "";
 	}
+
+    private void report_error(int line, String msg)
+    {
+        System.out.println(line+": "+msg);
+        ++errors;
+    }
+
+    public int getErrors() {
+	    return errors;
+    }
 
 	public SymbolTable getSymbolTable() {
 		return st;
@@ -130,11 +142,17 @@ public class SymTableVisitor implements Visitor {
 
 		// search for the extend class and add to the symbol
 		SymbolTable ext_st = st.getChild(n.j.toString());
-		Symbol s = ext_st.lookupSymbol(n.j.toString());
+        Symbol s = null;
+        if (st.lookupSymbol(n.j.toString()) != null) {
+            s = ext_st.lookupSymbol(n.j.toString());
+        }
+        else {
+            report_error(n.line_number, "Class: " + n.i.toString() + " attempts to extend: " + n.j.toString()
+            + " which doesn't exist");
+        }
 		if ( s != null && s instanceof ClassSymbol ) {
 			c.extendsClass((ClassSymbol)s);
 		}
-
 		// enter a new scope
 		st = st.enterScope(n.i.toString());
 
@@ -157,15 +175,20 @@ public class SymTableVisitor implements Visitor {
 				c.addMethod((MethodSymbol)sym);
 			}
 		}
-
 		for ( Iterator<String> i = st.getVarTable().keySet().iterator(); i.hasNext(); ) {
 			String id = (String)i.next();
 			Symbol sym = st.getVarTable().get(id);
 			if ( sym instanceof VarSymbol ) {
 				c.addVariable((VarSymbol)sym);
+                st.exitScope().addSymbol(sym);
 			}
 		}
-
+		for (MethodSymbol method : c.getMethods()) {
+		    st.addSymbol(method);
+        }
+        for (VarSymbol var : c.getVariables()) {
+            st.addSymbol(var);
+        }
 		st = st.exitScope();
 	}
 
@@ -183,6 +206,9 @@ public class SymTableVisitor implements Visitor {
 	// Exp e;
 	public void visit(MethodDecl n) {
 		MethodSymbol s = new MethodSymbol(n.i.toString(), getTypeString(n.t));
+		if (st.getMethodTable().get(n.i.toString()) != null) {
+		    report_error(n.line_number, "Method " + n.i.toString() + " has already been declared");
+        }
 		if (n.fl != null) {
 			for (int i = 0; i < n.fl.size(); i++) {
 				Formal f = n.fl.get(i);
@@ -245,8 +271,12 @@ public class SymTableVisitor implements Visitor {
 	// Exp e;
 	// Statement s1,s2;
 	public void visit(If n) {
-		n.s1.accept(this);
-		n.s2.accept(this);
+	    if (n.s1 != null) {
+            n.s1.accept(this);
+        }
+        if (n.s2 != null) {
+            n.s2.accept(this);
+        }
 	}
 
 	// Exp e;
