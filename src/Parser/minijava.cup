@@ -119,6 +119,7 @@ non terminal Identifier identifier;
 /* Precedence declarations: */
 
 precedence right BECOMES;
+precedence right ELSE;
 precedence left AND;
 precedence left LT;
 precedence left PLUS;
@@ -258,8 +259,11 @@ type ::= INTEGER_TYPE:it LBRACKET RBRACKET
 statement ::= LBRACE statementList:sl RBRACE
             {: RESULT = new Block(sl, slxleft); :}
             |
-            IF LPAREN:l exp:e RPAREN statement:s ELSE statement:s1
-            {: RESULT = new If(e, s, s1, lxleft); :}
+            IF LPAREN exp:e RPAREN statement:s ELSE statement:s1
+            {: RESULT = new If(e, s, s1, exleft); :}
+            |
+            IF LPAREN exp:e RPAREN statement:s
+            {: RESULT = new If(e, s, exleft); :}
             |
             WHILE LPAREN:l exp:e RPAREN statement:s
             {: RESULT = new While(e, s, lxleft); :}
