@@ -35,6 +35,9 @@ public class MiniJava {
             TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor();
             typeCheckingVisitor.setSymtab(symbolTable);
             typeCheckingVisitor.visit(program);
+            if (symTableVisitor.getErrors() > 0 || typeCheckingVisitor.getErrors() > 0) {
+                return_code = 1;
+            }
             return return_code;
         } catch (Exception exception) {
             System.err.println("Unexpected internal compiler error: " + exception.toString());
