@@ -27,6 +27,10 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         ++errors;
     }
 
+    public int getErrors() {
+        return errors;
+    }
+
     private boolean validMethodCall(Call call, String expectedType) {
         Object object = call.e.accept(this);
         if (object instanceof IdentifierExp) {

@@ -42,6 +42,10 @@ public class SymTableVisitor implements Visitor {
         ++errors;
     }
 
+    public int getErrors() {
+	    return errors;
+    }
+
 	public SymbolTable getSymbolTable() {
 		return st;
 	}
