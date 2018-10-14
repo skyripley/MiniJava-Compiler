@@ -36,7 +36,8 @@ class Element {
 	int aux01 ;
 	int aux02 ;
 	int nt ;
-	ret_val = true ;
+	// mismatched assignment
+	ret_val = aux01 ;
 
 	aux01 = other.GetAge();
 	// semantic error 1
