@@ -193,7 +193,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
         if (methodSymbol != null) {
             return methodSymbol.getType();
         }
-        // move to global scope to search for method
         while (symbolTable.getParent() != null) {
             symbolTable = symbolTable.getParent();
         }
@@ -266,7 +265,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // Identifier i1,i2;
     // Statement s;
     public Object visit(MainClass n) {
-        // not already declared?
         st = st.enterScope(n.i1.toString());
         n.i1.accept(this);
         n.i2.accept(this);
@@ -279,7 +277,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // VarDeclList vl;
     // MethodDeclList ml;
     public Object visit(ClassDeclSimple n) {
-        // not already declared?
         st = st.enterScope(n.i.toString());
         n.i.accept(this);
         if (n.vl != null) {
@@ -301,8 +298,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // VarDeclList vl;
     // MethodDeclList ml;
     public Object visit(ClassDeclExtends n) {
-        // extending a valid class?
-        // not already declared?
         st = st.enterScope(n.i.toString());
         n.i.accept(this);
         n.j.accept(this);
@@ -323,7 +318,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // Type t;
     // Identifier i;
     public Object visit(VarDecl n) {
-        // check that it doesn't already exist
         n.t.accept(this);
         n.i.accept(this);
         return n;
@@ -365,7 +359,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
     // Type t;
     // Identifier i;
     public Object visit(Formal n) {
-        // valid types?
         n.t.accept(this);
         n.i.accept(this);
         return n;
@@ -494,8 +487,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     // Exp e1,e2;
     public Object visit(LessThan n) {
-        // should also check if it's an identifier
-        // if it is should check type
         if (!validOperatorObjects(n.e1.accept(this))) {
             report_error(n.line_number, "Argument one in less than expression invalid");
         }
@@ -507,8 +498,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     // Exp e1,e2;
     public Object visit(Plus n) {
-        // should also check if it's an identifier
-        // if it is should check type
         if (!validOperatorObjects(n.e1.accept(this))) {
             report_error(n.line_number, "Argument one in addition expression invalid");
         }
@@ -520,8 +509,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     // Exp e1,e2;
     public Object visit(Minus n) {
-        // should also check if it's an identifier
-        // if it is should check type
         if (!validOperatorObjects(n.e1.accept(this))) {
             report_error(n.line_number, "Argument one in subtraction expression invalid");
         }
@@ -533,8 +520,6 @@ public class TypeCheckingVisitor implements ObjectVisitor {
 
     // Exp e1,e2;
     public Object visit(Times n) {
-        // should also check if it's an identifier
-        // if it is should check type
         if (!validOperatorObjects(n.e1.accept(this))) {
             report_error(n.line_number, "Argument one in multiplication expression invalid");
         }
