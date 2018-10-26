@@ -498,7 +498,7 @@ public class CodeTranslateVisitor implements Visitor {
 		}
 		code.add("    shl $2, %edx");
 		code.add("    addl %ecx, %edx");
-		code.add("    # DAVIDEBUG edx now contains array item addr");
+		code.add("    # DEBUG edx now contains array item addr");
 		code.add("    movl %eax, (%edx)");
 		code.add("    movl (%esp), %ecx");
 	}
@@ -572,7 +572,7 @@ public class CodeTranslateVisitor implements Visitor {
 		n.e2.accept(this);
 		code.add("    popl %edx");
 		code.add("    shl $2, %eax");
-		code.add("    # DAVIDEBUG eax now contains array item addr");
+		code.add("    # DEBUG eax now contains array item addr");
 		code.add("    addl %edx, %eax");
 		code.add("    movl (%eax), %eax");
 	}
