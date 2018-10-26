@@ -100,13 +100,19 @@ public class TypeVisitor implements Visitor {
         classes.put(n.i.s, node);
 
         VarDeclList variables = n.vl;
-        int variablesCount = variables.size();
+        int variablesCount = 0;
+        if (variables != null) {
+            variablesCount = variables.size();
+        }
         for (int i = 0; i < variablesCount; ++i) {
             variables.get(i).accept(this);
         }
 
         MethodDeclList methods = n.ml;
-        int methodsCount = methods.size();
+        int methodsCount = 0;
+        if (methods != null) {
+            methodsCount = methods.size();
+        }
         for (int i = 0; i < methodsCount; ++i) {
             methods.get(i).accept(this);
         }
@@ -120,13 +126,19 @@ public class TypeVisitor implements Visitor {
         classes.put(n.i.s, node);
 
         VarDeclList variables = n.vl;
-        int variablesCount = variables.size();
+        int variablesCount = 0;
+        if (variables != null) {
+            variablesCount = variables.size();
+        }
         for (int i = 0; i < variablesCount; ++i) {
             variables.get(i).accept(this);
         }
 
         MethodDeclList methods = n.ml;
-        int methodsCount = methods.size();
+        int methodsCount = 0;
+        if (methods != null) {
+            methodsCount = methods.size();
+        }
         for (int i = 0; i < methodsCount; ++i) {
             methods.get(i).accept(this);
         }

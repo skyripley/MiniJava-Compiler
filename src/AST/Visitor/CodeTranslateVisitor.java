@@ -299,13 +299,19 @@ public class CodeTranslateVisitor implements Visitor {
 		currentClass = n.i.s;
 
 		VarDeclList variables = n.vl;
-		int variablesCount = variables.size();
+		int variablesCount = 0;
+		if (variables != null) {
+			variablesCount = variables.size();
+		}
 		for (int i = 0; i < variablesCount; ++i) {
 			variables.get(i).accept(this);
 		}
 
 		MethodDeclList methods = n.ml;
-		int methodsCount = methods.size();
+		int methodsCount = 0;
+		if (methods != null) {
+			methodsCount = methods.size();
+		}
 		for (int i = 0; i < methodsCount; ++i) {
 			methods.get(i).accept(this);
 		}
@@ -317,13 +323,19 @@ public class CodeTranslateVisitor implements Visitor {
 		currentClass = n.i.s;
 
 		VarDeclList variables = n.vl;
-		int variablesCount = variables.size();
+		int variablesCount = 0;
+		if (variables != null) {
+			variablesCount = variables.size();
+		}
 		for (int i = 0; i < variablesCount; ++i) {
 			variables.get(i).accept(this);
 		}
 
 		MethodDeclList methods = n.ml;
-		int methodsCount = methods.size();
+		int methodsCount = 0;
+		if (methods != null) {
+			methodsCount = methods.size();
+		}
 		for (int i = 0; i < methodsCount; ++i) {
 			methods.get(i).accept(this);
 		}
@@ -339,7 +351,9 @@ public class CodeTranslateVisitor implements Visitor {
 		code.add(currentClass + "$" + currentMethod + ":");
 		code.add("    pushl %ebp");
 		code.add("    movl %esp, %ebp");
-		code.add("    subl $" + (4 * n.vl.size()) + ", %esp");
+		if (n.vl != null) {
+			code.add("    subl $" + (4 * n.vl.size()) + ", %esp");
+		}
 		code.add("    pushl %ecx");
 
 		currentMethodParameters = new HashMap<String, Integer>();
@@ -354,13 +368,19 @@ public class CodeTranslateVisitor implements Visitor {
 
 		currentMethodVariables = new HashMap<String, Integer>();
 		VarDeclList localVariables = n.vl;
-		int variablesCount = localVariables.size();
+		int variablesCount = 0;
+		if (localVariables != null) {
+			variablesCount = localVariables.size();
+		}
 		for (int i = 0; i < variablesCount; ++i) {
 			currentMethodVariables.put(localVariables.get(i).i.s, i);
 		}
 
 		StatementList stmts = n.sl;
-		int stmtsCount = stmts.size();
+		int stmtsCount = 0;
+		if (stmts != null) {
+			stmtsCount = stmts.size();
+		}
 		for (int i = 0; i < stmtsCount; ++i) {
 			stmts.get(i).accept(this);
 		}
@@ -368,7 +388,9 @@ public class CodeTranslateVisitor implements Visitor {
 		// Return value. Left at eax.
 		n.e.accept(this);
 
-		code.add("    addl $" + (1 + 4 * n.vl.size()) + ", %esp");
+		if (n.vl != null) {
+			code.add("    addl $" + (1 + 4 * n.vl.size()) + ", %esp");
+		}
 		code.add("    movl %ebp, %esp");
 		code.add("    popl %ebp");
 		code.add("    ret");
