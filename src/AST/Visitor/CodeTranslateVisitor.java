@@ -518,7 +518,7 @@ public class CodeTranslateVisitor implements Visitor {
 		} else {
 			System.err.println("SHOULD NOT HAVE GOTTEN HERE!!");
 		}
-		code.add("    shq $2, %rdx");
+		code.add("    shl $2, %rdx");
 		code.add("    addq %rcx, %rdx");
 		code.add("    # DEBUG rdx now contains array item addr");
 		code.add("    movq %rax, (%rdx)");
@@ -593,7 +593,7 @@ public class CodeTranslateVisitor implements Visitor {
 		code.add("    pushq %rax");
 		n.e2.accept(this);
 		code.add("    popq %rdx");
-		code.add("    shq $2, %rax");
+		code.add("    shl $2, %rax");
 		code.add("    # DEBUG rax now contains array item addr");
 		code.add("    addq %rdx, %rax");
 		code.add("    movq (%rax), %rax");
@@ -738,7 +738,7 @@ public class CodeTranslateVisitor implements Visitor {
 		n.e.accept(this);
 		code.add("    pushq %rax");
 		code.add("    addq $1, %rax");
-		code.add("    shq $2, %rax");
+		code.add("    shl $2, %rax");
 		code.add("    pushq %rax");
 		code.add("    call malloc");
 		code.add("    addq $8, %rsp");
