@@ -740,7 +740,7 @@ public class CodeTranslateVisitor implements Visitor {
 		code.add("    addq $1, %rax");
 		code.add("    shl $2, %rax");
 		code.add("    pushq %rax");
-		code.add("    call mjmalloc");
+		code.add("    call malloc");
 		code.add("    addq $4, %rsp");
 		code.add("    popq %rdx");
 		code.add("    movq %rdx, (%rax)");
@@ -769,7 +769,7 @@ public class CodeTranslateVisitor implements Visitor {
 		}
 
 		code.add("    pushq $" + objectSize);
-		code.add("    call mjmalloc");
+		code.add("    call malloc");
 		code.add("    addq $4, %rsp");
 		code.add("    movq (%rsp), %rcx");
 		code.add("    leaq " + n.i.s + "$$, %rbx");
