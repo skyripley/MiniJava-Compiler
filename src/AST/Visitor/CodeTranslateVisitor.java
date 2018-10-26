@@ -349,12 +349,12 @@ public class CodeTranslateVisitor implements Visitor {
 		currentMethod = n.i.s;
 
 		code.add(currentClass + "$" + currentMethod + ":");
-		code.add("    pushl %ebp");
-		code.add("    movl %esp, %ebp");
+		code.add("    pushq %rbp");
+		code.add("    movq %rsp, %rbp");
 		if (n.vl != null) {
-			code.add("    subl $" + (4 * n.vl.size()) + ", %esp");
+			code.add("    subq $" + (4 * n.vl.size()) + ", %rsp");
 		}
-		code.add("    pushl %ecx");
+		code.add("    pushq %rcx");
 
 		currentMethodParameters = new HashMap<String, Integer>();
 		FormalList params = n.fl;
@@ -385,14 +385,14 @@ public class CodeTranslateVisitor implements Visitor {
 			stmts.get(i).accept(this);
 		}
 
-		// Return value. Left at eax.
+		// Return value. Left at rax.
 		n.e.accept(this);
 
 		if (n.vl != null) {
-			code.add("    addl $" + (1 + 4 * n.vl.size()) + ", %esp");
+			code.add("    addq $" + (1 + 4 * n.vl.size()) + ", %rsp");
 		}
-		code.add("    movl %ebp, %esp");
-		code.add("    popl %ebp");
+		code.add("    movq %rbp, %rsp");
+		code.add("    popq %rbp");
 		code.add("    ret");
 
 		currentMethodParameters = null;
@@ -422,7 +422,7 @@ public class CodeTranslateVisitor implements Visitor {
 		String labelEnd = getLabel();
 
 		n.e.accept(this);
-		code.add("    cmpl $0, %eax");
+		code.add("    cmpq $0, %rax");
 		code.add("    je " + labelElse);
 		n.s1.accept(this);
 		code.add("    jmp " + labelEnd);
@@ -440,16 +440,16 @@ public class CodeTranslateVisitor implements Visitor {
 		n.s.accept(this);
 		code.add(labelTest + ":");
 		n.e.accept(this);
-		code.add("    cmpl $0, %eax");
+		code.add("    cmpq $0, %rax");
 		code.add("    jne " + labelStart);
 	}
 
 	public void visit(Print n) {
 		n.e.accept(this);
-		code.add("    pushl %eax");
+		code.add("    pushq %rax");
 		code.add("    call put");
-		code.add("    addl $4, %esp");
-		code.add("    movl (%esp), %ecx");
+		code.add("    addq $4, %rsp");
+		code.add("    movq (%rsp), %rcx");
 	}
 
 	public void visit(Assign n) {
@@ -467,17 +467,17 @@ public class CodeTranslateVisitor implements Visitor {
 		if (paramOffsets.containsKey(nid)) {
 			int offset = 4 * (1 + paramOffsets.size() - paramOffsets.get(nid));
 			code.add("    # parameter " + nid);
-			code.add("    movl %eax, " + offset + "(%ebp)");
+			code.add("    movq %rax, " + offset + "(%rbp)");
 		} else if (localVars.containsKey(nid)) {
 			code.add("    # local var " + nid);
-			code.add("    movl %eax, " +
+			code.add("    movq %rax, " +
 					(-4 * (1 + localVars.get(nid))) +
-					"(%ebp)");
+					"(%rbp)");
 		} else if (instanceVars.containsKey(nid)) {
 			code.add("    # instance var " + nid);
-			code.add("    movl %eax, " +
+			code.add("    movq %rax, " +
 					(4 * instanceVars.get(nid)) +
-					"(%ecx)");
+					"(%rcx)");
 		} else {
 			System.err.println("SHOULD NOT HAVE GOTTEN HERE!!");
 		}
@@ -485,10 +485,10 @@ public class CodeTranslateVisitor implements Visitor {
 
 	public void visit(ArrayAssign n) {
 		n.e2.accept(this);
-		code.add("    pushl %eax");
+		code.add("    pushq %rax");
 
 		n.e1.accept(this);
-		code.add("    pushl %eax");
+		code.add("    pushq %rax");
 
 		String nid = n.i.s;
 
@@ -499,30 +499,30 @@ public class CodeTranslateVisitor implements Visitor {
 		Map<String, Integer> instanceVars =
 				getInstanceVariableOffsets(currentClass);
 
-		code.add("    popl %edx");
-		code.add("    popl %eax");
+		code.add("    popq %rdx");
+		code.add("    popq %rax");
 		if (paramOffsets.containsKey(nid)) {
 			int offset = 4 * (1 + paramOffsets.size() - paramOffsets.get(nid));
 			code.add("    # parameter " + nid);
-			code.add("    movl " + offset + "(%ebp), %ecx");
+			code.add("    movq " + offset + "(%rbp), %rcx");
 		} else if (localVars.containsKey(nid)) {
 			code.add("    # local var " + nid);
-			code.add("    movl " +
+			code.add("    movq " +
 					(-4 * (1 + localVars.get(nid))) +
-					"(%ebp), %ecx");
+					"(%rbp), %rcx");
 		} else if (instanceVars.containsKey(nid)) {
 			code.add("    # instance var " + nid);
-			code.add("    movl " +
+			code.add("    movq " +
 					(4 * instanceVars.get(nid)) +
-					"(%ecx), %ecx");
+					"(%rcx), %rcx");
 		} else {
 			System.err.println("SHOULD NOT HAVE GOTTEN HERE!!");
 		}
-		code.add("    shl $2, %edx");
-		code.add("    addl %ecx, %edx");
-		code.add("    # DEBUG edx now contains array item addr");
-		code.add("    movl %eax, (%edx)");
-		code.add("    movl (%esp), %ecx");
+		code.add("    shl $2, %rdx");
+		code.add("    addq %rcx, %rdx");
+		code.add("    # DEBUG rdx now contains array item addr");
+		code.add("    movq %rax, (%rdx)");
+		code.add("    movq (%rsp), %rcx");
 	}
 
 	public void visit(And n) {
@@ -530,18 +530,18 @@ public class CodeTranslateVisitor implements Visitor {
 		String labelEnd = getLabel();
 
 		n.e1.accept(this);
-		code.add("    cmpl $0, %eax");
+		code.add("    cmpq $0, %rax");
 		code.add("    je " + labelFalse);
 
 		n.e2.accept(this);
-		code.add("    cmpl $0, %eax");
+		code.add("    cmpq $0, %rax");
 		code.add("    je " + labelFalse);
 
-		code.add("    movl $1, %eax");
+		code.add("    movq $1, %rax");
 		code.add("    jmp " + labelEnd);
 
 		code.add(labelFalse + ":");
-		code.add("    movl $0, %eax");
+		code.add("    movq $0, %rax");
 
 		code.add(labelEnd + ":");
 	}
@@ -551,57 +551,57 @@ public class CodeTranslateVisitor implements Visitor {
 		String labelEnd = getLabel();
 
 		n.e1.accept(this);
-		code.add("    pushl %eax");
+		code.add("    pushq %rax");
 		n.e2.accept(this);
-		code.add("    popl %edx");
-		code.add("    cmpl %eax, %edx");
+		code.add("    popq %rdx");
+		code.add("    cmpq %rax, %rdx");
 		code.add("    jl " + labelTrue);
-		code.add("    movl $0, %eax");
+		code.add("    movq $0, %rax");
 		code.add("    jmp " + labelEnd);
 		code.add(labelTrue + ":");
-		code.add("    movl $1, %eax");
+		code.add("    movq $1, %rax");
 		code.add(labelEnd + ":");
 	}
 
 	public void visit(Plus n) {
 		n.e1.accept(this);
-		code.add("    pushl %eax");
+		code.add("    pushq %rax");
 		n.e2.accept(this);
-		code.add("    popl %edx");
-		code.add("    addl %edx, %eax");
+		code.add("    popq %rdx");
+		code.add("    addq %rdx, %rax");
 	}
 
 	public void visit(Minus n) {
 		n.e1.accept(this);
-		code.add("    pushl %eax");
+		code.add("    pushq %rax");
 		n.e2.accept(this);
-		code.add("    movl %eax, %edx");
-		code.add("    popl %eax");
-		code.add("    subl %edx, %eax");
+		code.add("    movq %rax, %rdx");
+		code.add("    popq %rax");
+		code.add("    subq %rdx, %rax");
 	}
 
 	public void visit(Times n) {
 		n.e1.accept(this);
-		code.add("    pushl %eax");
+		code.add("    pushq %rax");
 		n.e2.accept(this);
-		code.add("    popl %edx");
-		code.add("    imul %edx, %eax");
+		code.add("    popq %rdx");
+		code.add("    imul %rdx, %rax");
 	}
 
 	public void visit(ArrayLookup n) {
 		n.e1.accept(this);
-		code.add("    pushl %eax");
+		code.add("    pushq %rax");
 		n.e2.accept(this);
-		code.add("    popl %edx");
-		code.add("    shl $2, %eax");
-		code.add("    # DEBUG eax now contains array item addr");
-		code.add("    addl %edx, %eax");
-		code.add("    movl (%eax), %eax");
+		code.add("    popq %rdx");
+		code.add("    shl $2, %rax");
+		code.add("    # DEBUG rax now contains array item addr");
+		code.add("    addq %rdx, %rax");
+		code.add("    movq (%rax), %rax");
 	}
 
 	public void visit(ArrayLength n) {
 		n.e.accept(this);
-		code.add("    movl -4(%eax), %eax");
+		code.add("    movq -4(%rax), %rax");
 	}
 
 	public void visit(Call n) {
@@ -610,12 +610,12 @@ public class CodeTranslateVisitor implements Visitor {
 		if (params != null) {
 			for (int i = params.size() - 1; i >= 0; --i) {
 				params.get(i).accept(this);
-				code.add("    pushl %eax");
+				code.add("    pushq %rax");
 			}
 		}
 		// Get invocant
 		n.e.accept(this);
-		code.add("    movl %eax, %ecx");
+		code.add("    movq %rax, %rcx");
 
 		String typeOfReturnValue = null;
 		Map<String, ClassNode> classes = declaredTypes.getClasses();
@@ -644,15 +644,15 @@ public class CodeTranslateVisitor implements Visitor {
 		clsVTable = (Map<String, Integer>)this.vTable.get(lastSeenType);
 		int slotNumber = (Integer)clsVTable.get(n.i.s);
 
-		code.add("    movl (%eax), %eax");
-		code.add("    addl $" + (slotNumber * 4) + ", %eax");
-		code.add("    movl (%eax), %eax");
-		code.add("    call *%eax");
+		code.add("    movq (%rax), %rax");
+		code.add("    addq $" + (slotNumber * 4) + ", %rax");
+		code.add("    movq (%rax), %rax");
+		code.add("    call *%rax");
 
 		if (params != null) {
-			code.add("    addl $" + (4 * params.size()) + ", %esp");
+			code.add("    addq $" + (4 * params.size()) + ", %rsp");
 		}
-		code.add("    movl (%esp), %ecx");
+		code.add("    movq (%rsp), %rcx");
 
 		if (typeOfReturnValue != null) {
 			lastSeenType = typeOfReturnValue;
@@ -660,15 +660,15 @@ public class CodeTranslateVisitor implements Visitor {
 	}
 
 	public void visit(IntegerLiteral n) {
-		code.add("    movl $" + n.i + ", %eax");
+		code.add("    movq $" + n.i + ", %rax");
 	}
 
 	public void visit(True n) {
-		code.add("    movl $1, %eax");
+		code.add("    movq $1, %rax");
 	}
 
 	public void visit(False n) {
-		code.add("    movl $0, %eax");
+		code.add("    movq $0, %rax");
 	}
 
 	public void visit(IdentifierExp n) {
@@ -688,23 +688,23 @@ public class CodeTranslateVisitor implements Visitor {
 		if (paramOffsets.containsKey(nid)) {
 			int offset = 4 * (1 + paramOffsets.size() - paramOffsets.get(nid));
 			code.add("    # parameter " + nid);
-			code.add("    movl " + offset + "(%ebp), %eax");
+			code.add("    movq " + offset + "(%rbp), %rax");
 
 			Node node = method.getParameters().get(paramOffsets.get(nid));
 			lastSeenType = node.whoami;
 		} else if (localVars.containsKey(nid)) {
 			code.add("    # local var " + nid);
-			code.add("    movl " +
+			code.add("    movq " +
 					(-4 * (1 + localVars.get(nid))) +
-					"(%ebp), %eax");
+					"(%rbp), %rax");
 
 			Node node = method.getLocalVariables().get(nid);
 			lastSeenType = node.whoami;
 		} else if (instanceVars.containsKey(nid)) {
 			code.add("    # instance var " + nid);
-			code.add("    movl " +
+			code.add("    movq " +
 					(4 * instanceVars.get(nid)) +
-					"(%ecx), %eax");
+					"(%rcx), %rax");
 
 			while (true) {
 				for (Map.Entry<String, Node> entry :
@@ -729,23 +729,23 @@ public class CodeTranslateVisitor implements Visitor {
 	}
 
 	public void visit(This n) {
-		code.add("    movl %ecx, %eax");
+		code.add("    movq %rcx, %rax");
 
 		lastSeenType = currentClass;
 	}
 
 	public void visit(NewArray n) {
 		n.e.accept(this);
-		code.add("    pushl %eax");
-		code.add("    addl $1, %eax");
-		code.add("    shl $2, %eax");
-		code.add("    pushl %eax");
+		code.add("    pushq %rax");
+		code.add("    addq $1, %rax");
+		code.add("    shl $2, %rax");
+		code.add("    pushq %rax");
 		code.add("    call mjmalloc");
-		code.add("    addl $4, %esp");
-		code.add("    popl %edx");
-		code.add("    movl %edx, (%eax)");
-		code.add("    movl (%esp), %ecx");
-		code.add("    addl $4, %eax");
+		code.add("    addq $4, %rsp");
+		code.add("    popq %rdx");
+		code.add("    movq %rdx, (%rax)");
+		code.add("    movq (%rsp), %rcx");
+		code.add("    addq $4, %rax");
 	}
 
 	public void visit(NewObject n) {
@@ -768,12 +768,12 @@ public class CodeTranslateVisitor implements Visitor {
 			}
 		}
 
-		code.add("    pushl $" + objectSize);
+		code.add("    pushq $" + objectSize);
 		code.add("    call mjmalloc");
-		code.add("    addl $4, %esp");
-		code.add("    movl (%esp), %ecx");
-		code.add("    leal " + n.i.s + "$$, %ebx");
-		code.add("    movl %ebx, (%eax)");
+		code.add("    addq $4, %rsp");
+		code.add("    movq (%rsp), %rcx");
+		code.add("    leaq " + n.i.s + "$$, %rbx");
+		code.add("    movq %rbx, (%rax)");
 
 		lastSeenType = n.i.s;
 	}
@@ -783,12 +783,12 @@ public class CodeTranslateVisitor implements Visitor {
 		String labelEnd = getLabel();
 
 		n.e.accept(this);
-		code.add("    cmpl $0, %eax");
+		code.add("    cmpq $0, %rax");
 		code.add("    je " + labelTrue);
-		code.add("    movl $0, %eax");
+		code.add("    movq $0, %rax");
 		code.add("    jmp " + labelEnd);
 		code.add(labelTrue + ":");
-		code.add("    movl $1, %eax");
+		code.add("    movq $1, %rax");
 		code.add(labelEnd + ":");
 	}
 
