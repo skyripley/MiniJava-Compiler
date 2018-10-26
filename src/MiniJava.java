@@ -13,6 +13,47 @@ import Symtab.*;
 
 public class MiniJava {
 
+    private static int generateCode(File file) {
+        try {
+            int return_code = 0;
+            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
+            InputStream inputStream = new FileInputStream(file);
+            Reader reader = new InputStreamReader(inputStream);
+            scanner scanner = new scanner(reader, complexSymbolFactory);
+            parser parser = new parser(scanner, complexSymbolFactory);
+            Symbol root;
+            root = parser.parse();
+            if (parser.errorDetected) {
+                System.out.println("\nErrors detected during parsing!");
+                System.out.println("Will attempt to generate a partial symbol table anyway...");
+                return_code = 1;
+            }
+            Program program = (Program) root.value;
+            SymTableVisitor symTableVisitor = new SymTableVisitor();
+            symTableVisitor.visit(program);
+            SymbolTable symbolTable = symTableVisitor.getSymbolTable();
+            TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor();
+            typeCheckingVisitor.setSymtab(symbolTable);
+            typeCheckingVisitor.visit(program);
+            if (symTableVisitor.getErrors() > 0 || typeCheckingVisitor.getErrors() > 0) {
+                return_code = 1;
+                System.exit(return_code);
+            }
+            TypeVisitor typeVisitor = new TypeVisitor();
+            typeVisitor.visit(program);
+            CodeTranslateVisitor codeTranslateVisitor = new CodeTranslateVisitor(typeVisitor);
+            codeTranslateVisitor.visit(program);
+            for (String line: codeTranslateVisitor.getCode()) {
+                System.out.println(line);
+            }
+            return return_code;
+        } catch (Exception exception) {
+            System.err.println("Unexpected internal compiler error: " + exception.toString());
+            exception.printStackTrace();
+            return 1;
+        }
+    }
+
     private static int semanticAnalyzer(File file) {
         try {
             int return_code = 0;
@@ -130,6 +171,7 @@ public class MiniJava {
         int parser_return_code = 0;
         int symbol_table_return_code = 0;
         int semantic_analysis_return_code = 0;
+        int code_gen_return_code = 0;
         Map<String, String> argsMap = new Cli(args).parse();
         if (argsMap != null) {
             if (argsMap.containsKey("S")) {
@@ -148,9 +190,13 @@ public class MiniJava {
                 String file = argsMap.get("A");
                 semantic_analysis_return_code = semanticAnalyzer(new File(file));
             }
+            if (argsMap.containsKey("C")) {
+                String file = argsMap.get("C");
+                code_gen_return_code = generateCode(new File(file));
+            }
         }
         if (scanner_return_code == 1 || parser_return_code == 1 || symbol_table_return_code == 1
-                || semantic_analysis_return_code == 1) {
+                || semantic_analysis_return_code == 1 || code_gen_return_code == 1) {
             System.exit(1);
         }
         else {
