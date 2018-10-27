@@ -105,14 +105,14 @@ public class X64CodeGenerator implements IrVisitor
 		emit(".ascii \"%d \\0\"");
 		emitLabel("newline");
 		emit(".ascii \"\\n\\0\"");
-		emit(".def main");
+		//emit(".def main");
 
-		emit(".globl main");
-		emitLabel("main");
+		emit(".globl asm_main");
+		emitLabel("asm_main");
 		emitComment("Prologue to main");
 		emit("pushq %rbp");
 		emit("movq %rsp, %rbp");
-		emit("call __main   #Call c library main");
+		//emit("call main   #Call c library main");
 		emit("call " + startFrameId + "  #call the starting frame");
 		emit("leave");
 		emit("ret");
@@ -342,14 +342,14 @@ public class X64CodeGenerator implements IrVisitor
 		assignCallParameters(call.getParameters(), 1);
 		if (call.getId().equals("print") || call.getId().equals("println"))
 		{
-			emit("call printf");
+			emit("call put");
 		}
 
 		if (call.getId().equals("println"))
 		{
 			emit("movq $newline, " + registers.getParamReg(0),
 					"Move address of string '\\n\\0' to param register 0");
-			emit("call printf", "Print new line");
+			emit("call put", "Print new line");
 		}
 		restoreCallerSaveRegisters();
 	}
