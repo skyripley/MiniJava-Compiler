@@ -291,6 +291,8 @@ public class CodeTranslateVisitor implements Visitor {
 		code.add("    .global asm_main");
 		code.add("");
 		code.add("asm_main:");
+		code.add("pushq %rbp");
+		code.add("movq %rsp, %rbp");
 		n.s.accept(this);
 		code.add("    ret");
 	}

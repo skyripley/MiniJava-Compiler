@@ -1,0 +1,36 @@
+package AST.syntaxtree.visitor.ops;
+
+import AST.syntaxtree.visitor.ops.visitor.IrVisitor;
+
+public class RecordAllocation implements Expression
+{
+	private String namespace;
+	private String typeId;
+	
+	public RecordAllocation(String namespace, String typeId)
+	{
+		this.typeId = typeId;
+		this.namespace = namespace;
+	}
+	
+	@Override
+	public void accept(IrVisitor v)
+	{
+		v.visit(this);
+	}
+
+	public String getNamespace()
+	{
+		return namespace;
+	}
+
+	public String getTypeId()
+	{
+		return typeId;
+	}
+	
+	public String toString()
+	{
+		return "new " + namespace + "." + typeId;
+	}
+}

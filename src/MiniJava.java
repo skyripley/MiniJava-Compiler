@@ -1,5 +1,11 @@
 import java.io.*;
 import java.util.*;
+
+import AST.symboltable.Table;
+import AST.syntaxtree.visitor.backend.X64CodeGenerator;
+import AST.syntaxtree.visitor.ops.FunctionDeclaration;
+import AST.syntaxtree.visitor.ops.RecordDeclaration;
+import AST.syntaxtree.visitor.ops.visitor.IrVisitor;
 import Parser.*;
 import Parser.sym;
 import Scanner.*;
@@ -10,8 +16,46 @@ import java_cup.runtime.ComplexSymbolFactory;
 import AST.*;
 import AST.Visitor.*;
 import Symtab.*;
+import AST.syntaxtree.visitor.*;
+import AST.syntaxtree.*;
+import frontend.*;
 
 public class MiniJava {
+
+    private static int generateAssembly(File file) {
+        try {
+            BuildSymbolTableVisitor symbolTableVisitor = new BuildSymbolTableVisitor();
+            int return_code = 0;
+            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
+            InputStream inputStream = new FileInputStream(file);
+            new RamParser(inputStream);
+            AST.syntaxtree.Program root = RamParser.Goal();
+            BuildSymbolTableVisitor buildSymbolTableVisitor = new BuildSymbolTableVisitor();
+            root.accept(buildSymbolTableVisitor);
+            TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(buildSymbolTableVisitor.getSymTab());
+            root.accept(typeCheckVisitor);
+            if (typeCheckVisitor.getErrorMsg().getHasErrors())
+            {
+                System.out.println("Error in front-end. Exiting.");
+                System.exit(1);
+            }
+            IrGenerator irGenerator = new IrGenerator(buildSymbolTableVisitor.getSymTab());
+            root.accept(irGenerator);
+            PrintStream ps = System.out;
+            X64CodeGenerator codeGenerator = new X64CodeGenerator(ps);
+            for (RecordDeclaration recordDeclaration: irGenerator.getRecordList()) {
+                recordDeclaration.accept((IrVisitor) codeGenerator);
+            }
+            for (FunctionDeclaration functionDeclaration: irGenerator.getFrameList()) {
+                functionDeclaration.accept((IrVisitor) codeGenerator);
+            }
+            return return_code;
+        } catch (Exception exception) {
+            System.err.println("Unexpected internal compiler error: " + exception.toString());
+            exception.printStackTrace();
+            return 1;
+        }
+    }
 
     private static int generateCode(File file) {
         try {
@@ -28,7 +72,7 @@ public class MiniJava {
                 System.out.println("Will attempt to generate a partial symbol table anyway...");
                 return_code = 1;
             }
-            Program program = (Program) root.value;
+            AST.Program program = (AST.Program) root.value;
             SymTableVisitor symTableVisitor = new SymTableVisitor();
             symTableVisitor.visit(program);
             SymbolTable symbolTable = symTableVisitor.getSymbolTable();
@@ -39,7 +83,7 @@ public class MiniJava {
                 return_code = 1;
                 System.exit(return_code);
             }
-            TypeVisitor typeVisitor = new TypeVisitor();
+            AST.Visitor.TypeVisitor typeVisitor = new AST.Visitor.TypeVisitor();
             typeVisitor.visit(program);
             CodeTranslateVisitor codeTranslateVisitor = new CodeTranslateVisitor(typeVisitor);
             codeTranslateVisitor.visit(program);
@@ -69,7 +113,7 @@ public class MiniJava {
                 System.out.println("Will attempt to generate a partial symbol table anyway...");
                 return_code = 1;
             }
-            Program program = (Program) root.value;
+            AST.Program program = (AST.Program) root.value;
             SymTableVisitor symTableVisitor = new SymTableVisitor();
             symTableVisitor.visit(program);
             SymbolTable symbolTable = symTableVisitor.getSymbolTable();
@@ -102,7 +146,7 @@ public class MiniJava {
                 System.out.println("Will attempt to generate a partial symbol table anyway...");
                 return_code = 1;
             }
-            Program program = (Program) root.value;
+            AST.Program program = (AST.Program) root.value;
             SymTableVisitor symTableVisitor = new SymTableVisitor();
             symTableVisitor.visit(program);
             symTableVisitor.print();
@@ -130,8 +174,8 @@ public class MiniJava {
             }
             else {
                 System.out.println("Parsing complete - no errors found");
-                Program program = (Program) root.value;
-                PrettyPrintVisitor prettyPrintVisitor = new PrettyPrintVisitor();
+                AST.Program program = (AST.Program) root.value;
+                AST.Visitor.PrettyPrintVisitor prettyPrintVisitor = new AST.Visitor.PrettyPrintVisitor();
                 prettyPrintVisitor.visit(program);
             }
             return return_code;
@@ -192,7 +236,7 @@ public class MiniJava {
             }
             if (argsMap.containsKey("C")) {
                 String file = argsMap.get("C");
-                code_gen_return_code = generateCode(new File(file));
+                code_gen_return_code = generateAssembly(new File(file));
             }
         }
         if (scanner_return_code == 1 || parser_return_code == 1 || symbol_table_return_code == 1
