@@ -344,13 +344,14 @@ public class X64CodeGenerator implements IrVisitor
 		{
 			emit("call put");
 		}
-
+		/*
 		if (call.getId().equals("println"))
 		{
 			emit("movq $newline, " + registers.getParamReg(0),
 					"Move address of string '\\n\\0' to param register 0");
 			emit("call put", "Print new line");
 		}
+		*/
 		restoreCallerSaveRegisters();
 	}
 
