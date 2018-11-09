@@ -13,8 +13,25 @@ public class MethodSymbol extends Symbol
         parameters = new ArrayList<Symbol>();
     }
 
-    public void addParameter(Symbol v) {
-        parameters.add(v);
+    public Symbol copy() {
+    	MethodSymbol m = new MethodSymbol(name, type);
+        for(int i=0;i<parameters.size();i++)
+        {
+        	VarSymbol vs = (VarSymbol)parameters.get(i);
+            m.addParameter(vs.copy());
+        }
+  
+        return m;
+    }
+    
+    public void addParameter(Symbol p) {
+        for(int i=0;i<parameters.size();i++) {
+        	if ( parameters.get(i) == p || parameters.get(i).getName() == p.getName() ) {
+        		return;
+        	}
+        }
+        parameters.add(p);
+        p.setParent(this);
     }
 
     public ArrayList<Symbol> getParameters() {
@@ -29,5 +46,13 @@ public class MethodSymbol extends Symbol
         }
 
         return "{METHOD}" + type + " " + name + "(" + s + ")";
+    }
+    
+    public boolean equals(Symbol s) {
+    	if ( s == null || !(s instanceof MethodSymbol) )
+    		return false;
+    	
+    	MethodSymbol ms = (MethodSymbol)s;    	
+    	return ms.toString().equals(this.toString());
     }
 }

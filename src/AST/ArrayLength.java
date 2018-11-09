@@ -10,11 +10,14 @@ public class ArrayLength extends Exp {
   public ArrayLength(Exp ae, Location pos) {
     super(pos);
     e=ae; 
+    if ( e != null ) e.setParent(this);
   }
 
   public void accept(Visitor v) {
     v.visit(this);
   }
 
-  public Object accept(ObjectVisitor objectVisitor) { return objectVisitor.visit(this); }
+  public Object accept(ObjectVisitor v) {
+    return v.visit(this);
+  }
 }

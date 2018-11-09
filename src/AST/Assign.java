@@ -11,12 +11,16 @@ public class Assign extends Statement {
   public Assign(Identifier ai, Exp ae, Location pos) {
     super(pos);
     i=ai; e=ae; 
+    if (i != null) i.setParent(this);
+    if (e != null) e.setParent(this);
   }
 
   public void accept(Visitor v) {
     v.visit(this);
   }
 
-  public Object accept(ObjectVisitor objectVisitor) { return objectVisitor.visit(this); }
+  public Object accept(ObjectVisitor v) {
+    return v.visit(this);
+  }
 }
 

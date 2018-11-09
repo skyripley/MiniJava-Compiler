@@ -9,15 +9,18 @@ import Symtab.*;
 
 public class SymTableVisitor implements Visitor {
 
-    public int errors = 0;
-
-	SymbolTable st = new SymbolTable("Global");
-
+	SymbolTable st = new SymbolTable();
+	public int errors = 0;
+	
+	public SymbolTable getSymtab() {
+		return st;
+	}
+	
 	public void print()
 	{
 		st.print(0);
 	}
-
+	
 	public String getTypeString(Type t) {
 		if ( t == null )
 			return "";
@@ -25,7 +28,7 @@ public class SymTableVisitor implements Visitor {
 			return "int[]";
 		}
 		else if ( t instanceof BooleanType ) {
-			return "boolean";
+			return "Boolean";
 		}
 		else if ( t instanceof IntegerType ) {
 			return "int";
@@ -35,31 +38,26 @@ public class SymTableVisitor implements Visitor {
 		}
 		else return "";
 	}
-
-    private void report_error(int line, String msg)
-    {
-        System.out.println(line+": "+msg);
-        ++errors;
-    }
-
-    public int getErrors() {
-	    return errors;
-    }
-
-	public SymbolTable getSymbolTable() {
-		return st;
-	}
-
+	
+	public void report_error(int line, String msg)
+	{
+		System.out.println(line+": "+msg);
+		++errors;
+	}	
+	
 	// Display added for toy example language. Not used in regular MiniJava
 	public void visit(Display n) {
+		if ( n.e != null ) n.e.accept(this);
 	}
 
 	// MainClass m;
 	// ClassDeclList cl;
 	public void visit(Program n) {
-		n.m.accept(this);
-		for (int i = 0; i < n.cl.size(); i++) {
-			n.cl.get(i).accept(this);
+		if ( n.m != null ) n.m.accept(this);
+		if ( n.cl != null ) {
+			for (int i = 0; i < n.cl.size(); i++) {
+				n.cl.get(i).accept(this);
+			}
 		}
 	}
 
@@ -68,31 +66,31 @@ public class SymTableVisitor implements Visitor {
 	public void visit(MainClass n) {
 		ClassSymbol c = new ClassSymbol(n.i1.toString(), "");
 		st.addSymbol(c);
-		st = st.enterScope(n.i1.toString());
+		st = st.enterScope(n.i1.toString(), n);
 		MethodSymbol s = new MethodSymbol("main", "void");
 		s.addParameter(new VarSymbol(n.i2.toString(), "String[]"));
 		st.addSymbol(s);
-		st = st.enterScope("main");
+		st = st.enterScope("main", n);
 		st.addSymbol(new VarSymbol(n.i2.toString(), "String[]"));
-		n.s.accept(this);
+		if ( n.s != null ) n.s.accept(this);
 		st = st.exitScope();
 
 		for ( Iterator<String> i = st.getMethodTable().keySet().iterator(); i.hasNext(); ) {
-			String id = (String)i.next();
-			Symbol sym = st.getMethodTable().get(id);
-			if ( sym instanceof MethodSymbol ) {
+            String id = (String)i.next();
+            Symbol sym = st.getMethodTable().get(id);
+            if ( sym instanceof MethodSymbol ) {
 				c.addMethod((MethodSymbol)sym);
 			}
 		}
-
+		
 		for ( Iterator<String> i = st.getVarTable().keySet().iterator(); i.hasNext(); ) {
-			String id = (String)i.next();
-			Symbol sym = st.getVarTable().get(id);
-			if ( sym instanceof VarSymbol ) {
-				c.addVariable((VarSymbol)sym);
+            String id = (String)i.next();
+            Symbol sym = st.getVarTable().get(id);
+            if ( sym instanceof VarSymbol ) {
+            	c.addVariable((VarSymbol)sym);
 			}
 		}
-
+		
 		st = st.exitScope();
 	}
 
@@ -102,33 +100,31 @@ public class SymTableVisitor implements Visitor {
 	public void visit(ClassDeclSimple n) {
 		ClassSymbol c = new ClassSymbol(n.i.toString());
 		st.addSymbol(c);
-		st = st.enterScope(n.i.toString());
-		if (n.vl != null) {
-			for (int i = 0; i < n.vl.size(); i++) {
-				n.vl.get(i).accept(this);
-			}
-		}
-		if (n.ml != null) {
-			for (int i = 0; i < n.ml.size(); i++) {
-				n.ml.get(i).accept(this);
-			}
-		}
-		for ( Iterator<String> i = st.getMethodTable().keySet().iterator(); i.hasNext(); ) {
-			String id = (String)i.next();
-			Symbol sym = st.getMethodTable().get(id);
-			if ( sym instanceof MethodSymbol ) {
-				c.addMethod((MethodSymbol)sym);
-			}
+		st = st.enterScope(n.i.toString(), n);
+		
+		// add variables 
+		for (int i = 0; i < n.vl.size(); i++) {
+			VarDecl v = n.vl.get(i);
+			if ( v == null ) continue; 
+			v.accept(this);
+
+			Symbol sym = st.getVarTable().get(v.i.s);
+            if ( sym instanceof VarSymbol ) {
+            	c.addVariable((VarSymbol)sym);
+			}			
 		}
 
-		for ( Iterator<String> i = st.getVarTable().keySet().iterator(); i.hasNext(); ) {
-			String id = (String)i.next();
-			Symbol sym = st.getVarTable().get(id);
-			if ( sym instanceof VarSymbol ) {
-				c.addVariable((VarSymbol)sym);
-			}
-		}
+		for (int i = 0; i < n.ml.size(); i++) {
+			MethodDecl m = n.ml.get(i);
+			if ( m == null ) continue; 
+			m.accept(this);
 
+            Symbol sym = st.getMethodTable().get(m.i.s);
+            if ( sym instanceof MethodSymbol ) {
+            	c.addMethod((MethodSymbol)sym);
+			}
+		}		
+		
 		st = st.exitScope();
 	}
 
@@ -139,62 +135,69 @@ public class SymTableVisitor implements Visitor {
 	public void visit(ClassDeclExtends n) {
 		ClassSymbol c = new ClassSymbol(n.i.toString(), n.j.toString());
 		st.addSymbol(c);
-
+		
 		// search for the extend class and add to the symbol
 		SymbolTable ext_st = st.getChild(n.j.toString());
-        Symbol s = null;
-        if (st.lookupSymbol(n.j.toString()) != null) {
-            s = ext_st.lookupSymbol(n.j.toString());
-        }
-        else {
-            report_error(n.line_number, "Class: " + n.i.toString() + " attempts to extend: " + n.j.toString()
-            + " which doesn't exist");
-        }
-		if ( s != null && s instanceof ClassSymbol ) {
-			c.extendsClass((ClassSymbol)s);
+		if ( ext_st != null ) {
+			Symbol s = ext_st.lookupSymbol(n.j.toString());
+			if ( s != null && s instanceof ClassSymbol ) {
+				c.extendsClass((ClassSymbol)s);
+			}
 		}
+		else {
+			report_error(n.getLineNo(), "Unable to locate extend class "+n.j.toString()+".");
+		}
+			
 		// enter a new scope
-		st = st.enterScope(n.i.toString());
+		st = st.enterScope(n.i.toString(), n);
+	
+		// add variables 
+		for (int i = 0; i < n.vl.size(); i++) {
+			VarDecl v = n.vl.get(i);
+			if ( v == null ) continue; 
+			v.accept(this);
 
-		// add variables & methods
-		if (n.vl != null) {
-			for (int i = 0; i < n.vl.size(); i++) {
-				n.vl.get(i).accept(this);
+			Symbol sym = st.getVarTable().get(v.i.s);
+            if ( sym instanceof VarSymbol ) {
+            	c.addVariable((VarSymbol)sym);
+			}			
+		}
+		
+		for (int i = 0; i < n.ml.size(); i++) {
+			MethodDecl m = n.ml.get(i);
+			if ( m == null ) continue; 
+			m.accept(this);
+
+            Symbol sym = st.getMethodTable().get(m.i.s);
+            if ( sym instanceof MethodSymbol ) {
+            	MethodSymbol ms = (MethodSymbol)sym;
+            	// check if the method is overriding a method from the extend class
+            	MethodSymbol ms_ext = c.getMethod(ms.getName());
+            	if ( ms_ext != null && !ms_ext.equals(ms) ) {
+            		report_error(m.getLineNo(), "Method override for \""+ms.getName()+"\" does not match previous definition.");
+            	}
+            	else {
+            		// replace the method with the override
+            		int index = c.getMethods().indexOf(ms_ext);
+            		c.getMethods().set(index, ms);
+            		ms.setParent(c);
+            		//c.addMethod(ms);
+            	}
 			}
 		}
-		if (n.ml != null) {
-			for (int i = 0; i < n.ml.size(); i++) {
-				n.ml.get(i).accept(this);
-			}
-		}
-		// add the variables and declarations from the symbol table to the class symbol
-		for ( Iterator<String> i = st.getMethodTable().keySet().iterator(); i.hasNext(); ) {
-			String id = (String)i.next();
-			Symbol sym = st.getMethodTable().get(id);
-			if ( sym instanceof MethodSymbol ) {
-				c.addMethod((MethodSymbol)sym);
-			}
-		}
-		for ( Iterator<String> i = st.getVarTable().keySet().iterator(); i.hasNext(); ) {
-			String id = (String)i.next();
-			Symbol sym = st.getVarTable().get(id);
-			if ( sym instanceof VarSymbol ) {
-				c.addVariable((VarSymbol)sym);
-                st.exitScope().addSymbol(sym);
-			}
-		}
-		for (MethodSymbol method : c.getMethods()) {
-		    st.addSymbol(method);
-        }
-        for (VarSymbol var : c.getVariables()) {
-            st.addSymbol(var);
-        }
+		
 		st = st.exitScope();
 	}
 
 	// Type t;
 	// Identifier i;
 	public void visit(VarDecl n) {
+		Symbol s = st.lookupSymbol(n.i.toString());
+		if ( s != null && s instanceof VarSymbol )
+		{
+			report_error(n.getLineNo(), "Symbol "+n.i.toString()+" has already been declared.");
+			return;
+		}
 		st.addSymbol(new VarSymbol(n.i.toString(), getTypeString(n.t)));
 	}
 
@@ -205,34 +208,31 @@ public class SymTableVisitor implements Visitor {
 	// StatementList sl;
 	// Exp e;
 	public void visit(MethodDecl n) {
-		MethodSymbol s = new MethodSymbol(n.i.toString(), getTypeString(n.t));
-		if (st.getMethodTable().get(n.i.toString()) != null) {
-		    report_error(n.line_number, "Method " + n.i.toString() + " has already been declared");
-        }
-		if (n.fl != null) {
-			for (int i = 0; i < n.fl.size(); i++) {
-				Formal f = n.fl.get(i);
-				if (f != null) {
-					s.addParameter(new VarSymbol(f.i.toString(), getTypeString(f.t)));
-				}
+		Symbol s = st.lookupSymbol(n.i.toString(), "MethodSymbol");
+		if ( s != null && s instanceof MethodSymbol )
+		{
+			report_error(n.getLineNo(), "Method "+n.i.toString()+" has already been declared.");
+			return;
+		}
+		
+		MethodSymbol m = new MethodSymbol(n.i.toString(), getTypeString(n.t));
+		for (int i = 0; i < n.fl.size(); i++) {
+			Formal f = n.fl.get(i);
+			if ( f != null ) {
+				m.addParameter(new VarSymbol(f.i.toString(), getTypeString(f.t)));
 			}
 		}
-		st.addSymbol(s);
-		st = st.enterScope(n.i.toString());
-		if (n.fl != null) {
-			for (int i = 0; i < n.fl.size(); i++) {
-				n.fl.get(i).accept(this);
-			}
+		
+		st.addSymbol(m);
+		st = st.enterScope(n.i.toString(), n);
+		for (int i = 0; i < n.fl.size(); i++) {
+			n.fl.get(i).accept(this);
 		}
-		if (n.vl != null) {
-			for (int i = 0; i < n.vl.size(); i++) {
-				n.vl.get(i).accept(this);
-			}
+		for (int i = 0; i < n.vl.size(); i++) {
+			n.vl.get(i).accept(this);
 		}
-		if (n.sl != null) {
-			for (int i = 0; i < n.sl.size(); i++) {
-				n.sl.get(i).accept(this);
-			}
+		for (int i = 0; i < n.sl.size(); i++) {
+			n.sl.get(i).accept(this);
 		}
 		st = st.exitScope();
 	}
@@ -245,92 +245,115 @@ public class SymTableVisitor implements Visitor {
 
 	// int[] i;
 	public void visit(IntArrayType n) {
+		n.accept(this);
 	}
 
 	// Bool b;
 	public void visit(BooleanType n) {
+		n.accept(this);
 	}
 
 	// Int i;
 	public void visit(IntegerType n) {
+		n.accept(this);
 	}
 
 	// String s;
 	public void visit(IdentifierType n) {
+		n.accept(this);
 	}
 
 	// StatementList sl;
 	public void visit(Block n) {
-		st = st.enterScope("block");
 		for (int i = 0; i < n.sl.size(); i++) {
 			n.sl.get(i).accept(this);
 		}
-		st = st.exitScope();
 	}
 
 	// Exp e;
 	// Statement s1,s2;
 	public void visit(If n) {
-	    if (n.s1 != null) {
-            n.s1.accept(this);
-        }
-        if (n.s2 != null) {
-            n.s2.accept(this);
-        }
+		n.s1.accept(this);
+		if ( n.s2 != null ) n.s2.accept(this);
 	}
 
 	// Exp e;
 	// Statement s;
 	public void visit(While n) {
-		n.s.accept(this);
+		if ( n.s != null ) n.s.accept(this);
 	}
 
 	// Exp e;
 	public void visit(Print n) {
+		if ( n.e != null ) n.e.accept(this);
 	}
+	
 
 	// Identifier i;
 	// Exp e;
 	public void visit(Assign n) {
+		if ( n.i != null ) n.i.accept(this);
+		if ( n.e != null ) n.e.accept(this);
 	}
 
 	// Identifier i;
 	// Exp e1,e2;
 	public void visit(ArrayAssign n) {
+		if ( n.i != null ) n.i.accept(this);
+		n.e1.accept(this);
+		n.e2.accept(this);
 	}
 
 	// Exp e1,e2;
 	public void visit(And n) {
+		n.e1.accept(this);
+		n.e2.accept(this);
 	}
 
 	// Exp e1,e2;
 	public void visit(LessThan n) {
+		n.e1.accept(this);
+		n.e2.accept(this);		
 	}
 
 	// Exp e1,e2;
 	public void visit(Plus n) {
+		n.e1.accept(this);
+		n.e2.accept(this);
 	}
 
 	// Exp e1,e2;
 	public void visit(Minus n) {
+		n.e1.accept(this);
+		n.e2.accept(this);
 	}
 
 	// Exp e1,e2;
 	public void visit(Times n) {
+		n.e1.accept(this);
+		n.e2.accept(this);
 	}
 
 	// Exp e1,e2;
 	public void visit(ArrayLookup n) {
+		n.e1.accept(this);
+		n.e2.accept(this);
 	}
 
 	// Exp e;
 	public void visit(ArrayLength n) {
+		if ( n.e != null ) n.e.accept(this);
 	}
 
 	// Exp e;
 	// Identifier i;
 	// ExpList el;
 	public void visit(Call n) {
+		if ( n.e != null ) n.e.accept(this);
+		if ( n.i != null ) n.i.accept(this);
+		for (int i = 0; i < n.el.size(); i++) {
+			n.el.get(i).accept(this);
+		}		
 	}
 
 	// int i;
@@ -348,14 +371,17 @@ public class SymTableVisitor implements Visitor {
 
 	// Exp e;
 	public void visit(NewArray n) {
+		if ( n.e != null ) n.e.accept(this);
 	}
 
 	// Identifier i = new Identifier();
 	public void visit(NewObject n) {
+		if ( n.i != null ) n.i.accept(this);
 	}
 
 	// Exp e;
 	public void visit(Not n) {
+		if ( n.e != null ) n.e.accept(this);
 	}
 
 	// String s;

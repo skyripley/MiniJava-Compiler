@@ -1,0 +1,7 @@
+javac Test.java
+java Test
+echo ""
+java -cp ../build/classes:../lib/java-cup-11b.jar MiniJava -C Test.java > test.s
+gcc -g -O0 -o Test test.s ../src/runtime/boot.c 
+./Test
+

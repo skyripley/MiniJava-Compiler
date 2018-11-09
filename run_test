@@ -1,0 +1,7 @@
+javac SamplePrograms/SampleMiniJavaPrograms/$1.java
+java -cp SamplePrograms/SampleMiniJavaPrograms/ $1
+echo ""
+java -cp build/classes:lib/java-cup-11b.jar MiniJava -C SamplePrograms/SampleMiniJavaPrograms/$1.java > out.s
+gcc -g -O0 -o test out.s src/runtime/boot.c 
+./test
+

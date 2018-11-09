@@ -1,6 +1,9 @@
 package AST;
 
 import java.util.List;
+
+import AST.Visitor.ObjectVisitor;
+
 import java.util.ArrayList;
 import java_cup.runtime.ComplexSymbolFactory.Location;
 
@@ -14,6 +17,7 @@ public class FormalList extends ASTNode {
 
    public void add(Formal n) {
       list.add(n);
+      if (n != null) n.setParent(this);
    }
 
    public Formal get(int i)  { 
