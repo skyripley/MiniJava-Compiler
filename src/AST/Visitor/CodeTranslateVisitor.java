@@ -630,6 +630,18 @@ public class CodeTranslateVisitor implements Visitor {
 	}
 
 	// Exp e1,e2;
+	public void visit(Div n) {
+		String op1 = getExpr(n.e1, false);
+		printInstr("pushq", new String[]{"%rax"});
+
+		String op2 = getExpr(n.e2, false);
+		printInstr("popq", new String[]{"%r10"});
+		op1 = "%r10";
+
+		printInstr("idivq", new String[]{op1, op2});
+	}
+
+	// Exp e1,e2;
 	public void visit(ArrayLookup n) {
 		String arr = getExpr(n.e1, false);
         printInstr("pushq", new String[] {arr});

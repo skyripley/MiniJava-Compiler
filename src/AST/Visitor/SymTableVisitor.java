@@ -335,6 +335,12 @@ public class SymTableVisitor implements Visitor {
 	}
 
 	// Exp e1,e2;
+	public void visit(Div n) {
+		n.e1.accept(this);
+		n.e2.accept(this);
+	}
+
+	// Exp e1,e2;
 	public void visit(ArrayLookup n) {
 		n.e1.accept(this);
 		n.e2.accept(this);

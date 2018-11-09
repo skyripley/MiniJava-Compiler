@@ -312,6 +312,15 @@ public class PrettyPrintVisitor implements Visitor {
 	}
 
 	// Exp e1,e2;
+	public void visit(Div n) {
+		System.out.print("(");
+		n.e1.accept(this);
+		System.out.print(" / ");
+		n.e2.accept(this);
+		System.out.print(")");
+	}
+
+	// Exp e1,e2;
 	public void visit(ArrayLookup n) {
 		n.e1.accept(this);
 		System.out.print("[");

@@ -385,6 +385,18 @@ public class SemanticAnalysisVisitor implements ObjectVisitor {
 		return s1;
 	}
 
+	// Exp e1,e2;
+	public Object visit(Div n) {
+		String s1 = checkIntType(( n.e1 != null ) ? n.e1.accept(this) : null);
+		String s2 = checkIntType(( n.e2 != null ) ? n.e2.accept(this) : null);
+		if ( s1 != s2 || s1 != "int") {
+			report_error(n.getLineNo(), "Expecting int operand types in division operation.");
+			return null;
+		}
+		System.out.println(n.e2);
+		return s1;
+	}
+
 	// Exp e1[e2];
 	public Object visit(ArrayLookup n) {
 		Object o1 = ( n.e1 != null ) ? n.e1.accept(this) : null;
