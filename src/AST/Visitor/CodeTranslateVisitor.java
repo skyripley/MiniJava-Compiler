@@ -314,7 +314,15 @@ public class CodeTranslateVisitor implements Visitor {
 		
 		System.out.println("");
 		System.out.println(".text");
-		System.out.println(".globl " + getLabel("", "asm_main")); 		
+		System.out.println(".globl " + getLabel("", "asm_main"));
+		System.out.println("message:");
+		System.out.println("\t.ascii	\"Caught divide by zero exception.. Exiting now\\n\"\n");
+		System.out.println("divideByZeroHandler:");
+		System.out.println("\tmovq	$message, %rdi");
+		System.out.println("\tcall	put");
+		System.out.println("\tleave");
+		System.out.println("\tret");
+
 		n.m.accept(this);
 		if ( n.cl != null ) {
 			for (int i = 0; i < n.cl.size(); i++) {
@@ -637,6 +645,8 @@ public class CodeTranslateVisitor implements Visitor {
 		String op1 = getExpr(n.e1, false);
 		printInstr("popq", new String[]{"%r10"});
 		printInstr("cltd");
+		printInstr("cmpq	$0, %r10");
+		printInstr("je	divideByZeroHandler");
 		op1 = "%r10";
 
 		printInstr("idivq", new String[]{op1});
