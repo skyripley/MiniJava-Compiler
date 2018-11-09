@@ -179,7 +179,9 @@ public class SymTableVisitor implements Visitor {
             	else {
             		// replace the method with the override
             		int index = c.getMethods().indexOf(ms_ext);
-            		c.getMethods().set(index, ms);
+            		if (index != -1) {
+						c.getMethods().set(index, ms);
+					}
             		ms.setParent(c);
             		//c.addMethod(ms);
             	}
