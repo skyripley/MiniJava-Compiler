@@ -148,6 +148,7 @@ COMMENT="/*"{NOT_STAR}*("*"({NOT_STAR_OR_SLASH}{NOT_STAR}*)?)*"*/"
 "<"		{ return symbol(sym.LT); }
 "*"		{ return symbol(sym.MULT); }
 "!"		{ return symbol(sym.NOT); }
+"/"     { return symbol(sym.DIV); }
 
 
 /* delimiters */

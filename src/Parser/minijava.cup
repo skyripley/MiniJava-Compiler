@@ -36,7 +36,7 @@ terminal RETURN;
 terminal STRING;
 
 /* operators */
-terminal PLUS, MINUS, BECOMES, AND, LT, MULT, NOT;
+terminal PLUS, MINUS, BECOMES, AND, LT, MULT, NOT, DIV;
 
 /* delimiters */
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LCURLYBRACKET, RCURLYBRACKET, SEMICOLON, PERIOD, COMMA;
@@ -79,6 +79,7 @@ precedence nonassoc LT;
 precedence left 	AND;
 precedence left 	PLUS, MINUS;
 precedence left 	MULT;
+precedence left     DIV;
 precedence right 	NOT;
 precedence right 	ELSE;
 precedence right 	PERIOD;
@@ -336,7 +337,10 @@ Expression    	::=	Expression:arg1 AND Expression:arg2
 			        | 
 			        Expression:arg1 MULT Expression:arg2
 			            {: RESULT = new Times(arg1, arg2, arg1xleft); :}
-			        | 
+			        |
+			        Expression:arg1 DIV Expression:arg2
+                        {: RESULT = new Div(arg1, arg2, arg1xleft); :}
+                    |
 			        Expression:e1 LBRACKET Expression:e2 RBRACKET
 			            {: RESULT = new ArrayLookup(e1, e2, e1xleft); :}
 			        | 
