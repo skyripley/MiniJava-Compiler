@@ -317,11 +317,15 @@ public class CodeTranslateVisitor implements Visitor {
 		System.out.println(".globl " + getLabel("", "asm_main"));
 		System.out.println("message:");
 		System.out.println("\t.ascii	\"Caught divide by zero exception.. Exiting now\\n\"\n");
-		System.out.println("divideByZeroHandler:");
-		System.out.println("\tmovq	$message, %rdi");
-		System.out.println("\tcall	put");
-		System.out.println("\tleave");
-		System.out.println("\tret");
+		System.out.println("\ndivideByZeroHandler:");
+		System.out.println("\tmov	$1, %rax");
+		System.out.println("\tmov	$1, %rdi");
+		System.out.println("\tmov	$message, %rsi");
+		System.out.println("\tmov	$46, %rdx");
+		System.out.println("\tsyscall");
+		System.out.println("\tmov	$60, %rax");
+		System.out.println("\tmov	$1, %rdi");
+		System.out.println("\tsyscall");
 
 		n.m.accept(this);
 		if ( n.cl != null ) {
