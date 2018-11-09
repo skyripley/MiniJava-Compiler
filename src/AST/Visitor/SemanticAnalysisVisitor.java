@@ -393,7 +393,6 @@ public class SemanticAnalysisVisitor implements ObjectVisitor {
 			report_error(n.getLineNo(), "Expecting int operand types in division operation.");
 			return null;
 		}
-		System.out.println(n.e2);
 		return s1;
 	}
 
