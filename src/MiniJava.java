@@ -1,250 +1,263 @@
-import java.io.*;
-import java.util.*;
-
-import AST.symboltable.Table;
-import AST.syntaxtree.visitor.backend.X64CodeGenerator;
-import AST.syntaxtree.visitor.ops.FunctionDeclaration;
-import AST.syntaxtree.visitor.ops.RecordDeclaration;
-import AST.syntaxtree.visitor.ops.visitor.IrVisitor;
-import Parser.*;
-import Parser.sym;
 import Scanner.*;
-import Symtab.SymbolTable;
-import cli.Cli;
+import Parser.parser;
+import Parser.sym;
 import java_cup.runtime.Symbol;
 import java_cup.runtime.ComplexSymbolFactory;
+import java.io.*;
+import java.util.List;
+
 import AST.*;
-import AST.Visitor.*;
-import Symtab.*;
-import AST.syntaxtree.visitor.*;
-import AST.syntaxtree.*;
-import frontend.*;
+import AST.Program;
+//import AST.Statement;
+import AST.Visitor.PrettyPrintVisitor;
+import AST.Visitor.SemanticAnalysisVisitor;
+import AST.Visitor.SymTableVisitor;
+import AST.Visitor.CodeTranslateVisitor;
 
 public class MiniJava {
+	
+    public static void main(String [] args) 
+    {
+    	int errors = 0;
+		String help = "Use:\n" +
+				  	  "  java MiniJava -S <source_file>\n" +
+				  	  "  java MiniJava -P <source_file>\n" +
+				  	  "  java MiniJava -T <source_file>\n" +
+				  	  "  java MiniJava -A <source_file>\n" +
+				  	  "  java MiniJava -C <source_file>\n";
+    	
+    	if ( args.length == 1 && (args[0].equals("-h") || args[0].equals("-H")) )
+    	{
+        	// print the help
+        	System.out.println(help);
+    	}
+    	else if ( args.length == 2 && args[0].equals("-S") )
+    	{
+        	// run scanner on the source file
+    		errors = FileScanner( args[1] );
+    	}
+    	else if ( args.length == 2 && args[0].equals("-P") )
+    	{
+        	// run the parser on the source file
+    		errors = FileParser( args[1] );
+    	}
+    	else if ( args.length == 2 && args[0].equals("-T") )
+    	{
+        	// run the parser & semantic analysis on the source file
+    		errors = FileSymtab( args[1] );
+    	}
+    	else if ( args.length == 2 && args[0].equals("-A") )
+    	{
+        	// run the parser & semantic analysis on the source file
+    		errors = FileSemantics( args[1] );
+    	}
+    	else if ( args.length == 2 && args[0].equals("-C") )
+    	{
+        	// run the translation on the source file
+    		errors = FileTranslate( args[1] );
+    	}
+    	else
+    	{
+    		System.err.println("Invalid program arguments.\n" + help);
+    		errors = 1;
+    	}
+    	
+    	if ( args.length > 1 && args[0].equals("-C") && errors > 0 ) {
+    		System.out.println(errors + " errors were found.");
+    	}
+    	
+		System.exit( errors == 0 ? 0 : 1 );
+   }
 
-    private static int generateAssembly(File file) {
-        try {
-            BuildSymbolTableVisitor symbolTableVisitor = new BuildSymbolTableVisitor();
-            int return_code = 0;
-            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
-            InputStream inputStream = new FileInputStream(file);
-            new RamParser(inputStream);
-            AST.syntaxtree.Program root = RamParser.Goal();
-            BuildSymbolTableVisitor buildSymbolTableVisitor = new BuildSymbolTableVisitor();
-            root.accept(buildSymbolTableVisitor);
-            TypeCheckVisitor typeCheckVisitor = new TypeCheckVisitor(buildSymbolTableVisitor.getSymTab());
-            root.accept(typeCheckVisitor);
-            if (typeCheckVisitor.getErrorMsg().getHasErrors())
-            {
-                System.out.println("Error in front-end. Exiting.");
-                System.exit(1);
-            }
-            IrGenerator irGenerator = new IrGenerator(buildSymbolTableVisitor.getSymTab());
-            root.accept(irGenerator);
-            PrintStream ps = System.out;
-            X64CodeGenerator codeGenerator = new X64CodeGenerator(ps);
-            for (RecordDeclaration recordDeclaration: irGenerator.getRecordList()) {
-                recordDeclaration.accept((IrVisitor) codeGenerator);
-            }
-            for (FunctionDeclaration functionDeclaration: irGenerator.getFrameList()) {
-                functionDeclaration.accept((IrVisitor) codeGenerator);
-            }
-            return return_code;
-        } catch (Exception exception) {
-            System.err.println("Unexpected internal compiler error: " + exception.toString());
-            exception.printStackTrace();
-            return 1;
-        }
-    }
+	public static int FileScanner(String source_file)
+	{
+		int errors = 0;
+		
+	    try {
+	        // create a scanner on the input file
+	        ComplexSymbolFactory sf = new ComplexSymbolFactory();
+	        Reader in = new BufferedReader(new FileReader(source_file));
+	        scanner s = new scanner(in, sf);
+	        Symbol t = s.next_token();
+	        while (t.sym != sym.EOF){ 
+	        	if ( t.sym == sym.error ) ++errors;
+	        	
+	            // print each token that we scanned
+        		System.out.print(s.symbolToString(t) + "\n");
+	            t = s.next_token();
+	        }
+	        
+	        System.out.println("\nLexical analysis completed"); 
+	    
+	    } catch (Exception e) {
+	        // yuck: some kind of error in the compiler implementation
+	        // that we're not expecting (a bug!)
+	        System.err.println("Unexpected internal compiler error: " + 
+	                    e.toString());
+	        // print out a stack dump
+	        e.printStackTrace();
+	    }
+	    
+	    return errors;    	
+	}
 
-    private static int generateCode(File file) {
-        try {
-            int return_code = 0;
-            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
-            InputStream inputStream = new FileInputStream(file);
-            Reader reader = new InputStreamReader(inputStream);
-            scanner scanner = new scanner(reader, complexSymbolFactory);
-            parser parser = new parser(scanner, complexSymbolFactory);
+	public static int FileParser(String source_file)
+	{
+		int errors = 0;
+		
+	    try {
+	        // create a parser on the input file
+            ComplexSymbolFactory sf = new ComplexSymbolFactory();
+	        Reader in = new BufferedReader(new FileReader(source_file));
+            scanner s = new scanner(in, sf);
+            parser p = new parser(s, sf);
             Symbol root;
-            root = parser.parse();
-            if (parser.errorDetected) {
-                System.out.println("\nErrors detected during parsing!");
-                System.out.println("Will attempt to generate a partial symbol table anyway...");
-                return_code = 1;
-            }
-            AST.Program program = (AST.Program) root.value;
-            SymTableVisitor symTableVisitor = new SymTableVisitor();
-            symTableVisitor.visit(program);
-            SymbolTable symbolTable = symTableVisitor.getSymbolTable();
-            TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor();
-            typeCheckingVisitor.setSymtab(symbolTable);
-            typeCheckingVisitor.visit(program);
-            if (symTableVisitor.getErrors() > 0 || typeCheckingVisitor.getErrors() > 0) {
-                return_code = 1;
-                System.exit(return_code);
-            }
-            AST.Visitor.TypeVisitor typeVisitor = new AST.Visitor.TypeVisitor();
-            typeVisitor.visit(program);
-            CodeTranslateVisitor codeTranslateVisitor = new CodeTranslateVisitor(typeVisitor);
-            codeTranslateVisitor.visit(program);
-            for (String line: codeTranslateVisitor.getCode()) {
-                System.out.println(line);
-            }
-            return return_code;
-        } catch (Exception exception) {
-            System.err.println("Unexpected internal compiler error: " + exception.toString());
-            exception.printStackTrace();
-            return 1;
-        }
-    }
-
-    private static int semanticAnalyzer(File file) {
-        try {
-            int return_code = 0;
-            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
-            InputStream inputStream = new FileInputStream(file);
-            Reader reader = new InputStreamReader(inputStream);
-            scanner scanner = new scanner(reader, complexSymbolFactory);
-            parser parser = new parser(scanner, complexSymbolFactory);
+		    // replace p.parse() with p.debug_parse() in next line to see trace of
+		    // parser shift/reduce actions during parse
+            root = p.parse();  
+            Program program = (Program)root.value;
+            program.accept( new PrettyPrintVisitor() );
+	    
+	        System.out.println("\nParsing completed"); 
+	    } catch (Exception e) {
+	        // yuck: some kind of error in the compiler implementation
+	        // that we're not expecting (a bug!)
+	        System.err.println("Unexpected internal compiler error: " + 
+	                    e.toString());
+	        // print out a stack dump
+	        e.printStackTrace();
+	    }
+	    
+	    return errors;    	
+	}
+	
+	public static int FileSymtab(String source_file)
+	{
+		int errors = 0;
+		
+	    try {
+	        // create a parser on the input file
+            ComplexSymbolFactory sf = new ComplexSymbolFactory();
+	        Reader in = new BufferedReader(new FileReader(source_file));
+            scanner s = new scanner(in, sf);
+            parser p = new parser(s, sf);
             Symbol root;
-            root = parser.parse();
-            if (parser.errorDetected) {
-                System.out.println("\nErrors detected during parsing!");
-                System.out.println("Will attempt to generate a partial symbol table anyway...");
-                return_code = 1;
-            }
-            AST.Program program = (AST.Program) root.value;
-            SymTableVisitor symTableVisitor = new SymTableVisitor();
-            symTableVisitor.visit(program);
-            SymbolTable symbolTable = symTableVisitor.getSymbolTable();
-            TypeCheckingVisitor typeCheckingVisitor = new TypeCheckingVisitor();
-            typeCheckingVisitor.setSymtab(symbolTable);
-            typeCheckingVisitor.visit(program);
-            if (symTableVisitor.getErrors() > 0 || typeCheckingVisitor.getErrors() > 0) {
-                return_code = 1;
-            }
-            return return_code;
-        } catch (Exception exception) {
-            System.err.println("Unexpected internal compiler error: " + exception.toString());
-            exception.printStackTrace();
-            return 1;
-        }
-    }
-
-    private static int generateSymbolTable(File file) {
-        try {
-            int return_code = 0;
-            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
-            InputStream inputStream = new FileInputStream(file);
-            Reader reader = new InputStreamReader(inputStream);
-            scanner scanner = new scanner(reader, complexSymbolFactory);
-            parser parser = new parser(scanner, complexSymbolFactory);
+		    // replace p.parse() with p.debug_parse() in next line to see trace of
+		    // parser shift/reduce actions during parse
+            root = p.parse();  
+            Program program = (Program)root.value;
+            //program.accept( new PrettyPrintVisitor() );
+            if ( errors > 0 ) return errors;
+            
+            SymTableVisitor st = new SymTableVisitor();
+            program.accept( st );
+            st.print();
+	    
+	        System.out.println("\nSymbol table generation completed"); 
+	    } catch (Exception e) {
+	        // yuck: some kind of error in the compiler implementation
+	        // that we're not expecting (a bug!)
+	        System.err.println("Unexpected internal compiler error: " + 
+	                    e.toString());
+	        // print out a stack dump
+	        e.printStackTrace();
+	    }
+	    
+	    return errors;
+	}	
+	
+	public static int FileSemantics(String source_file)
+	{
+		int errors = 0;
+		
+	    try {
+	        // create a parser on the input file
+            ComplexSymbolFactory sf = new ComplexSymbolFactory();
+	        Reader in = new BufferedReader(new FileReader(source_file));
+            scanner s = new scanner(in, sf);
+            parser p = new parser(s, sf);
             Symbol root;
-            root = parser.parse();
-            if (parser.errorDetected) {
-                System.out.println("\nErrors detected during parsing!");
-                System.out.println("Will attempt to generate a partial symbol table anyway...");
-                return_code = 1;
-            }
-            AST.Program program = (AST.Program) root.value;
-            SymTableVisitor symTableVisitor = new SymTableVisitor();
-            symTableVisitor.visit(program);
-            symTableVisitor.print();
-            return return_code;
-        } catch (Exception exception) {
-            System.err.println("Unexpected internal compiler error: " + exception.toString());
-            exception.printStackTrace();
-            return 1;
-        }
-    }
+		    // replace p.parse() with p.debug_parse() in next line to see trace of
+		    // parser shift/reduce actions during parse
+            root = p.parse();  
+            Program program = (Program)root.value;
+            //program.accept( new PrettyPrintVisitor() );
+            if ( errors > 0 ) return errors;
+            
+            SymTableVisitor st = new SymTableVisitor();
+            program.accept( st );
+            //st.print();
+            errors += st.errors;
+            //if ( errors > 0 ) return errors;
 
-    private static int parser(File file) {
-        try {
-            int return_code = 0;
-            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
-            InputStream inputStream = new FileInputStream(file);
-            Reader reader = new InputStreamReader(inputStream);
-            scanner scanner = new scanner(reader, complexSymbolFactory);
-            parser parser = new parser(scanner, complexSymbolFactory);
+            SemanticAnalysisVisitor sa = new SemanticAnalysisVisitor();
+            sa.setSymtab(st.getSymtab());
+            program.accept( sa );
+            errors += sa.errors;
+            
+	        System.out.println("\nSemantic analysis completed"); 
+	    } catch (Exception e) {
+	        // yuck: some kind of error in the compiler implementation
+	        // that we're not expecting (a bug!)
+	        System.err.println("Unexpected internal compiler error: " + 
+	                    e.toString());
+	        // print out a stack dump
+	        e.printStackTrace();
+	    }
+	    
+	    return errors;
+	}	
+
+	public static int FileTranslate(String source_file)
+	{
+		int errors = 0;
+		
+	    try {
+	        // create a parser on the input file
+            ComplexSymbolFactory sf = new ComplexSymbolFactory();
+	        Reader in = new BufferedReader(new FileReader(source_file));
+            scanner s = new scanner(in, sf);
+            parser p = new parser(s, sf);
             Symbol root;
-            root = parser.parse();
-            if (parser.errorDetected) {
-                System.out.println("\nParsing complete, but syntax errors were detected");
-                return_code = 1;
-            }
-            else {
-                System.out.println("Parsing complete - no errors found");
-                AST.Program program = (AST.Program) root.value;
-                AST.Visitor.PrettyPrintVisitor prettyPrintVisitor = new AST.Visitor.PrettyPrintVisitor();
-                prettyPrintVisitor.visit(program);
-            }
-            return return_code;
-        } catch (Exception exception) {
-            System.err.println("Unexpected internal compiler error: " + exception.toString());
-            exception.printStackTrace();
-            return 1;
-        }
-    }
+		    // replace p.parse() with p.debug_parse() in next line to see trace of
+		    // parser shift/reduce actions during parse
+            root = p.parse();  
+            Program program = (Program)root.value;
+            //program.accept( new PrettyPrintVisitor() );
+            if ( errors > 0 ) return errors;
+            
+            SymTableVisitor st = new SymTableVisitor();
+            program.accept( st );
+            //st.print();
+            errors += st.errors;
+        	if ( errors > 0 ) return errors;
+            
+            SemanticAnalysisVisitor sa = new SemanticAnalysisVisitor();
+            sa.setSymtab(st.getSymtab());
+            program.accept( sa );
+            errors += sa.errors;
+            if ( errors > 0 ) return errors;
+            
+            CodeTranslateVisitor ct = new CodeTranslateVisitor();
+            ct.setSymtab(st.getSymtab());
+            program.accept( ct );
+            errors += ct.errors;
+            if ( errors > 0 ) return errors;
+            
+	        //System.out.println("\nCode translation completed"); 
 
-    private static int scanner(File file) {
-        try {
-            int return_code = 0;
-            ComplexSymbolFactory complexSymbolFactory = new ComplexSymbolFactory();
-            InputStream inputStream = new FileInputStream(file);
-            Reader reader = new InputStreamReader(inputStream);
-            scanner scanner = new scanner(reader, complexSymbolFactory);
-            Symbol symbol = scanner.next_token();
-            while (symbol.sym != sym.EOF) {
-                if (symbol.sym == sym.error) {
-                    return_code = 1;
-                }
-                System.out.print(scanner.symbolToString(symbol) + " ");
-                symbol = scanner.next_token();
-            }
-            System.out.println();
-            return return_code;
-        } catch (Exception exception) {
-            System.err.println("Unexpected internal compiler error: " + exception.toString());
-            exception.printStackTrace();
-            return 1;
-        }
-    }
-
-    public static void main(String[] args) {
-        int scanner_return_code = 0;
-        int parser_return_code = 0;
-        int symbol_table_return_code = 0;
-        int semantic_analysis_return_code = 0;
-        int code_gen_return_code = 0;
-        Map<String, String> argsMap = new Cli(args).parse();
-        if (argsMap != null) {
-            if (argsMap.containsKey("S")) {
-                String file = argsMap.get("S");
-                scanner_return_code = scanner(new File(file));
-            }
-            if (argsMap.containsKey("P")) {
-                String file = argsMap.get("P");
-                parser_return_code = parser(new File(file));
-            }
-            if (argsMap.containsKey("T")) {
-                String file = argsMap.get("T");
-                symbol_table_return_code = generateSymbolTable(new File(file));
-            }
-            if (argsMap.containsKey("A")) {
-                String file = argsMap.get("A");
-                semantic_analysis_return_code = semanticAnalyzer(new File(file));
-            }
-            if (argsMap.containsKey("C")) {
-                String file = argsMap.get("C");
-                code_gen_return_code = generateAssembly(new File(file));
-            }
-        }
-        if (scanner_return_code == 1 || parser_return_code == 1 || symbol_table_return_code == 1
-                || semantic_analysis_return_code == 1 || code_gen_return_code == 1) {
-            System.exit(1);
-        }
-        else {
-            System.exit(0);
-        }
-    }
+	    } catch (Exception e) {
+	        // yuck: some kind of error in the compiler implementation
+	        // that we're not expecting (a bug!)
+	        System.err.println("Unexpected internal compiler error: " + 
+	                    e.toString());
+	        // print out a stack dump
+	        e.printStackTrace();
+	    }
+	    
+	    return errors;    	
+	}	
 }
+
+
+

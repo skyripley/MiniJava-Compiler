@@ -14,6 +14,7 @@ public class StatementList extends ASTNode {
 
    public void add(Statement n) {
       list.add(n);
+      if (n != null) n.setParent(this);
    }
 
    public Statement get(int i)  { 

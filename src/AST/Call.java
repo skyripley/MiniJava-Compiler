@@ -12,17 +12,16 @@ public class Call extends Exp {
   public Call(Exp ae, Identifier ai, ExpList ael, Location pos) {
     super(pos);
     e=ae; i=ai; el=ael;
-  }
-
-  public Call(Exp ae, Identifier ai, Location pos) {
-    super(pos);
-    e = ae;
-    i = ai;
+    if (e != null)  i.setParent(this);
+    if (i != null)  e.setParent(this);
+    if (el != null) el.setParent(this);
   }
 
   public void accept(Visitor v) {
     v.visit(this);
   }
 
-  public Object accept(ObjectVisitor objectVisitor) { return objectVisitor.visit(this); }
+  public Object accept(ObjectVisitor v) {
+    return v.visit(this);
+  }
 }

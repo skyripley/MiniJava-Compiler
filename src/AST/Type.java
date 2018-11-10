@@ -9,5 +9,6 @@ public abstract class Type extends ASTNode {
         super(pos);
     }
     public abstract void accept(Visitor v);
-    public abstract Object accept(ObjectVisitor objectVisitor);
+
+    public abstract Object accept(ObjectVisitor v);
 }

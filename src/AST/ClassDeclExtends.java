@@ -15,18 +15,17 @@ public class ClassDeclExtends extends ClassDecl {
                           Location pos) {
     super(pos);
     i=ai; j=aj; vl=avl; ml=aml;
-  }
-
-  public ClassDeclExtends(Identifier ai, Identifier aj,
-                          MethodDeclList aml,
-                          Location pos) {
-    super(pos);
-    i=ai; j=aj; ml=aml;
+    if (i != null)  i.setParent(this);
+    if (j != null)  j.setParent(this);
+    if (vl != null) vl.setParent(this);
+    if (ml != null) ml.setParent(this);
   }
 
   public void accept(Visitor v) {
     v.visit(this);
   }
 
-  public Object accept(ObjectVisitor objectVisitor) { return objectVisitor.visit(this); }
+  public Object accept(ObjectVisitor v) {
+    return v.visit(this);
+  }
 }

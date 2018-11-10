@@ -13,17 +13,16 @@ public class ClassDeclSimple extends ClassDecl {
                          Location pos) {
     super(pos);
     i=ai; vl=avl; ml=aml;
-  }
-
-  public ClassDeclSimple(Identifier ai, MethodDeclList aml, Location pos) {
-    super(pos);
-    i = ai;
-    ml = aml;
+    if (i != null) i.setParent(this);
+    if (vl != null) vl.setParent(this);
+    if (ml != null) ml.setParent(this);
   }
 
   public void accept(Visitor v) {
     v.visit(this);
   }
 
-  public Object accept(ObjectVisitor objectVisitor) { return objectVisitor.visit(this); }
+  public Object accept(ObjectVisitor v) {
+    return v.visit(this);
+  }
 }

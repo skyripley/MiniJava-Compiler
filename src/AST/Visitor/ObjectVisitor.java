@@ -27,6 +27,7 @@ public interface ObjectVisitor {
   public Object visit(Plus n);
   public Object visit(Minus n);
   public Object visit(Times n);
+  public Object visit(Div n);
   public Object visit(ArrayLookup n);
   public Object visit(ArrayLength n);
   public Object visit(Call n);

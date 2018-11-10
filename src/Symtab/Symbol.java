@@ -6,6 +6,7 @@ public abstract class Symbol
 {
     protected String type;
     protected String name;
+    protected Symbol parent;
 	
     public Symbol(String n, String t) 
     {
@@ -22,5 +23,17 @@ public abstract class Symbol
         return name;
     }
 
+    public Symbol getParent() {
+    	return parent;
+    }
+    
+    public void setParent(Symbol s) {
+    	parent = s;
+    }
+    
     public abstract String toString();
+    
+    public abstract Symbol copy();
+    
+    public abstract boolean equals(Symbol s);
 }

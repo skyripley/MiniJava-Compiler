@@ -15,5 +15,7 @@ public class IdentifierExp extends Exp {
     v.visit(this);
   }
 
-  public Object accept(ObjectVisitor objectVisitor) { return objectVisitor.visit(this); }
+  public Object accept(ObjectVisitor v) {
+    return v.visit(this);
+  }
 }

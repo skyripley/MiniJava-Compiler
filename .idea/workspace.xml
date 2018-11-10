@@ -2,9 +2,298 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2751b215-0944-4262-9de6-f720e8f30717" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/src/AST/ErrorMsg.java" />
+      <change beforePath="$PROJECT_DIR$/README-eclipse.txt" afterPath="$PROJECT_DIR$/README-eclipse.txt" />
+      <change beforePath="$PROJECT_DIR$/README.md" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/README.txt" afterPath="$PROJECT_DIR$/README.txt" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/Example.java" afterPath="$PROJECT_DIR$/SamplePrograms/Example.java" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/ExampleError.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/ExampleErrorTwo.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/BinarySearch-errors.java" afterPath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/BinarySearch-errors.java" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/BinarySearch.java" afterPath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/BinarySearch.java" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/BinaryTree.java" afterPath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/BinaryTree.java" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/BubbleSort.java" afterPath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/BubbleSort.java" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/Factorial.java" afterPath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/Factorial.java" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/FactorialError.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/LinearSearch.java" afterPath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/LinearSearch.java" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/LinkedList.java" afterPath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/LinkedList.java" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/LinkedListSemanticError.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/QuickSort.java" afterPath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/QuickSort.java" />
+      <change beforePath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/TreeVisitor.java" afterPath="$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/TreeVisitor.java" />
+      <change beforePath="$PROJECT_DIR$/build.xml" afterPath="$PROJECT_DIR$/build.xml" />
+      <change beforePath="$PROJECT_DIR$/lib/README" afterPath="$PROJECT_DIR$/lib/README" />
+      <change beforePath="$PROJECT_DIR$/lib/cup-src/ComplexSymbolFactory.java" afterPath="$PROJECT_DIR$/lib/cup-src/ComplexSymbolFactory.java" />
+      <change beforePath="$PROJECT_DIR$/lib/cup-src/Symbol.java" afterPath="$PROJECT_DIR$/lib/cup-src/Symbol.java" />
+      <change beforePath="$PROJECT_DIR$/lib/cup-src/lr_parser.java" afterPath="$PROJECT_DIR$/lib/cup-src/lr_parser.java" />
+      <change beforePath="$PROJECT_DIR$/lib/cup-src/old-symbols/README" afterPath="$PROJECT_DIR$/lib/cup-src/old-symbols/README" />
+      <change beforePath="$PROJECT_DIR$/lib/cup-src/old-symbols/non_terminal.java" afterPath="$PROJECT_DIR$/lib/cup-src/old-symbols/non_terminal.java" />
+      <change beforePath="$PROJECT_DIR$/lib/cup-src/old-symbols/symbol.java" afterPath="$PROJECT_DIR$/lib/cup-src/old-symbols/symbol.java" />
+      <change beforePath="$PROJECT_DIR$/lib/cup-src/old-symbols/terminal.java" afterPath="$PROJECT_DIR$/lib/cup-src/old-symbols/terminal.java" />
+      <change beforePath="$PROJECT_DIR$/lib/jflex-mode.el" afterPath="$PROJECT_DIR$/lib/jflex-mode.el" />
+      <change beforePath="$PROJECT_DIR$/lib/jflex.vim" afterPath="$PROJECT_DIR$/lib/jflex.vim" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ASTNode.java" afterPath="$PROJECT_DIR$/src/AST/ASTNode.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/And.java" afterPath="$PROJECT_DIR$/src/AST/And.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ArrayAssign.java" afterPath="$PROJECT_DIR$/src/AST/ArrayAssign.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ArrayLength.java" afterPath="$PROJECT_DIR$/src/AST/ArrayLength.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ArrayLookup.java" afterPath="$PROJECT_DIR$/src/AST/ArrayLookup.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Assign.java" afterPath="$PROJECT_DIR$/src/AST/Assign.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Block.java" afterPath="$PROJECT_DIR$/src/AST/Block.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/BooleanType.java" afterPath="$PROJECT_DIR$/src/AST/BooleanType.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Call.java" afterPath="$PROJECT_DIR$/src/AST/Call.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ClassDecl.java" afterPath="$PROJECT_DIR$/src/AST/ClassDecl.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ClassDeclExtends.java" afterPath="$PROJECT_DIR$/src/AST/ClassDeclExtends.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ClassDeclList.java" afterPath="$PROJECT_DIR$/src/AST/ClassDeclList.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ClassDeclSimple.java" afterPath="$PROJECT_DIR$/src/AST/ClassDeclSimple.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Display.java" afterPath="$PROJECT_DIR$/src/AST/Display.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ErrorMsg.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Exp.java" afterPath="$PROJECT_DIR$/src/AST/Exp.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/ExpList.java" afterPath="$PROJECT_DIR$/src/AST/ExpList.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/False.java" afterPath="$PROJECT_DIR$/src/AST/False.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Formal.java" afterPath="$PROJECT_DIR$/src/AST/Formal.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/FormalList.java" afterPath="$PROJECT_DIR$/src/AST/FormalList.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Identifier.java" afterPath="$PROJECT_DIR$/src/AST/Identifier.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/IdentifierExp.java" afterPath="$PROJECT_DIR$/src/AST/IdentifierExp.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/IdentifierType.java" afterPath="$PROJECT_DIR$/src/AST/IdentifierType.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/If.java" afterPath="$PROJECT_DIR$/src/AST/If.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/IntArrayType.java" afterPath="$PROJECT_DIR$/src/AST/IntArrayType.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/IntegerLiteral.java" afterPath="$PROJECT_DIR$/src/AST/IntegerLiteral.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/IntegerType.java" afterPath="$PROJECT_DIR$/src/AST/IntegerType.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/LessThan.java" afterPath="$PROJECT_DIR$/src/AST/LessThan.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/MainClass.java" afterPath="$PROJECT_DIR$/src/AST/MainClass.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/MethodDecl.java" afterPath="$PROJECT_DIR$/src/AST/MethodDecl.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/MethodDeclList.java" afterPath="$PROJECT_DIR$/src/AST/MethodDeclList.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Minus.java" afterPath="$PROJECT_DIR$/src/AST/Minus.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/NewArray.java" afterPath="$PROJECT_DIR$/src/AST/NewArray.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/NewObject.java" afterPath="$PROJECT_DIR$/src/AST/NewObject.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Not.java" afterPath="$PROJECT_DIR$/src/AST/Not.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Plus.java" afterPath="$PROJECT_DIR$/src/AST/Plus.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Print.java" afterPath="$PROJECT_DIR$/src/AST/Print.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Program.java" afterPath="$PROJECT_DIR$/src/AST/Program.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/README" afterPath="$PROJECT_DIR$/src/AST/README" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Statement.java" afterPath="$PROJECT_DIR$/src/AST/Statement.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/StatementList.java" afterPath="$PROJECT_DIR$/src/AST/StatementList.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/This.java" afterPath="$PROJECT_DIR$/src/AST/This.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Times.java" afterPath="$PROJECT_DIR$/src/AST/Times.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/True.java" afterPath="$PROJECT_DIR$/src/AST/True.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Type.java" afterPath="$PROJECT_DIR$/src/AST/Type.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/VarDecl.java" afterPath="$PROJECT_DIR$/src/AST/VarDecl.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/VarDeclList.java" afterPath="$PROJECT_DIR$/src/AST/VarDeclList.java" />
       <change beforePath="$PROJECT_DIR$/src/AST/Visitor/CodeTranslateVisitor.java" afterPath="$PROJECT_DIR$/src/AST/Visitor/CodeTranslateVisitor.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Visitor/ObjectVisitor.java" afterPath="$PROJECT_DIR$/src/AST/Visitor/ObjectVisitor.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Visitor/PrettyPrintVisitor.java" afterPath="$PROJECT_DIR$/src/AST/Visitor/PrettyPrintVisitor.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Visitor/README" afterPath="$PROJECT_DIR$/src/AST/Visitor/README" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Visitor/SemanticAnalysisVisitor.java" afterPath="$PROJECT_DIR$/src/AST/Visitor/SemanticAnalysisVisitor.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Visitor/SymTableVisitor.java" afterPath="$PROJECT_DIR$/src/AST/Visitor/SymTableVisitor.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Visitor/TypeCheckingVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Visitor/TypeVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/Visitor/Visitor.java" afterPath="$PROJECT_DIR$/src/AST/Visitor/Visitor.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/While.java" afterPath="$PROJECT_DIR$/src/AST/While.java" />
+      <change beforePath="$PROJECT_DIR$/src/AST/symboltable/RamClass.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/symboltable/RamMethod.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/symboltable/RamVariable.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/symboltable/Symbol.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/symboltable/Table.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/And.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/ArrayAssign.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/ArrayLength.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/ArrayLookup.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Assign.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Block.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/BooleanType.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Call.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/ClassDecl.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/ClassDeclExtends.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/ClassDeclList.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/ClassDeclSimple.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Equality.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Exp.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/ExpList.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/False.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/ForEach.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Formal.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/FormalList.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Identifier.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/IdentifierExp.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/IdentifierType.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/If.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/IntArrayType.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/IntegerLiteral.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/IntegerType.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/LessThan.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/LessThanOrEqual.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/MainClass.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/MethodDecl.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/MethodDeclList.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Minus.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/NewArray.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/NewObject.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Not.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Or.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Plus.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/PlusEquals.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Print.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/PrintLn.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Program.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Statement.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/StatementList.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/This.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Times.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/True.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/Type.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/VarDecl.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/VarDeclList.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/While.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ASTPrintVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/BuildSymbolTableVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/DepthFirstVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/IrGenerator.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/PrettyPrintVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/TypeCheckExpVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/TypeCheckVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/TypeDepthFirstVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/TypeVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/Visitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/X86CodeGenerator.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/IntegerLiteral.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/Register.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/RegisterDereference.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/RegisterManager.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/StackOffset.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/Value.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/WinX64RegisterManager.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/X64CodeGenerator.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/BottomUpVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/BranchCodePoint.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/CodePoint.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/ControlFlowGraphBuilder.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/FlowGraph.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/LinearCodePoint.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/TopDownVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/Visitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/ArrayAccess.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/ArrayAllocation.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/ArrayLength.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/Assignment.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/BinOp.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/Call.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/ConditionalJump.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/DataType.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/Declaration.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/Expression.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/FunctionDeclaration.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/Identifier.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/IntegerLiteral.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/Jump.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/Label.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/RecordAccess.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/RecordAllocation.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/RecordDeclaration.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/RelationalOp.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/Return.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/Statement.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/SysCall.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/visitor/IrPrintStream.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/visitor/IrVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/visitor/IrWriter.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/GraphColorAllocator.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/InterferenceGraph.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/LivenessVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/Register.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/RegisterAllocator.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/StackAllocator.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/StackOffset.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/StatementVisitor.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/Value.java" afterPath="" />
       <change beforePath="$PROJECT_DIR$/src/MiniJava.java" afterPath="$PROJECT_DIR$/src/MiniJava.java" />
+      <change beforePath="$PROJECT_DIR$/src/Parser/README" afterPath="$PROJECT_DIR$/src/Parser/README" />
+      <change beforePath="$PROJECT_DIR$/src/Parser/minijava.cup" afterPath="$PROJECT_DIR$/src/Parser/minijava.cup" />
+      <change beforePath="$PROJECT_DIR$/src/Scanner/README" afterPath="$PROJECT_DIR$/src/Scanner/README" />
+      <change beforePath="$PROJECT_DIR$/src/Scanner/minijava.jflex" afterPath="$PROJECT_DIR$/src/Scanner/minijava.jflex" />
+      <change beforePath="$PROJECT_DIR$/src/Symtab/ClassSymbol.java" afterPath="$PROJECT_DIR$/src/Symtab/ClassSymbol.java" />
+      <change beforePath="$PROJECT_DIR$/src/Symtab/MethodSymbol.java" afterPath="$PROJECT_DIR$/src/Symtab/MethodSymbol.java" />
+      <change beforePath="$PROJECT_DIR$/src/Symtab/Symbol.java" afterPath="$PROJECT_DIR$/src/Symtab/Symbol.java" />
+      <change beforePath="$PROJECT_DIR$/src/Symtab/SymbolTable.java" afterPath="$PROJECT_DIR$/src/Symtab/SymbolTable.java" />
+      <change beforePath="$PROJECT_DIR$/src/Symtab/VarSymbol.java" afterPath="$PROJECT_DIR$/src/Symtab/VarSymbol.java" />
+      <change beforePath="$PROJECT_DIR$/src/TestParser.java" afterPath="$PROJECT_DIR$/src/TestParser.java" />
+      <change beforePath="$PROJECT_DIR$/src/TestScanner.java" afterPath="$PROJECT_DIR$/src/TestScanner.java" />
+      <change beforePath="$PROJECT_DIR$/src/TypeNodes/ClassNode.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/TypeNodes/ClassWithParentNode.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/TypeNodes/MethodNode.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/TypeNodes/Node.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/TypeNodes/NodeType.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/Cli.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/CONTRIBUTING.md" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/LICENSE.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/NOTICE.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/README.md" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/RELEASE-NOTES.txt" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/pom.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/assembly/bin.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/assembly/src.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/changes/changes.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/conf/checkstyle-suppressions.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/conf/checkstyle.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/conf/findbugs-exclude-filter.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/AlreadySelectedException.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/AmbiguousOptionException.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/BasicParser.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/CommandLine.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/CommandLineParser.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/DefaultParser.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/GnuParser.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/HelpFormatter.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/MissingArgumentException.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/MissingOptionException.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/Option.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/OptionBuilder.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/OptionGroup.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/OptionValidator.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/Options.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/ParseException.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/Parser.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/PatternOptionBuilder.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/PosixParser.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/TypeHandler.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/UnrecognizedOptionException.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/Util.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/overview.html" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/main/java/org/apache/commons/cli/package-info.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/media/logo.xcf" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/.htaccess" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/download_cli.cgi" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/images/1x1.gif" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/images/logo.png" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/images/options.png" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/images/svg/commandlines.svg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/images/svg/diagrams-cli2.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/images/svg/diagrams.css" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/images/svg/diagrams.js" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/images/svg/options.svg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/images/svg/util.svg" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/resources/profile.jacoco" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/site.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/download_cli.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/index.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/introduction.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/issue-tracking.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/mail-lists.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/properties.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/release_1_0.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/release_1_2.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/release_1_3.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/release_1_3_1.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/release_1_4.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/upgrading-1.0-to-1.1.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/cli/commons-cli-1.4-src/src/site/xdoc/usage.xml" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/JavaCharStream.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/ParseException.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/RamParser.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/RamParserConstants.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/RamParserTokenManager.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/Token.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/TokenMgrError.java" afterPath="" />
+      <change beforePath="$PROJECT_DIR$/src/runtime/README" afterPath="$PROJECT_DIR$/src/runtime/README" />
+      <change beforePath="$PROJECT_DIR$/src/runtime/boot.c" afterPath="$PROJECT_DIR$/src/runtime/boot.c" />
+      <change beforePath="$PROJECT_DIR$/src/runtime/demo.s" afterPath="$PROJECT_DIR$/src/runtime/demo.s" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -15,118 +304,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="X86CodeGenerator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/X86CodeGenerator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="34" lean-forward="false" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MiniJava.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MiniJava.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/MiniJava.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="46" column="68" lean-forward="true" selection-start-line="46" selection-start-column="68" selection-end-line="46" selection-end-column="68" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WinX64RegisterManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/WinX64RegisterManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="48" column="57" lean-forward="false" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1085#1100#0" expanded="true" />
-                <element signature="e#1162#1177#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RegisterAllocator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/RegisterAllocator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="1" lean-forward="false" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="BottomUpVisitor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/BottomUpVisitor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="305">
-              <caret line="21" column="40" lean-forward="false" selection-start-line="21" selection-start-column="40" selection-end-line="21" selection-end-column="40" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#218#229#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LinearCodePoint.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/LinearCodePoint.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="55" lean-forward="false" selection-start-line="4" selection-start-column="55" selection-end-line="4" selection-end-column="55" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="X64CodeGenerator.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/X64CodeGenerator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="InterferenceGraph.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/InterferenceGraph.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="12" column="80" lean-forward="false" selection-start-line="12" selection-start-column="80" selection-end-line="12" selection-end-column="80" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="RamParserTokenManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/frontend/RamParserTokenManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4165">
-              <caret line="302" column="14" lean-forward="false" selection-start-line="302" selection-start-column="14" selection-end-line="302" selection-end-column="14" />
+            <state relative-caret-position="1258">
+              <caret line="74" column="8" lean-forward="false" selection-start-line="74" selection-start-column="8" selection-end-line="74" selection-end-column="8" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="RamParser.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/frontend/RamParser.java">
+      <file leaf-file-name="minijava.jflex" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/Scanner/minijava.jflex">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="43" lean-forward="false" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
+            <state relative-caret-position="493">
+              <caret line="149" column="35" lean-forward="true" selection-start-line="149" selection-start-column="35" selection-end-line="149" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="minijava.cup" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Parser/minijava.cup">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="981">
+              <caret line="335" column="22" lean-forward="true" selection-start-line="335" selection-start-column="22" selection-end-line="335" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -233,7 +435,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/AST/LessThan.java" />
         <option value="$PROJECT_DIR$/src/AST/MainClass.java" />
         <option value="$PROJECT_DIR$/src/AST/MethodDecl.java" />
         <option value="$PROJECT_DIR$/src/AST/Minus.java" />
@@ -284,12 +485,13 @@
         <option value="$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/LinearCodePoint.java" />
         <option value="$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/WinX64RegisterManager.java" />
         <option value="$PROJECT_DIR$/src/MiniJava.java" />
+        <option value="$PROJECT_DIR$/src/Scanner/minijava.jflex" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="2130" />
+    <option name="y" value="-16" />
     <option name="width" value="1552" />
     <option name="height" value="840" />
   </component>
@@ -308,7 +510,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -319,104 +520,7 @@
             <path>
               <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
               <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="SamplePrograms" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="SamplePrograms" type="462c0819:PsiDirectoryNode" />
-              <item name="SampleMiniJavaPrograms" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="AST" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="AST" type="462c0819:PsiDirectoryNode" />
-              <item name="symboltable" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="AST" type="462c0819:PsiDirectoryNode" />
-              <item name="syntaxtree" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="AST" type="462c0819:PsiDirectoryNode" />
-              <item name="syntaxtree" type="462c0819:PsiDirectoryNode" />
-              <item name="visitor" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="AST" type="462c0819:PsiDirectoryNode" />
-              <item name="syntaxtree" type="462c0819:PsiDirectoryNode" />
-              <item name="visitor" type="462c0819:PsiDirectoryNode" />
-              <item name="backend" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="AST" type="462c0819:PsiDirectoryNode" />
-              <item name="syntaxtree" type="462c0819:PsiDirectoryNode" />
-              <item name="visitor" type="462c0819:PsiDirectoryNode" />
-              <item name="cfgraph" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="AST" type="462c0819:PsiDirectoryNode" />
-              <item name="syntaxtree" type="462c0819:PsiDirectoryNode" />
-              <item name="visitor" type="462c0819:PsiDirectoryNode" />
-              <item name="ops" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="AST" type="462c0819:PsiDirectoryNode" />
-              <item name="syntaxtree" type="462c0819:PsiDirectoryNode" />
-              <item name="visitor" type="462c0819:PsiDirectoryNode" />
-              <item name="ops" type="462c0819:PsiDirectoryNode" />
-              <item name="visitor" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="AST" type="462c0819:PsiDirectoryNode" />
-              <item name="syntaxtree" type="462c0819:PsiDirectoryNode" />
-              <item name="visitor" type="462c0819:PsiDirectoryNode" />
-              <item name="regalloc" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="cli" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="frontend" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
@@ -442,19 +546,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="Symtab" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="MiniJava-Compiler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MiniJava-Compiler" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="TypeNodes" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
-      <pane id="AndroidView" />
       <pane id="Scratches" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -581,7 +680,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1552" height="840" extended-state="6" />
+    <frame x="1912" y="-8" width="1936" height="1176" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -591,24 +690,24 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287483" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3298077" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21313673" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1716418" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -619,14 +718,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/AST/Identifier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="22" column="80" lean-forward="false" selection-start-line="22" selection-start-column="80" selection-end-line="22" selection-end-column="80" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AST/IdentifierType.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -708,19 +799,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Parser/minijava.cup">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5627">
-          <caret line="335" column="69" lean-forward="false" selection-start-line="335" selection-start-column="69" selection-end-line="335" selection-end-column="69" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SamplePrograms/SampleMiniJavaPrograms/LinkedList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1683">
           <caret line="107" column="17" lean-forward="false" selection-start-line="107" selection-start-column="17" selection-end-line="107" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -732,22 +814,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/Visitor/CodeGeneratorVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="664" column="47" lean-forward="true" selection-start-line="664" selection-start-column="47" selection-end-line="664" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AST/Visitor/CodeGeneratorVisitor.java" />
     <entry file="file://$PROJECT_DIR$/src/AST/Visitor/TypeCheckingVisitor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
           <caret line="11" column="26" lean-forward="true" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
-          <folding>
-            <element signature="e#21589#21590#0" expanded="false" />
-            <element signature="e#21613#21614#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -755,9 +826,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -781,7 +849,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="28" column="2" lean-forward="false" selection-start-line="28" selection-start-column="2" selection-end-line="34" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -789,7 +856,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="707">
           <caret line="53" column="80" lean-forward="false" selection-start-line="53" selection-start-column="80" selection-end-line="53" selection-end-column="80" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -805,9 +871,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="71" column="27" lean-forward="false" selection-start-line="71" selection-start-column="27" selection-end-line="71" selection-end-column="27" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -815,7 +878,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
           <caret line="21" column="32" lean-forward="false" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -827,261 +889,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/Visitor/X86CodeGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AST/Visitor/X86CodeGenerator.java" />
     <entry file="file://$PROJECT_DIR$/src/AST/Visitor/CodeTranslateVisitor.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
           <caret line="762" column="17" lean-forward="false" selection-start-line="762" selection-start-column="17" selection-end-line="762" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="false" />
-            <element signature="e#824#825#0" expanded="false" />
             <element signature="e#842#843#0" expanded="false" />
-            <element signature="e#2414#2431#0" expanded="false" />
-            <element signature="e#2736#2744#0" expanded="false" />
-            <element signature="e#3642#3658#0" expanded="false" />
-            <element signature="e#4757#4777#0" expanded="false" />
-            <element signature="e#5643#5654#0" expanded="false" />
-            <element signature="e#6267#6284#0" expanded="false" />
-            <element signature="e#6842#6859#0" expanded="false" />
-            <element signature="e#7165#7182#0" expanded="false" />
-            <element signature="e#17445#17446#0" expanded="false" />
             <element signature="e#17491#17492#0" expanded="false" />
             <element signature="e#17521#17522#0" expanded="false" />
-            <element signature="e#17557#17558#0" expanded="false" />
-            <element signature="e#17588#17589#0" expanded="false" />
-            <element signature="e#17624#17625#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/And.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/Visitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="33" lean-forward="false" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/symboltable/RamClass.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="30" lean-forward="false" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/Assign.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="16" lean-forward="true" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/ErrorMsg.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="5" lean-forward="false" selection-start-line="6" selection-start-column="5" selection-end-line="6" selection-end-column="5" />
-          <folding>
-            <element signature="e#208#209#0" expanded="false" />
-            <element signature="e#240#241#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/TypeCheckExpVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="27" lean-forward="false" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/TypeCheckVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="34" column="45" lean-forward="false" selection-start-line="34" selection-start-column="45" selection-end-line="34" selection-end-column="45" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/visitor/IrPrintStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="1" lean-forward="false" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/ArrayAccess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="46" lean-forward="false" selection-start-line="4" selection-start-column="46" selection-end-line="4" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/IrGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2329">
-          <caret line="149" column="5" lean-forward="false" selection-start-line="149" selection-start-column="5" selection-end-line="149" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/Program.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="18" column="3" lean-forward="true" selection-start-line="18" selection-start-column="3" selection-end-line="18" selection-end-column="3" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/frontend/JavaCharStream.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="2" column="17" lean-forward="false" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/frontend/RamParserTokenManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4165">
-          <caret line="302" column="14" lean-forward="false" selection-start-line="302" selection-start-column="14" selection-end-line="302" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/frontend/RamParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="43" lean-forward="false" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/X86CodeGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="34" lean-forward="false" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/X64CodeGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" column="42" lean-forward="true" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/WinX64RegisterManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/InterferenceGraph.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="12" column="80" lean-forward="false" selection-start-line="12" selection-start-column="80" selection-end-line="12" selection-end-column="80" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/RegisterAllocator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="1" lean-forward="false" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/BottomUpVisitor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="21" column="40" lean-forward="false" selection-start-line="21" selection-start-column="40" selection-end-line="21" selection-end-column="40" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#218#229#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/LinearCodePoint.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="55" lean-forward="false" selection-start-line="4" selection-start-column="55" selection-end-line="4" selection-end-column="55" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/WinX64RegisterManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="48" column="57" lean-forward="false" selection-start-line="48" selection-start-column="57" selection-end-line="48" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1085#1100#0" expanded="true" />
-            <element signature="e#1162#1177#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/X64CodeGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/And.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/Visitor.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/symboltable/RamClass.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/Assign.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/ErrorMsg.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/TypeCheckExpVisitor.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/TypeCheckVisitor.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/visitor/IrPrintStream.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/ops/ArrayAccess.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/IrGenerator.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/Program.java" />
+    <entry file="file://$PROJECT_DIR$/src/frontend/JavaCharStream.java" />
+    <entry file="file://$PROJECT_DIR$/src/frontend/RamParserTokenManager.java" />
+    <entry file="file://$PROJECT_DIR$/src/frontend/RamParser.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/X86CodeGenerator.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/X64CodeGenerator.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/WinX64RegisterManager.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/InterferenceGraph.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/regalloc/RegisterAllocator.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/BottomUpVisitor.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/cfgraph/LinearCodePoint.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/WinX64RegisterManager.java" />
+    <entry file="file://$PROJECT_DIR$/src/AST/syntaxtree/visitor/backend/X64CodeGenerator.java" />
     <entry file="file://$PROJECT_DIR$/src/MiniJava.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="46" column="68" lean-forward="true" selection-start-line="46" selection-start-column="68" selection-end-line="46" selection-end-column="68" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="1258">
+          <caret line="74" column="8" lean-forward="false" selection-start-line="74" selection-start-column="8" selection-end-line="74" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Parser/minijava.cup">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="981">
+          <caret line="335" column="22" lean-forward="true" selection-start-line="335" selection-start-column="22" selection-end-line="335" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Scanner/minijava.jflex">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="493">
+          <caret line="149" column="35" lean-forward="true" selection-start-line="149" selection-start-column="35" selection-end-line="149" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>

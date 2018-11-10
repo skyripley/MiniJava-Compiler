@@ -10,11 +10,14 @@ public class NewObject extends Exp {
   public NewObject(Identifier ai, Location pos) {
     super(pos);
     i=ai;
+    if (i != null) i.setParent(this);
   }
 
   public void accept(Visitor v) {
     v.visit(this);
   }
 
-  public Object accept(ObjectVisitor objectVisitor) { return objectVisitor.visit(this); }
+  public Object accept(ObjectVisitor v) {
+    return v.visit(this);
+  }
 }

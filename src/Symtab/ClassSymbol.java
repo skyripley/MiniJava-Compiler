@@ -21,24 +21,69 @@ public class ClassSymbol extends Symbol
         methods = new ArrayList<MethodSymbol>();
         variables = new ArrayList<VarSymbol>();
     }
+    
+    public Symbol copy() {
+    	ClassSymbol c = new ClassSymbol(name, type);
+        for(int i=0;i<variables.size();i++)
+        {
+            c.addVariable((VarSymbol)variables.get(i).copy());
+        }
+  
+        for(int i=0;i<methods.size();i++)
+        {
+            c.addMethod((MethodSymbol)methods.get(i).copy());
+        }
+        return c;
+    }
 
     public void addMethod(MethodSymbol m) {
+        for(int i=0;i<methods.size();i++) {
+        	if ( methods.get(i) == m || methods.get(i).getName() == m.getName() ) {
+        		return;
+        	}
+        }
+
         methods.add(m);
+        m.setParent(this);
     }
 
     public void addVariable(VarSymbol v) {
+        for(int i=0;i<variables.size();i++) {
+        	if ( variables.get(i) == v || variables.get(i).getName() == v.getName() ) {
+        		return;
+        	}
+        }
         variables.add(v);
+        v.setParent(this);
+    }
+    
+    public MethodSymbol getMethod(String n) {
+        for(int i=0;i<methods.size();i++) {
+        	MethodSymbol ms = methods.get(i);
+        	if ( ms.getName().equals(n) ) {
+        		return ms;
+        	}
+        }
+    	return null;
     }
 
     public ArrayList<MethodSymbol> getMethods() {
         return methods;
     }
 
+    public VarSymbol getVariable(String n) {
+        for(int i=0;i<variables.size();i++) {
+        	VarSymbol vs = variables.get(i);
+        	if ( vs.getName().equals(n) ) {
+        		return vs;
+        	}
+        }
+    	return null;
+    }
+
     public ArrayList<VarSymbol> getVariables() {
         return variables;
     }
-
-    public String getType() { return type; }
 
     public void extendsClass(ClassSymbol c) {
         type = c.name;
@@ -72,4 +117,12 @@ public class ClassSymbol extends Symbol
         }
         return c;
     }
+    
+    public boolean equals(Symbol s) {
+    	if ( s == null || !(s instanceof ClassSymbol) )
+    		return false;
+    	
+    	ClassSymbol cs = (ClassSymbol)s;    	
+    	return cs.toString().equals(this.toString());
+    }    
 }
